@@ -1,0 +1,11 @@
+#Курильщик
+defaultPhrase = What do you want? <br> Get out
+
+hell = Wata hell?
+
+satanJudge = Bye
+
+#Главное меню
+startText = START
+
+endNpcDialog = End

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+message PlayerInfo{
+	enum MessageType{
+		Connect = 0;
+		Move = 1;
+		Disconnect = 2;
+	}
+	enum Direction{
+		Up = 0;
+		Down = 1;
+		Left = 2;
+		Right = 3;
+	}
+	MessageType type = 1;
+	Direction direction = 2;
+	string animName = 3;
+}
+	
