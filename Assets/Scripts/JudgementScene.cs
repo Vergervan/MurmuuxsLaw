@@ -10,11 +10,12 @@ public class JudgementScene : MonoBehaviour
 
     public void StartJudgeSpeech()
     {
-        satanBubble = dManager.CreateSpeechBubble(transform);
+        if(!satanBubble) satanBubble = dManager.CreateSpeechBubble(transform);
+        dManager.gameObject.SetActive(true);
         satanBubble.gameObject.SetActive(true);
         Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
-        pos.x += 180f;
-        pos.y += 60f;
+        pos.x += 50f;
+        pos.y += 15f;
         satanBubble.transform.position = pos;
         satanBubble.SetFlagName("satanJudge");
         StartCoroutine(JudgeSpeech());
@@ -23,17 +24,17 @@ public class JudgementScene : MonoBehaviour
     {
         if (satanBubble.GetTextFlag().HasValue)
         {
-            GetComponent<AudioSource>().enabled = true;
+            GetComponent<AudioSource>().mute = false;
             
             do
             {
                 satanBubble.StartSpeech();
-                yield return new WaitForSeconds(satanBubble.GetTextFlag().FlagValue.CurrentText().Length * 0.05f + 1f);
+                yield return new WaitForSeconds(satanBubble.GetTextFlag().FlagValue.CurrentText().Length * 0.05f + 1.7f);
                 if (!satanBubble.GetTextFlag().FlagValue.HasNext()) break;
                 satanBubble.GetTextFlag().FlagValue.Next();
             } while (true);
             dManager.gameObject.SetActive(false);
-            GetComponent<AudioSource>().enabled = false;
+            GetComponent<AudioSource>().mute = true;
         }
         GetComponent<Animator>().SetBool("start", true);
     }

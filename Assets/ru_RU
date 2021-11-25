@@ -8,6 +8,10 @@ satanJudge = Хорошо-с. <br> Таким образом, исходя из 
 
 
 #Главное меню
-startText = НАЧАТЬ
+menuStartText = НАЧАТЬ
+menuOnlineText = МУЛЬТИПЛЕЕР
 
-endNpcDialog = Закончить
+menuServerText = СОЗДАТЬ СЕРВЕР
+menuClientText = ПОДКЛЮЧИТЬСЯ
+
+menuBackText = НАЗАД

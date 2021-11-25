@@ -26,9 +26,9 @@ public class LevelItem : MonoBehaviour
 
     private void Start()
     {
-        GetComponent<SpriteRenderer>().sprite = Inventory.ItemSprites[item];
         try
         {
+            GetComponent<SpriteRenderer>().sprite = Inventory.ItemSprites[item];
             foreach (var prop in ItemProperties[item])
             {
                 gameObject.AddComponent(ItemPropertyScripts[prop]);

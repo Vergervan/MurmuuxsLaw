@@ -25,4 +25,8 @@ public class InGameButton : MonoBehaviour
     {
         transform.localScale = baseScale;
     }
+    private void OnDisable()
+    {
+        if(baseScale != Vector3.zero) transform.localScale = baseScale;
+    }
 }

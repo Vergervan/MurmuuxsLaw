@@ -9,13 +9,13 @@ public class NPCBehaviour : MonoBehaviour
     [Serializable]
     public class NPCSettings
     {
-        public string currentFlag = "defaultPhrase";
+        public string currentFlag;
     }
 
     public NPCSettings npcSettings;
     [SerializeField] private DialogueManager dManager;
-    [SerializeField] private SpeechBubble npcBubble;
-    [SerializeField] private CharacterController player;
+    [SerializeField] private PlayerController player;
+    private SpeechBubble npcBubble;
     private bool isSpeak = false;
     private Coroutine hideBubble = null;
     void OnMouseDown()

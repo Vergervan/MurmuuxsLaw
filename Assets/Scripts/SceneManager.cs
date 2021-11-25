@@ -9,6 +9,7 @@ public class SceneManager : MonoBehaviour
     [SerializeField] private LanguageManager languageManager;
     [SerializeField] private string startSceneName;
     private Scene currentScene;
+    private bool musicOn = true;
 
     private void Awake()
     {
@@ -47,5 +48,13 @@ public class SceneManager : MonoBehaviour
                 return;
             }
         }
+    }
+
+    public void ToggleVolume()
+    {
+        musicOn = !musicOn;
+        var sounds = transform.GetComponentsInChildren<AudioSource>(true);
+        Debug.Log("Sounds found: " + sounds.Length);
+        foreach (var sound in sounds) sound.mute = !musicOn;
     }
 }

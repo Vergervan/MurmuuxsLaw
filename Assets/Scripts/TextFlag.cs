@@ -34,7 +34,10 @@ public class TextFlag : MonoBehaviour
     public void RefreshFlagValue()
     {
         if (_flagValue == null) return;
-        _text.text = _flagValue.CurrentText();
+        try
+        {
+            _text.text = _flagValue.CurrentText();
+        }catch(Exception) { Debug.LogError("Error load flag: " + _flagName); }
     }
     public void SetFlagValue(Dialogue dialogueValue)
     {

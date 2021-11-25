@@ -15,7 +15,7 @@ public class LanguageManager : MonoBehaviour
 #if UNITY_EDITOR
             fullFileName = Application.dataPath + "/" + fileName;
 #elif UNITY_STANDALONE
-            fullFileName = System.IO.Directory.GetCurrentDirectory() + "\\" + fileName;
+            fullFileName = System.IO.Directory.GetCurrentDirectory() + "\\locale\\" + fileName;
 #endif
         if (reader.Filename == fileName) return;
         reader.Filename = fullFileName;
@@ -28,6 +28,13 @@ public class LanguageManager : MonoBehaviour
         foreach (var obj in scene.DependentObjects)
         {
             flags.AddRange(obj.GetComponentsInChildren<TextFlag>(true));
+        }
+        foreach(var obj in scene.InactiveObjects)
+        {
+            bool vis = obj.gameObject.activeSelf;
+            obj.SetActive(true);
+            flags.AddRange(obj.GetComponentsInChildren<TextFlag>(true));
+            obj.SetActive(vis);
         }
         foreach (var flag in flags)
         {

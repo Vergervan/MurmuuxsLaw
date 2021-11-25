@@ -6,6 +6,11 @@ hell = Wata hell?
 satanJudge = Bye
 
 #Главное меню
-startText = START
+menuStartText = START
+menuOnlineText = MULTIPLAYER
+
+menuServerText = HOST
+menuClientText = CONNECT
+menuBackText = BACK
 
 endNpcDialog = End

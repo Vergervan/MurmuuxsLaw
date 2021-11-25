@@ -1,10 +1,25 @@
 syntax = "proto3";
 
 message PlayerInfo{
+	message vec2{
+		int32 x = 1;
+		int32 y = 2;
+	}
+	message vec2f{
+		float x = 1;
+		float y = 2;
+	}
 	enum MessageType{
 		Connect = 0;
-		Move = 1;
-		Disconnect = 2;
+		AcceptConnect = 1;
+		Move = 2;
+		AcceptMove = 3;
+		InfoRequest = 4;
+		NewPlayerConnected = 5;
+		NewPlayerInfo = 6;
+		Disconnect = 7;
+		PlayerMoves = 8;
+		PlayerDisconnected = 9;
 	}
 	enum Direction{
 		Up = 0;
@@ -13,7 +28,8 @@ message PlayerInfo{
 		Right = 3;
 	}
 	MessageType type = 1;
-	Direction direction = 2;
-	string animName = 3;
+	vec2 direction = 2;
+	vec2f position = 3;
+	string guid = 4;
 }
 	
