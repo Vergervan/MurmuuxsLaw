@@ -142,7 +142,7 @@ public class NetworkManager : MonoBehaviour
                 try
                 {
                     size = client.Receive(buffer);
-                    if (size == 0)
+                    if (size < 4)
                     {
                         Debug.Log($"0 bytes by {client.RemoteEndPoint}");
                         UpdateDispatcher.Enqueue(() => RemovePlayerFromServer(client));
@@ -157,7 +157,7 @@ public class NetworkManager : MonoBehaviour
                         client.Receive(protoBuffer);
                         info = PlayerInfo.Parser.ParseFrom(protoBuffer);
                     }
-                    ProcessMessage(client, info);
+                    Task.Run(() => ProcessMessage(client, info));
                 }
                 catch (SocketException e)
                 {
