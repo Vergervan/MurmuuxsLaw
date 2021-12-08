@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using System.Linq;
 
 using NetworkType = NetworkManager.NetworkType;
+using static PlayerInfo.Types;
 
 public class PlayerController : MonoBehaviour
 {
@@ -54,7 +55,35 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         if (isOnline) return;
-        Vector2Int direction = new Vector2Int();
+        Vector2Int direction = ReadMovementKeys();
+        if (direction.magnitude > 0) isMoving = true;
+        else
+        {
+            if (!isMoving) return;
+            isMoving = false;
+            if (network.networkType == NetworkType.Client)
+            {
+                SendPositionToServer(Vector2Int.zero);
+                return;
+            }
+        }
+        switch (network.networkType) 
+        {
+            case NetworkType.Client:
+                SendPositionToServer(direction);
+                break;
+            case NetworkType.Server:
+                network.SendHostPlayerMovement(direction);
+                goto default;
+            default:
+                MoveLocal(direction);
+                break;
+        }
+    }
+
+    private Vector2Int ReadMovementKeys()
+    {
+        Vector2Int direction = Vector2Int.zero;
         if (Input.GetKey(KeyCode.A))
             direction -= Vector2Int.right;
         if (Input.GetKey(KeyCode.D))
@@ -63,25 +92,9 @@ public class PlayerController : MonoBehaviour
             direction += Vector2Int.up;
         if (Input.GetKey(KeyCode.S))
             direction -= Vector2Int.up;
-        if (direction.magnitude > 0) isMoving = true;
-        else
-        {
-            if (!isMoving) return;
-            if (network.networkType == NetworkType.Client)
-            {
-                SendPositionToServer(Vector2Int.zero);
-            }
-            isMoving = false;
-        }
-        if (network.networkType == NetworkType.Client)
-            SendPositionToServer(direction);
-        else
-        {
-            MoveLocal(direction);
-            network.SendHostPlayerMovement(direction);
-        }
-
+        return direction;
     }
+
     public void MoveLocal(Vector2 direction)
     {
         Vector2 newScale = transform.localScale;
@@ -115,8 +128,9 @@ public class PlayerController : MonoBehaviour
     {
         network.SendMessageTo(network.Socket, new PlayerInfo
         {
-            Type = PlayerInfo.Types.MessageType.Move,
-            Direction = new PlayerInfo.Types.vec2 { X = direction.x, Y = direction.y },
+            Type = MessageType.Move,
+            Direction = new vec2 { X = direction.x, Y = direction.y },
+            Position = new vec2f { X = transform.position.x, Y = transform.position.y },
             Guid = playerGuid.ToString("N")
         });
     }
