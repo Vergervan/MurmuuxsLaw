@@ -15,6 +15,22 @@ using static PlayerInfo.Types;
 using UnityEngine.Events;
 using System.Linq;
 
+public class NetworkEvent
+{
+    private Action _action;
+    private string _actionName;
+    public string ActionName
+    {
+        get => _actionName;
+    }
+    public void CallEvent() => _action.Invoke();
+    public NetworkEvent(string name, Action action)
+    {
+        _action = action;
+        _actionName = name;
+    }
+}
+
 public class NetworkManager : MonoBehaviour
 {
     public enum NetworkType
@@ -25,12 +41,12 @@ public class NetworkManager : MonoBehaviour
     private LanguageManager languageManager;
     [SerializeField] private PlayerController localPlayer;
     public NetworkType networkType = NetworkType.None;
-    private Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-    public Socket Socket { get => socket; }
+    private Socket m_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+    public Socket Socket { get => m_socket; private set => m_socket = value; }
     private MemoryStream messageStream;
     SocketAsyncEventArgs acceptArgs = new SocketAsyncEventArgs();
-    private static Queue<Action> UpdateDispatcher = new Queue<Action>();
-    private static Queue<Action> FixedUpdateDispatcher = new Queue<Action>();
+    private static Queue<NetworkEvent> UpdateDispatcher = new Queue<NetworkEvent>();
+    private static Queue<NetworkEvent> FixedUpdateDispatcher = new Queue<NetworkEvent>();
     private List<PlayerController> players = new List<PlayerController>();
     private Dictionary<Socket, PlayerController> playersSocket = new Dictionary<Socket, PlayerController>();
     private int serverPort = 0;
@@ -48,7 +64,7 @@ public class NetworkManager : MonoBehaviour
                 break;
             }
         }
-        socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
+        Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
     }
 
     private void Start()
@@ -67,37 +83,31 @@ public class NetworkManager : MonoBehaviour
     {
         while (UpdateDispatcher.Count > 0)
         {
-            try
-            {
-                UpdateDispatcher.Dequeue().Invoke();
-            }catch(Exception e) { Debug.LogError(e.Message); }
+            var evnt = UpdateDispatcher.Dequeue();
+            Debug.Log(evnt.ActionName);
+            evnt.CallEvent();
         }
-        if (Input.GetKeyDown(KeyCode.Space) && networkType == NetworkType.Client)
-            SendMessageTo(socket, new PlayerInfo
-            {
-                Type = MessageType.Connect
-            });
         RefreshPlayerLayers();
-
     }
     private void FixedUpdate()
-    {
+    { 
         while (FixedUpdateDispatcher.Count > 0)
         {
-            try
-            {
-                FixedUpdateDispatcher.Dequeue().Invoke();
-            }catch(Exception e) { Debug.LogError(e.Message); }
+            var evnt = FixedUpdateDispatcher.Dequeue();
+            if (evnt == null)
+                Debug.Log("Event is null");
+            Debug.Log(evnt.ActionName);
+            evnt.CallEvent();
         }
     }
     private void OnDestroy()
     {
         messageStream?.Close();
         messageStream?.Dispose();
-        if (socket.Connected)
-            socket.Shutdown(SocketShutdown.Both);
-        socket?.Close();
-        socket?.Dispose();
+        if (Socket.Connected)
+            Socket.Shutdown(SocketShutdown.Both);
+        Socket?.Close();
+        Socket?.Dispose();
     }
     public void SetupServer(TMPro.TMP_InputField input)
     {
@@ -112,14 +122,14 @@ public class NetworkManager : MonoBehaviour
     public void SetupServer(int? port = null)
     {
         networkType = NetworkType.Server;
-        socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 #if UNITY_SERVER
         socket.Bind(new IPEndPoint(IPAddress.Any, serverPort));
 #else
         if (!port.HasValue || port > ushort.MaxValue) return;
-        socket.Bind(new IPEndPoint(IPAddress.Any, port.Value));
+        Socket.Bind(new IPEndPoint(IPAddress.Any, port.Value));
 #endif
-        socket.Listen(0);
+        Socket.Listen(0);
         localPlayer.playerGuid = Guid.NewGuid();
         //canUpdate = true;
         sceneManager.SetScene("city");
@@ -130,7 +140,7 @@ public class NetworkManager : MonoBehaviour
     }
     private void AcceptConnection(SocketAsyncEventArgs args)
     {
-        socket.AcceptAsync(args);
+        Socket.AcceptAsync(args);
     }
     private void AcceptCompleted(object sender, SocketAsyncEventArgs args)
     {
@@ -145,43 +155,52 @@ public class NetworkManager : MonoBehaviour
     private async void ListenClient(Socket client)
     {
         await Task.Run(() =>
-        {
-            byte[] buffer = new byte[4];
-            byte[] protoBuffer;
-            ProtoPacket packet;
-            int size = 0;
-            int protoMsgSize = 0;
-            do
+        {   
+            while(true)
             {
-                try
-                {
-                    size = client.Receive(buffer);
-                    if (size < 4)
-                    {
-                        Debug.Log($"{size} bytes by {client.RemoteEndPoint}");
-                        UpdateDispatcher.Enqueue(() => RemovePlayer(client));
-                        break;
-                    }
-                    protoMsgSize = BitConverter.ToInt32(buffer, 0);
-                    packet = new ProtoPacket();
-                    if (protoMsgSize != 0)
-                    {
-                        protoBuffer = new byte[protoMsgSize];
-                        client.Receive(protoBuffer);
-                        packet.AddBytes(protoBuffer);
-                    }
-                    Task.Run(() => ProcessMessage(client, packet));
-                }
-                catch (SocketException e)
-                {
-                    Debug.LogError(e.Message);
-                }
-            } while (true);
+                ReceiveMessage(client);
+            }
         });
     }
+    private async void ReceiveMessage(Socket client)
+    {
+        byte[] buffer = new byte[4];
+        byte[] protoBuffer = new byte[1024];
+        ProtoPacket packet;
+        int size = 0;
+        int protoMsgSize = 0;
+        try
+        {
+            size = client.Receive(buffer);
+            if (size < 4)
+            {
+                AddEvent(nameof(ListenClient), () => RemovePlayer(client));
+                return;
+            }
+            protoMsgSize = BitConverter.ToInt32(buffer, 0);
+            packet = new ProtoPacket();
+            while (protoMsgSize > 0)
+            {
+                int rcvSize = client.Receive(protoBuffer);
+                protoMsgSize -= rcvSize;
+                if (protoMsgSize < protoBuffer.Length)
+                {
+                    packet.AddBytes(protoBuffer, rcvSize);
+                    break;
+                }
+                packet.AddBytes(protoBuffer);
+            }
+            await ProcessMessageAsync(client, packet);
+        }
+        catch (SocketException e)
+        {
+            Debug.LogError(e.Message);
+        }
+    }
+    private async Task ProcessMessageAsync(Socket client, ProtoPacket packet) => await Task.Run(() => ProcessMessage(client, packet));
     private void ProcessMessage(Socket client, ProtoPacket packet)
     {
-        Debug.Log("Process");
+        #region LegacyProcess
         PlayerInfo info = packet.IsDefault ? new PlayerInfo() : PlayerInfo.Parser.ParseFrom(packet.GetBytes());
         Vector2 startPos = new Vector2(-20.7f, 1.37f);
         switch (info.Type)
@@ -190,69 +209,109 @@ public class NetworkManager : MonoBehaviour
             case MessageType.Connect:
                 Debug.Log($"{client.RemoteEndPoint}: Connected");
                 Guid playerGuid = Guid.NewGuid();
-                UpdateDispatcher.Enqueue(() => CreateNewPlayer(startPos, playerGuid, client));
+                AddEvent(info.Type.ToString(), () => CreateNewPlayer(startPos, playerGuid, client));
                 PlayerInfo infoReq = new PlayerInfo { Type = MessageType.AcceptConnect, Position = new vec2f { X = startPos.x, Y = startPos.y }, Guid = playerGuid.ToString("N") };
                 SendMessageTo(client, infoReq);
                 SendConnectedPlayerToOthers(client, infoReq);
                 break;
 
             case MessageType.InfoRequest:
-                UpdateDispatcher.Enqueue(() => SendAllPlayersInfoTo(client));
+                AddEvent(info.Type.ToString(), () => SendAllPlayersInfoTo(client));
                 break;
 
             case MessageType.Move:
                 //playersSocket[client].RememberOldPos();
-                info.Type = MessageType.AcceptMove;
-                FixedUpdateDispatcher.Enqueue(() => playersSocket[client].MoveLocal(new Vector2(info.Direction.X, info.Direction.Y)));
-                SendMessageTo(client, info);
-                PlayerInfo info2 = new PlayerInfo(info);
-                info2.Type = MessageType.PlayerMoves;
-                SendPlayerMovementToAll(client, info2);
+                AddFixedEvent(info.Type.ToString(), () =>
+                {
+                    PlayerController player = playersSocket[client];
+                    Vector2 direction = new Vector2(info.Direction.X, info.Direction.Y);
+                    player.MoveLocal(direction);
+                    player.RefreshAnimation(direction);
+                    info.Type = MessageType.AcceptMove;
+                    info.Position = new vec2f { X = player.transform.position.x, Y = player.transform.position.y };
+                    SendMessageTo(client, info);
+                    PlayerInfo info2 = new PlayerInfo(info);
+                    info2.Type = MessageType.PlayerMoves;
+                    SendPlayerMovementToAll(client, info2);
+                });
                 break;
 
             //CLIENT SIDE MESSAGES
             case MessageType.AcceptConnect:
-                UpdateDispatcher.Enqueue(() => LoadNetworkScene("city", info));
-                SendMessageTo(socket, new PlayerInfo { Type = MessageType.InfoRequest });
+                AddEvent(info.Type.ToString(), () => LoadNetworkScene("city", info));
+                SendMessageTo(Socket, new PlayerInfo { Type = MessageType.InfoRequest });
                 break;
             case MessageType.NewPlayerInfo:
-                UpdateDispatcher.Enqueue(() => CreateNewPlayer(new Vector2(info.Position.X, info.Position.Y), Guid.ParseExact(info.Guid, "N")));
+                AddEvent(info.Type.ToString(), () => CreateNewPlayer(new Vector2(info.Position.X, info.Position.Y), Guid.ParseExact(info.Guid, "N")));
                 break;
 
             case MessageType.AcceptMove:
-                FixedUpdateDispatcher.Enqueue(() => localPlayer.MoveLocal(new Vector2
-                { x = info.Direction.X, y = info.Direction.Y }));
+                AddFixedEvent(info.Type.ToString(), () =>
+                {
+                    Vector2 direction = new Vector2(info.Direction.X, info.Direction.Y);
+                    Vector2 position = new Vector2(info.Position.X, info.Position.Y);
+                    localPlayer.MoveLocal(direction);
+                    localPlayer.RefreshAnimation(direction);
+                });
                 break;
             case MessageType.NewPlayerConnected:
-                UpdateDispatcher.Enqueue(() => CreateNewPlayer(new Vector2(info.Position.X, info.Position.Y), Guid.ParseExact(info.Guid, "N")));
+                AddEvent(info.Type.ToString(), () => CreateNewPlayer(new Vector2(info.Position.X, info.Position.Y), Guid.ParseExact(info.Guid, "N")));
                 break;
             case MessageType.PlayerMoves:
-                lock (lockObj)
-                {
-                    foreach (var player in players)
-                    {
-                        if (player.playerGuid == Guid.ParseExact(info.Guid, "N"))
-                        {
-                            FixedUpdateDispatcher.Enqueue(() =>
-                            {
-                                Vector2 clientPos = new Vector2(info.Position.X, info.Position.Y);
-                                float distance = (clientPos - (Vector2)player.transform.position).magnitude;
-                                if (distance > 0.001f)
-                                {
-                                    Debug.Log($"Correcting a long distance {distance}");
-                                    player.transform.position = clientPos;
-                                }
-                                player.MoveLocal(new Vector2(info.Direction.X, info.Direction.Y));
-                            });
-                            break;
-                        }
-                    }
-                }
+                MovePlayer(info);
                 break;
             case MessageType.PlayerDisconnected:
-                UpdateDispatcher.Enqueue(() => RemovePlayer(Guid.ParseExact(info.Guid, "N")));
+                AddEvent(info.Type.ToString(), () => RemovePlayer(Guid.ParseExact(info.Guid, "N")));
                 break;
         }
+        #endregion
+    }
+
+    private Vector2 GetDirection(ProtoPacket packet)
+    {
+        Vector2 vector = Vector2.zero;
+        if (packet.ReadBool())
+            vector -= Vector2.right;
+        if (packet.ReadBool())
+            vector += Vector2.right;
+        if (packet.ReadBool())
+            vector += Vector2.up;
+        if (packet.ReadBool())
+            vector -= Vector2.up;
+        return vector;
+    }
+
+    private void MovePlayer(PlayerInfo info)
+    {
+        lock (lockObj)
+        {
+            foreach (var player in players)
+            {
+                if (player.playerGuid == Guid.ParseExact(info.Guid, "N"))
+                {
+                    AddFixedEvent(nameof(MovePlayer), () =>
+                    {
+                        Vector2 clientPos = new Vector2(info.Position.X, info.Position.Y);
+                        Vector2 direction = new Vector2(info.Direction.X, info.Direction.Y);
+                        player.MoveLocal(direction);
+                        player.RefreshAnimation(direction);
+                    });
+                    break;
+                }
+            }
+        }
+    }
+
+    private void AddEvent(string name, Action action)
+    {
+        lock (lockObj)
+            UpdateDispatcher.Enqueue(new NetworkEvent(name, action));
+    }
+
+    private void AddFixedEvent(string name, Action action)
+    {
+        lock (lockObj)
+            FixedUpdateDispatcher.Enqueue(new NetworkEvent(name, action));
     }
 
     public void ConnectAsClient(TMPro.TMP_InputField addressText)
@@ -277,10 +336,11 @@ public class NetworkManager : MonoBehaviour
             try
             {
                 Debug.Log($"Try to connect to {ip}:{port}");
-                socket.Connect(ip, port);
+                Socket.Connect(ip, port);
                 networkType = NetworkType.Client;
-                ListenClient(socket);
-                SendMessageTo(socket, new PlayerInfo());
+                ListenClient(Socket);
+                AddEvent(string.Empty, () => LoadNetworkScene("city"));
+                SendMessageTo(Socket, new PlayerInfo());
             }
             catch (Exception e) { Debug.LogError(e.Message); }
         });
@@ -301,25 +361,22 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public async void SendMessageTo(Socket socket, PlayerInfo info)
+    public void SendMessageTo(Socket socket, PlayerInfo info)
     {
-        await Task.Run(() =>
+        MemoryStream ms = new MemoryStream();
+        ms.Write(BitConverter.GetBytes(info.CalculateSize()), 0, sizeof(int));
+        info.WriteTo(ms);
+        try
         {
-            MemoryStream ms = new MemoryStream();
-            ms.Write(BitConverter.GetBytes(info.CalculateSize()), 0, sizeof(int));
-            info.WriteTo(ms);
-            try
-            {
-                socket.Send(ms.ToArray());
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e.Message);
-            }
-        });
+            socket.Send(ms.ToArray());
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
     }
 
-    public void SendHostPlayerMovement(Vector2Int direction)
+    public void SendHostPlayerMovement(Vector2 direction)
     {
         lock (lockObj)
         {
@@ -327,13 +384,29 @@ public class NetworkManager : MonoBehaviour
             {
                 Type = MessageType.PlayerMoves,
                 Guid = localPlayer.playerGuid.ToString("N"),
-                Direction = new vec2 { X = direction.x, Y = direction.y },
+                Direction = new vec2f { X = direction.x, Y = direction.y },
                 Position = new vec2f { X = localPlayer.transform.position.x, Y = localPlayer.transform.position.y }
             };
             foreach (var player in playersSocket)
             {
                 SendMessageTo(player.Key, info);
             }
+        }
+    }
+
+    private void CreateNewPlayer(Vector2 startPos, Socket socket = null)
+    {
+        PlayerController newPlayer = Instantiate(localPlayer, localPlayer.transform.parent);
+        newPlayer.SetIsOnlinePlayer(true);
+        newPlayer.transform.position = startPos;
+        lock (lockObj)
+        {
+            if (socket == null)
+            {
+                players.Add(newPlayer);
+            }
+            else
+                playersSocket.Add(socket, newPlayer);
         }
     }
 
@@ -367,26 +440,38 @@ public class NetworkManager : MonoBehaviour
         localPlayer.playerGuid = Guid.ParseExact(info.Guid, "N");
         localPlayer.gameObject.SetActive(true);
     }
-
+    private void LoadNetworkScene(string sceneName)
+    {
+        localPlayer.gameObject.SetActive(false);
+        sceneManager.SetScene(sceneName);
+        languageManager.LoadTextFlags(sceneManager.GetCurrentScene());
+        sceneManager.GetCurrentScene().GetComponentInChildren<LevelOneScene>().enabled = false;
+        sceneManager.GetCurrentScene().GetComponentsInChildren<Animator>(true).First(an => an.gameObject.name == "Trash").enabled = false;
+        localPlayer.transform.position = new Vector2(-20.7f, 1.37f);
+        localPlayer.gameObject.SetActive(true);
+    }
     private void SendAllPlayersInfoTo(Socket client)
     {
-            vec2f pos;
 #if !UNITY_SERVER
-            pos = new vec2f() { X = localPlayer.transform.position.x, Y = localPlayer.transform.position.y };
-            SendMessageTo(client, new PlayerInfo { Type = MessageType.NewPlayerInfo, Guid = localPlayer.playerGuid.ToString("N"), Position = pos });
+        vec2f hostpos = new vec2f() { X = localPlayer.transform.position.x, Y = localPlayer.transform.position.y };
+        SendMessageTo(client, new PlayerInfo { Type = MessageType.NewPlayerInfo, Guid = localPlayer.playerGuid.ToString("N"), Position = hostpos });
+        Debug.Log("Send host info");
 #endif
+        if (playersSocket.Count == 0) return;
         lock (lockObj)
         {
             foreach (var player in playersSocket)
             {
                 if (player.Key == client) continue;
-                pos = new vec2f { X = player.Value.transform.position.x, Y = player.Value.transform.position.y };
+                vec2f pos = new vec2f { X = player.Value.transform.position.x, Y = player.Value.transform.position.y };
                 SendMessageTo(client, new PlayerInfo { Type = MessageType.NewPlayerInfo, Guid = player.Value.playerGuid.ToString("N"), Position = pos });
+                Debug.Log("Send player info about " + player.Value.playerGuid);
             }
         }
     }
     private void SendConnectedPlayerToOthers(Socket client, PlayerInfo info)
     {
+        if (playersSocket.Count == 0) return;
         lock (lockObj)
         {
             foreach (var player in playersSocket)
@@ -433,20 +518,16 @@ public class NetworkManager : MonoBehaviour
     }
     private void RemovePlayerFromServer(Socket client)
     {
-        try
+        Guid guid = playersSocket[client].playerGuid;
+        Destroy(playersSocket[client].gameObject);
+        playersSocket.Remove(client);
+        lock (lockObj)
         {
-            Guid guid = playersSocket[client].playerGuid;
-            Destroy(playersSocket[client].gameObject);
-            playersSocket.Remove(client);
-            lock (lockObj)
+            foreach (var player in playersSocket)
             {
-                foreach (var player in playersSocket)
-                {
-                    SendMessageTo(player.Key, new PlayerInfo { Type = MessageType.PlayerDisconnected, Guid = guid.ToString("N") });
-                }
+                SendMessageTo(player.Key, new PlayerInfo { Type = MessageType.PlayerDisconnected, Guid = guid.ToString("N") });
             }
         }
-        catch (Exception e) { Debug.LogError(e.Message); }
     }
     private void RemovePlayerFromClient(Socket client)
     {

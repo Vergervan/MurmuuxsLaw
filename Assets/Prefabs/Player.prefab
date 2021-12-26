@@ -120,7 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventory: {fileID: 0}
   network: {fileID: 0}
-  speed: 130
+  speed: 2.7
 --- !u!61 &412621702446675541
 BoxCollider2D:
   m_ObjectHideFlags: 0

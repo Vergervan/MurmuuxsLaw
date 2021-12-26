@@ -28,7 +28,7 @@ message PlayerInfo{
 		Right = 3;
 	}
 	MessageType type = 1;
-	vec2 direction = 2;
+	vec2f direction = 2;
 	vec2f position = 3;
 	string guid = 4;
 }
