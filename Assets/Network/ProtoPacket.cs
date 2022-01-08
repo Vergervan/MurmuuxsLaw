@@ -10,7 +10,7 @@ public class ProtoPacket
 {
     private List<byte> bytes = new List<byte>();
     public int Length => bytes.Count;
-    public bool IsDefault => bytes.Count == 0;
+    public bool IsDefaultProto => bytes.Count == 0;
     public int Position { get; private set; }
     public void AddBytes(byte[] bytes) => this.bytes.AddRange(bytes);
     public void AddBytes(byte[] bytes, int length)

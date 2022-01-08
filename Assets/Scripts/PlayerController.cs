@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
             switch (network.networkType)
             {
                 case NetworkType.Client:
-                    SendPositionToServer(ReadKeysInBytes());
+                    SendPositionToServer(direction);
                     break;
                 case NetworkType.Server:
                     network.SendHostPlayerMovement(direction);
@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
         return direction;
     }
 
-    private bool[] ReadKeysInBytes()
+    private bool[] ReadKeysInBools()
     {
         //ADWS
         bool[] keys = new bool[4];
@@ -139,17 +139,27 @@ public class PlayerController : MonoBehaviour
     }
     private void SendPositionToServer(Vector2 direction)
     {
-        ProtoPacket packet = new ProtoPacket().WriteShort((short)MessageType.Move).WriteFloat(direction.x).WriteFloat(direction.y);
-        packet.SendPacket(network.Socket);
-        Debug.Log("Length: " + packet.Length);
+        network.SendMessageTo(network.Socket, new PlayerInfo
+        {
+            Type = MessageType.Move,
+            Direction = new vec2f { X = direction.x, Y = direction.y },
+            Position = new vec2f { X = transform.position.x, Y = transform.position.y },
+            Guid = playerGuid.ToString("N")
+        });
     }
+    //private void SendPositionToServer(Vector2 direction)
+    //{
+    //    ProtoPacket packet = new ProtoPacket().WriteShort((short)MessageType.Move).WriteFloat(direction.x).WriteFloat(direction.y);
+    //    packet.SendPacket(network.Socket);
+    //    Debug.Log("Length: " + packet.Length);
+    //}
 
-    private void SendPositionToServer(bool[] direction)
-    {
-        ProtoPacket packet = new ProtoPacket().WriteShort((short)MessageType.Move).WriteBool(direction[0]).WriteBool(direction[1]).WriteBool(direction[2]).WriteBool(direction[3]);
-        packet.SendPacket(network.Socket);
-        Debug.Log("Length: " + packet.Length);
-    }
+    //private void SendPositionToServer(bool[] direction)
+    //{
+    //    ProtoPacket packet = new ProtoPacket().WriteShort((short)MessageType.Move).WriteBool(direction[0]).WriteBool(direction[1]).WriteBool(direction[2]).WriteBool(direction[3]);
+    //    packet.SendPacket(network.Socket);
+    //    Debug.Log("Length: " + packet.Length);
+    //}
 
     public void SetIsOnlinePlayer(bool b) => isOnline = b;
     public void SetNetworkManager(NetworkManager nm) => network = nm;

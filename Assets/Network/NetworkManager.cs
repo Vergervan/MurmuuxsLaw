@@ -23,7 +23,7 @@ public class NetworkEvent
     {
         get => _actionName;
     }
-    public void CallEvent() => _action.Invoke();
+    public void CallEvent() => _action?.Invoke();
     public NetworkEvent(string name, Action action)
     {
         _action = action;
@@ -46,9 +46,11 @@ public class NetworkManager : MonoBehaviour
     private MemoryStream messageStream;
     SocketAsyncEventArgs acceptArgs = new SocketAsyncEventArgs();
     private static Queue<NetworkEvent> UpdateDispatcher = new Queue<NetworkEvent>();
-    private static Queue<NetworkEvent> FixedUpdateDispatcher = new Queue<NetworkEvent>();
-    private List<PlayerController> players = new List<PlayerController>();
-    private Dictionary<Socket, PlayerController> playersSocket = new Dictionary<Socket, PlayerController>();
+    private static List<NetworkEvent> FixedUpdateDispatcher = new List<NetworkEvent>();
+    private static List<NetworkEvent> FixedUpdateContainer = new List<NetworkEvent>();
+
+    private Dictionary<Guid, PlayerController> players;
+    private Dictionary<Socket, Tuple<Guid, PlayerController>> playersSocket;
     private int serverPort = 0;
     public static readonly object lockObj = new object();
 
@@ -83,22 +85,17 @@ public class NetworkManager : MonoBehaviour
     {
         while (UpdateDispatcher.Count > 0)
         {
-            var evnt = UpdateDispatcher.Dequeue();
+            NetworkEvent evnt;
+            lock (lockObj)
+                evnt = UpdateDispatcher.Dequeue();
             Debug.Log(evnt.ActionName);
             evnt.CallEvent();
         }
-        RefreshPlayerLayers();
+        if (networkType != NetworkType.None && (players != null || playersSocket != null)) RefreshPlayerLayers();
     }
     private void FixedUpdate()
-    { 
-        while (FixedUpdateDispatcher.Count > 0)
-        {
-            var evnt = FixedUpdateDispatcher.Dequeue();
-            if (evnt == null)
-                Debug.Log("Event is null");
-            Debug.Log(evnt.ActionName);
-            evnt.CallEvent();
-        }
+    {
+        ExecuteFixedUpdate();
     }
     private void OnDestroy()
     {
@@ -108,6 +105,17 @@ public class NetworkManager : MonoBehaviour
             Socket.Shutdown(SocketShutdown.Both);
         Socket?.Close();
         Socket?.Dispose();
+    }
+    private void ExecuteFixedUpdate()
+    {
+        FixedUpdateContainer.Clear();
+        lock (FixedUpdateDispatcher)
+        {
+            FixedUpdateContainer.AddRange(FixedUpdateDispatcher);
+            FixedUpdateDispatcher.Clear();
+        }
+        foreach (var act in FixedUpdateContainer)
+            act.CallEvent();
     }
     public void SetupServer(TMPro.TMP_InputField input)
     {
@@ -122,6 +130,7 @@ public class NetworkManager : MonoBehaviour
     public void SetupServer(int? port = null)
     {
         networkType = NetworkType.Server;
+        playersSocket = new Dictionary<Socket, Tuple<Guid, PlayerController>>();
         Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 #if UNITY_SERVER
         socket.Bind(new IPEndPoint(IPAddress.Any, serverPort));
@@ -155,27 +164,26 @@ public class NetworkManager : MonoBehaviour
     private async void ListenClient(Socket client)
     {
         await Task.Run(() =>
-        {   
-            while(true)
-            {
-                ReceiveMessage(client);
-            }
+        {
+            ReceiveMessage(client);
         });
     }
     private async void ReceiveMessage(Socket client)
     {
-        byte[] buffer = new byte[4];
-        byte[] protoBuffer = new byte[1024];
-        ProtoPacket packet;
-        int size = 0;
-        int protoMsgSize = 0;
-        try
+        while (client.Connected)
         {
+            byte[] buffer = new byte[4];
+            byte[] protoBuffer = new byte[1024];
+            ProtoPacket packet;
+            int size = 0;
+            int protoMsgSize = 0;
+
             size = client.Receive(buffer);
             if (size < 4)
             {
+                Debug.Log("Less than 4 bytes");
                 AddEvent(nameof(ListenClient), () => RemovePlayer(client));
-                return;
+                break;
             }
             protoMsgSize = BitConverter.ToInt32(buffer, 0);
             packet = new ProtoPacket();
@@ -192,20 +200,27 @@ public class NetworkManager : MonoBehaviour
             }
             await ProcessMessageAsync(client, packet);
         }
-        catch (SocketException e)
-        {
-            Debug.LogError(e.Message);
-        }
     }
     private async Task ProcessMessageAsync(Socket client, ProtoPacket packet) => await Task.Run(() => ProcessMessage(client, packet));
     private void ProcessMessage(Socket client, ProtoPacket packet)
     {
-        #region LegacyProcess
-        PlayerInfo info = packet.IsDefault ? new PlayerInfo() : PlayerInfo.Parser.ParseFrom(packet.GetBytes());
+        PlayerInfo info = packet.IsDefaultProto ? new PlayerInfo() : PlayerInfo.Parser.ParseFrom(packet.GetBytes());
+        switch (networkType)
+        {
+            case NetworkType.Server:
+                ProcessServerMessage(client, info);
+                break;
+            case NetworkType.Client:
+                ProcessClientMessage(client, info);
+                break;
+        }
+    }
+    //SERVER-SIDE MESSAGES
+    private void ProcessServerMessage(Socket client, PlayerInfo info)
+    {
         Vector2 startPos = new Vector2(-20.7f, 1.37f);
         switch (info.Type)
         {
-            //SERVER SIDE MESSAGES
             case MessageType.Connect:
                 Debug.Log($"{client.RemoteEndPoint}: Connected");
                 Guid playerGuid = Guid.NewGuid();
@@ -220,23 +235,25 @@ public class NetworkManager : MonoBehaviour
                 break;
 
             case MessageType.Move:
-                //playersSocket[client].RememberOldPos();
+                PlayerController player = playersSocket[client].Item2;
+                Vector2 direction = new Vector2(info.Direction.X, info.Direction.Y);
                 AddFixedEvent(info.Type.ToString(), () =>
                 {
-                    PlayerController player = playersSocket[client];
-                    Vector2 direction = new Vector2(info.Direction.X, info.Direction.Y);
                     player.MoveLocal(direction);
                     player.RefreshAnimation(direction);
                     info.Type = MessageType.AcceptMove;
-                    info.Position = new vec2f { X = player.transform.position.x, Y = player.transform.position.y };
                     SendMessageTo(client, info);
-                    PlayerInfo info2 = new PlayerInfo(info);
-                    info2.Type = MessageType.PlayerMoves;
-                    SendPlayerMovementToAll(client, info2);
+                    info.Type = MessageType.PlayerMoves;
+                    SendPlayerMovementToAll(client, info);
                 });
                 break;
-
-            //CLIENT SIDE MESSAGES
+        }
+    }
+    //CLIENT-SIDE MESSAGES
+    private void ProcessClientMessage(Socket client, PlayerInfo info)
+    {
+        switch (info.Type)
+        {
             case MessageType.AcceptConnect:
                 AddEvent(info.Type.ToString(), () => LoadNetworkScene("city", info));
                 SendMessageTo(Socket, new PlayerInfo { Type = MessageType.InfoRequest });
@@ -249,7 +266,6 @@ public class NetworkManager : MonoBehaviour
                 AddFixedEvent(info.Type.ToString(), () =>
                 {
                     Vector2 direction = new Vector2(info.Direction.X, info.Direction.Y);
-                    Vector2 position = new Vector2(info.Position.X, info.Position.Y);
                     localPlayer.MoveLocal(direction);
                     localPlayer.RefreshAnimation(direction);
                 });
@@ -264,9 +280,7 @@ public class NetworkManager : MonoBehaviour
                 AddEvent(info.Type.ToString(), () => RemovePlayer(Guid.ParseExact(info.Guid, "N")));
                 break;
         }
-        #endregion
     }
-
     private Vector2 GetDirection(ProtoPacket packet)
     {
         Vector2 vector = Vector2.zero;
@@ -283,23 +297,18 @@ public class NetworkManager : MonoBehaviour
 
     private void MovePlayer(PlayerInfo info)
     {
-        lock (lockObj)
+        PlayerController player;
+        try
         {
-            foreach (var player in players)
-            {
-                if (player.playerGuid == Guid.ParseExact(info.Guid, "N"))
-                {
-                    AddFixedEvent(nameof(MovePlayer), () =>
-                    {
-                        Vector2 clientPos = new Vector2(info.Position.X, info.Position.Y);
-                        Vector2 direction = new Vector2(info.Direction.X, info.Direction.Y);
-                        player.MoveLocal(direction);
-                        player.RefreshAnimation(direction);
-                    });
-                    break;
-                }
-            }
+            player = players[Guid.ParseExact(info.Guid, "N")];
         }
+        catch (KeyNotFoundException) { return; }
+        AddFixedEvent(nameof(MovePlayer), () =>
+        {
+            Vector2 direction = new Vector2(info.Direction.X, info.Direction.Y);
+            player.MoveLocal(direction);
+            player.RefreshAnimation(direction);
+        });
     }
 
     private void AddEvent(string name, Action action)
@@ -310,8 +319,8 @@ public class NetworkManager : MonoBehaviour
 
     private void AddFixedEvent(string name, Action action)
     {
-        lock (lockObj)
-            FixedUpdateDispatcher.Enqueue(new NetworkEvent(name, action));
+        lock (FixedUpdateDispatcher)
+            FixedUpdateDispatcher.Add(new NetworkEvent(name, action));
     }
 
     public void ConnectAsClient(TMPro.TMP_InputField addressText)
@@ -339,8 +348,8 @@ public class NetworkManager : MonoBehaviour
                 Socket.Connect(ip, port);
                 networkType = NetworkType.Client;
                 ListenClient(Socket);
-                AddEvent(string.Empty, () => LoadNetworkScene("city"));
                 SendMessageTo(Socket, new PlayerInfo());
+                players = new Dictionary<Guid, PlayerController>();
             }
             catch (Exception e) { Debug.LogError(e.Message); }
         });
@@ -352,7 +361,7 @@ public class NetworkManager : MonoBehaviour
         {
             foreach (var player in playersSocket)
             {
-                if (player.Value.playerGuid == guid)
+                if (player.Value.Item1 == guid)
                 {
                     SendMessageTo(player.Key, info);
                     return;
@@ -387,26 +396,13 @@ public class NetworkManager : MonoBehaviour
                 Direction = new vec2f { X = direction.x, Y = direction.y },
                 Position = new vec2f { X = localPlayer.transform.position.x, Y = localPlayer.transform.position.y }
             };
-            foreach (var player in playersSocket)
+            if (playersSocket.Count > 0)
             {
-                SendMessageTo(player.Key, info);
+                foreach (var player in playersSocket)
+                {
+                    SendMessageTo(player.Key, info);
+                }
             }
-        }
-    }
-
-    private void CreateNewPlayer(Vector2 startPos, Socket socket = null)
-    {
-        PlayerController newPlayer = Instantiate(localPlayer, localPlayer.transform.parent);
-        newPlayer.SetIsOnlinePlayer(true);
-        newPlayer.transform.position = startPos;
-        lock (lockObj)
-        {
-            if (socket == null)
-            {
-                players.Add(newPlayer);
-            }
-            else
-                playersSocket.Add(socket, newPlayer);
         }
     }
 
@@ -422,10 +418,10 @@ public class NetworkManager : MonoBehaviour
             if (socket == null)
             {
                 //newPlayer.GetComponent<BoxCollider2D>().enabled = false;
-                players.Add(newPlayer);
+                players.Add(playerGuid, newPlayer);
             }
             else
-                playersSocket.Add(socket, newPlayer);
+                playersSocket.Add(socket, new Tuple<Guid, PlayerController>(playerGuid, newPlayer));
         }
     }
 
@@ -463,9 +459,9 @@ public class NetworkManager : MonoBehaviour
             foreach (var player in playersSocket)
             {
                 if (player.Key == client) continue;
-                vec2f pos = new vec2f { X = player.Value.transform.position.x, Y = player.Value.transform.position.y };
-                SendMessageTo(client, new PlayerInfo { Type = MessageType.NewPlayerInfo, Guid = player.Value.playerGuid.ToString("N"), Position = pos });
-                Debug.Log("Send player info about " + player.Value.playerGuid);
+                vec2f pos = new vec2f { X = player.Value.Item2.transform.position.x, Y = player.Value.Item2.transform.position.y };
+                SendMessageTo(client, new PlayerInfo { Type = MessageType.NewPlayerInfo, Guid = player.Value.Item1.ToString("N"), Position = pos });
+                Debug.Log("Send player info about " + player.Value.Item1);
             }
         }
     }
@@ -496,9 +492,9 @@ public class NetworkManager : MonoBehaviour
     {
         lock (lockObj)
         {
-            var player = players.Find(p => p.playerGuid == guid);
+            var player = players[guid];
             Destroy(player.gameObject);
-            players.Remove(player);
+            players.Remove(guid);
         }
     }
     private void RemovePlayer(Socket client)
@@ -518,8 +514,8 @@ public class NetworkManager : MonoBehaviour
     }
     private void RemovePlayerFromServer(Socket client)
     {
-        Guid guid = playersSocket[client].playerGuid;
-        Destroy(playersSocket[client].gameObject);
+        Guid guid = playersSocket[client].Item1;
+        Destroy(playersSocket[client].Item2.gameObject);
         playersSocket.Remove(client);
         lock (lockObj)
         {
@@ -531,7 +527,10 @@ public class NetworkManager : MonoBehaviour
     }
     private void RemovePlayerFromClient(Socket client)
     {
-        players.ForEach(p => Destroy(p.gameObject));
+        foreach (var player in players)
+        {
+            Destroy(player.Value.gameObject);
+        }
         players.Clear();
         sceneManager.SetScene("mainmenu");
         languageManager.LoadTextFlags(sceneManager.GetCurrentScene());
@@ -558,17 +557,17 @@ public class NetworkManager : MonoBehaviour
         {
             foreach (var player in players)
             {
-                float dist = Vector2.Distance(localPlayer.transform.position, player.transform.position);
+                float dist = Vector2.Distance(localPlayer.transform.position, player.Value.transform.position);
                 if (!lowMagnitudePlayer)
                 {
                     lowDist = dist;
-                    lowMagnitudePlayer = player;
+                    lowMagnitudePlayer = player.Value;
                     continue;
                 }
                 if (dist < lowDist)
                 {
                     lowDist = dist;
-                    lowMagnitudePlayer = player;
+                    lowMagnitudePlayer = player.Value;
                 }
             }
         }
@@ -592,17 +591,17 @@ public class NetworkManager : MonoBehaviour
         {
             foreach (var player in playersSocket)
             {
-                float dist = Vector2.Distance(localPlayer.transform.position, player.Value.transform.position);
+                float dist = Vector2.Distance(localPlayer.transform.position, player.Value.Item2.transform.position);
                 if (!lowMagnitudePlayer)
                 {
                     lowDist = dist;
-                    lowMagnitudePlayer = player.Value;
+                    lowMagnitudePlayer = player.Value.Item2;
                     continue;
                 }
                 if (dist < lowDist)
                 {
                     lowDist = dist;
-                    lowMagnitudePlayer = player.Value;
+                    lowMagnitudePlayer = player.Value.Item2;
                 }
             }
         }

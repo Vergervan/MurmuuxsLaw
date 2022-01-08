@@ -64,7 +64,7 @@ public class ItemCell : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     public void OnDrag(PointerEventData eventData)
     {
         if (Type == Inventory.ItemType.Nothing) return;
-        rectTransform.anchoredPosition += (eventData.delta / 2) / canvas.scaleFactor; //В конце делим на скейл родительского объекта
+        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor; //В конце делим на скейл родительского объекта
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
