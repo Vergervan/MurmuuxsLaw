@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ItemCell : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class ItemCell : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
     [SerializeReference] LevelItem item;
     [SerializeField]
@@ -21,6 +21,7 @@ public class ItemCell : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     [SerializeField] private Image itemImage;
     [SerializeField] private Inventory inventory;
     [SerializeField] private Canvas canvas;
+    [SerializeField] private ItemMenuManager itemMenuManager;
     private GraphicRaycaster gr;
     private RectTransform rectTransform;
     private Vector2 posBeforeDrag;
@@ -115,5 +116,14 @@ public class ItemCell : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
         pos.y -= 1.05f;
         Instantiate(droppedItem, pos, Quaternion.identity, player.transform.parent);
         Type = Inventory.ItemType.Nothing;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if(eventData.button == PointerEventData.InputButton.Right)
+        {
+            itemMenuManager.ExecuteInPosition(eventData.position);
+            Debug.Log(eventData.position);
+        }
     }
 }
