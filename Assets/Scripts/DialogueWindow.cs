@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DialogueWindow : MonoBehaviour
 {
+    [SerializeField] private DialogueController controller;
     [SerializeField] private Image buttonBackground;
     [SerializeField] private Sprite altImage;
 
@@ -13,6 +14,7 @@ public class DialogueWindow : MonoBehaviour
     [SerializeField] private GameObject answerVariantPrefab;
     private Sprite baseSprite;
     private bool _opened = false;
+    public bool IsOpened { get => _opened; }
     void Start()
     {
         baseSprite = buttonBackground.sprite;
@@ -22,5 +24,7 @@ public class DialogueWindow : MonoBehaviour
         _opened = !_opened;
         buttonBackground.sprite = _opened ? altImage : baseSprite;
         windowObject.SetActive(_opened);
+        if (_opened) 
+            controller.SelectChoice(0);
     }
 }

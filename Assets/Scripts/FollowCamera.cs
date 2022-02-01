@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
 public class FollowCamera : MonoBehaviour
 {
     [SerializeField] private Transform target;
     public float followSpeed = 2f;
-    [SerializeField, HideInInspector] private float minX;
-    [SerializeField, HideInInspector] private float maxX;
+    [HideInInspector] public float minX = 0;
+    [HideInInspector] public float maxX = 0;
     void Update()
     {
         Vector3 newPos = new Vector3(target.position.x, Camera.main.transform.position.y, -10);
@@ -16,10 +16,5 @@ public class FollowCamera : MonoBehaviour
         slerpedPos.z = newPos.z;
         slerpedPos.x = Mathf.Clamp(slerpedPos.x, minX, maxX);
         Camera.main.transform.position = slerpedPos;
-    }
-    public void SetHorizontalCameraBorders(float left, float right)
-    {
-        minX = left;
-        maxX = right;
     }
 }

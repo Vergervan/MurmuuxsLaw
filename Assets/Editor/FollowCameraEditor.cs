@@ -1,26 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 [CustomEditor(typeof(FollowCamera))]
 public class FollowCameraEditor : Editor
 {
-    float left = 0, right = 0;
-    FollowCamera followCamera;
+    SerializedProperty minXProp, maxXProp;
     private void OnEnable()
     {
-        followCamera = (FollowCamera)target;
+        minXProp = serializedObject.FindProperty("minX");
+        maxXProp = serializedObject.FindProperty("maxX");
     }
     public override void OnInspectorGUI()
     {
+        serializedObject.Update();
         DrawDefaultInspector();
         EditorGUILayout.LabelField("Horizontal Camera Borders");
         EditorGUILayout.BeginHorizontal();
-        left = EditorGUILayout.FloatField(left);
-        right = EditorGUILayout.FloatField(right);
+        EditorGUILayout.PropertyField(minXProp);
+        EditorGUILayout.PropertyField(maxXProp);
         EditorGUILayout.EndHorizontal();
-        followCamera.SetHorizontalCameraBorders(left, right);
-        EditorUtility.SetDirty(followCamera);
+        serializedObject.ApplyModifiedProperties();
     }
 }

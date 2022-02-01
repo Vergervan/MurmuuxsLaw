@@ -65,15 +65,19 @@ public class ItemCell : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     public void OnDrag(PointerEventData eventData)
     {
         if (Type == Inventory.ItemType.Nothing) return;
-        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor; //В конце делим на скейл родительского объекта
+        if(eventData.button == PointerEventData.InputButton.Left) rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor; //В конце делим на скейл родительского объекта
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
-        posBeforeDrag = rectTransform.anchoredPosition;
-        itemImage.transform.SetAsLastSibling();
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            posBeforeDrag = rectTransform.anchoredPosition;
+            itemImage.transform.SetAsLastSibling();
+        }
     }
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left) return;
         rectTransform.anchoredPosition = posBeforeDrag;
         if (Type == Inventory.ItemType.Nothing)
         {
