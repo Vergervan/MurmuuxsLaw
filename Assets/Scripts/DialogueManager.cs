@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
 {
+    [SerializeField] private GameObject speechBubblePrefab;
     public SpeechBubble CreateSpeechBubble(Transform target)
     {
-        GameObject bubbleObj = (GameObject)Instantiate(Resources.Load("Speech Bubble"), transform);
+        GameObject bubbleObj = Instantiate(speechBubblePrefab, transform);
         SpeechBubble bubble = bubbleObj.GetComponent<SpeechBubble>();
         bubble.SetTarget(target);
         return bubble;

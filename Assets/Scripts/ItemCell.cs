@@ -126,8 +126,7 @@ public class ItemCell : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     {
         if(eventData.button == PointerEventData.InputButton.Right)
         {
-            itemMenuManager.ExecuteInPosition(eventData.position);
-            Debug.Log(eventData.position);
+            itemMenuManager.ExecuteInPosition(itemImage.transform.position);
         }
     }
 }

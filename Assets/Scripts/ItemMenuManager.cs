@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class ItemMenuManager : MonoBehaviour
 {
-    [SerializeField] private StackGroup menuObject;
-    private RectTransform menuRect;
+    [SerializeField] private RectTransform menuObject;
     [SerializeField] private Canvas canvas;
     [SerializeField] private bool _enabled;
     public bool Enabled
@@ -17,13 +16,15 @@ public class ItemMenuManager : MonoBehaviour
             menuObject.gameObject.SetActive(value);
         }
     }
-    private void Start()
-    {
-        menuRect = menuObject.GetComponent<RectTransform>();
-    }
     public void ExecuteInPosition(Vector2 pos)
     {
-        menuRect.localPosition = pos;
+        Debug.Log(pos);
+        if (pos.y < menuObject.sizeDelta.y)
+        {
+            pos.y -= (pos.y - menuObject.sizeDelta.y);
+        }
+        menuObject.transform.position = pos;
+        Debug.Log(pos);
         if (!Enabled) Enabled = true;
     }
 }
