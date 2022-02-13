@@ -415,21 +415,10 @@ public class NetworkManager : MonoBehaviour
         newPlayer.playerGuid = playerGuid;
         if (socket == null)
         {
-<<<<<<< HEAD
-            //newPlayer.GetComponent<BoxCollider2D>().enabled = false;
-            players.Add(newPlayer);
-=======
-            if (socket == null)
-            {
-                //newPlayer.GetComponent<BoxCollider2D>().enabled = false;
-                players.Add(playerGuid, newPlayer);
-            }
-            else
-                playersSocket.Add(socket, new Tuple<Guid, PlayerController>(playerGuid, newPlayer));
->>>>>>> b2f4f9dee9ed71a7833618cd578a7a21534e725f
+            players.Add(playerGuid, newPlayer);
         }
-        else
-            playersSocket.Add(socket, newPlayer);
+        else 
+            playersSocket.Add(socket, new Tuple<Guid, PlayerController>(playerGuid, newPlayer));
     }
 
     private void LoadNetworkScene(string sceneName, PlayerInfo info)
@@ -499,17 +488,6 @@ public class NetworkManager : MonoBehaviour
     {
         lock (lockObj)
         {
-<<<<<<< HEAD
-            foreach (var player in players)
-            {
-                if (player.playerGuid == guid)
-                {
-                    Destroy(player.gameObject);
-                    players.Remove(player);
-                    return;
-                }
-            }
-=======
             var player = players[guid];
             Destroy(player.gameObject);
             players.Remove(guid);
@@ -525,7 +503,6 @@ public class NetworkManager : MonoBehaviour
             case NetworkType.Server:
                 RemovePlayerFromServer(client);
                 break;
->>>>>>> b2f4f9dee9ed71a7833618cd578a7a21534e725f
         }
         Debug.Log($"Stop listening {client.RemoteEndPoint}");
         client.Close();
