@@ -22,17 +22,17 @@ public static partial class PlayerInfoReflection {
   static PlayerInfoReflection() {
     byte[] descriptorData = global::System.Convert.FromBase64String(
         string.Concat(
-          "ChBQbGF5ZXJJbmZvLnByb3RvIrsDCgpQbGF5ZXJJbmZvEiUKBHR5cGUYASAB",
-          "KA4yFy5QbGF5ZXJJbmZvLk1lc3NhZ2VUeXBlEiMKCWRpcmVjdGlvbhgCIAEo",
-          "CzIQLlBsYXllckluZm8udmVjMhIjCghwb3NpdGlvbhgDIAEoCzIRLlBsYXll",
-          "ckluZm8udmVjMmYSDAoEZ3VpZBgEIAEoCRocCgR2ZWMyEgkKAXgYASABKAUS",
-          "CQoBeRgCIAEoBRodCgV2ZWMyZhIJCgF4GAEgASgCEgkKAXkYAiABKAIivAEK",
-          "C01lc3NhZ2VUeXBlEgsKB0Nvbm5lY3QQABIRCg1BY2NlcHRDb25uZWN0EAES",
-          "CAoETW92ZRACEg4KCkFjY2VwdE1vdmUQAxIPCgtJbmZvUmVxdWVzdBAEEhYK",
-          "Ek5ld1BsYXllckNvbm5lY3RlZBAFEhEKDU5ld1BsYXllckluZm8QBhIOCgpE",
-          "aXNjb25uZWN0EAcSDwoLUGxheWVyTW92ZXMQCBIWChJQbGF5ZXJEaXNjb25u",
-          "ZWN0ZWQQCSIyCglEaXJlY3Rpb24SBgoCVXAQABIICgREb3duEAESCAoETGVm",
-          "dBACEgkKBVJpZ2h0EANiBnByb3RvMw=="));
+          "ChBQbGF5ZXJJbmZvLnByb3RvIrwDCgpQbGF5ZXJJbmZvEiUKBHR5cGUYASAB",
+          "KA4yFy5QbGF5ZXJJbmZvLk1lc3NhZ2VUeXBlEiQKCWRpcmVjdGlvbhgCIAEo",
+          "CzIRLlBsYXllckluZm8udmVjMmYSIwoIcG9zaXRpb24YAyABKAsyES5QbGF5",
+          "ZXJJbmZvLnZlYzJmEgwKBGd1aWQYBCABKAkaHAoEdmVjMhIJCgF4GAEgASgF",
+          "EgkKAXkYAiABKAUaHQoFdmVjMmYSCQoBeBgBIAEoAhIJCgF5GAIgASgCIrwB",
+          "CgtNZXNzYWdlVHlwZRILCgdDb25uZWN0EAASEQoNQWNjZXB0Q29ubmVjdBAB",
+          "EggKBE1vdmUQAhIOCgpBY2NlcHRNb3ZlEAMSDwoLSW5mb1JlcXVlc3QQBBIW",
+          "ChJOZXdQbGF5ZXJDb25uZWN0ZWQQBRIRCg1OZXdQbGF5ZXJJbmZvEAYSDgoK",
+          "RGlzY29ubmVjdBAHEg8KC1BsYXllck1vdmVzEAgSFgoSUGxheWVyRGlzY29u",
+          "bmVjdGVkEAkiMgoJRGlyZWN0aW9uEgYKAlVwEAASCAoERG93bhABEggKBExl",
+          "ZnQQAhIJCgVSaWdodBADYgZwcm90bzM="));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { },
         new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -105,10 +105,10 @@ public sealed partial class PlayerInfo : pb::IMessage<PlayerInfo>
 
   /// <summary>Field number for the "direction" field.</summary>
   public const int DirectionFieldNumber = 2;
-  private global::PlayerInfo.Types.vec2 direction_;
+  private global::PlayerInfo.Types.vec2f direction_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public global::PlayerInfo.Types.vec2 Direction {
+  public global::PlayerInfo.Types.vec2f Direction {
     get { return direction_; }
     set {
       direction_ = value;
@@ -268,7 +268,7 @@ public sealed partial class PlayerInfo : pb::IMessage<PlayerInfo>
     }
     if (other.direction_ != null) {
       if (direction_ == null) {
-        Direction = new global::PlayerInfo.Types.vec2();
+        Direction = new global::PlayerInfo.Types.vec2f();
       }
       Direction.MergeFrom(other.Direction);
     }
@@ -302,7 +302,7 @@ public sealed partial class PlayerInfo : pb::IMessage<PlayerInfo>
         }
         case 18: {
           if (direction_ == null) {
-            Direction = new global::PlayerInfo.Types.vec2();
+            Direction = new global::PlayerInfo.Types.vec2f();
           }
           input.ReadMessage(Direction);
           break;
@@ -339,7 +339,7 @@ public sealed partial class PlayerInfo : pb::IMessage<PlayerInfo>
         }
         case 18: {
           if (direction_ == null) {
-            Direction = new global::PlayerInfo.Types.vec2();
+            Direction = new global::PlayerInfo.Types.vec2f();
           }
           input.ReadMessage(Direction);
           break;
