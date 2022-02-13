@@ -39,7 +39,7 @@ public class NetworkManager : MonoBehaviour
     private void Awake()
     {
         string[] args = System.Environment.GetCommandLineArgs();
-        foreach(var arg in args)
+        foreach (var arg in args)
         {
             if (arg.Contains("-port="))
             {
@@ -231,8 +231,8 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public void ConnectAsClient(TMPro.TMP_InputField addressText) 
-    { 
+    public void ConnectAsClient(TMPro.TMP_InputField addressText)
+    {
         string[] addrParts = addressText.text.Split(':');
         int port;
         try
@@ -314,16 +314,13 @@ public class NetworkManager : MonoBehaviour
         newPlayer.SetIsOnlinePlayer(true);
         newPlayer.transform.position = startPos;
         newPlayer.playerGuid = playerGuid;
-        lock (lockObj)
+        if (socket == null)
         {
-            if (socket == null)
-            {
-                //newPlayer.GetComponent<BoxCollider2D>().enabled = false;
-                players.Add(newPlayer);
-            }
-            else
-                playersSocket.Add(socket, newPlayer);
+            //newPlayer.GetComponent<BoxCollider2D>().enabled = false;
+            players.Add(newPlayer);
         }
+        else
+            playersSocket.Add(socket, newPlayer);
     }
 
     private void LoadNetworkScene(string sceneName, PlayerInfo info)
@@ -359,7 +356,7 @@ public class NetworkManager : MonoBehaviour
     {
         lock (lockObj)
         {
-            foreach(var player in playersSocket)
+            foreach (var player in playersSocket)
             {
                 if (client == player.Key) continue;
                 SendMessageTo(player.Key, new PlayerInfo(info) { Type = MessageType.NewPlayerConnected });
@@ -381,9 +378,9 @@ public class NetworkManager : MonoBehaviour
     {
         lock (lockObj)
         {
-            foreach(var player in players)
+            foreach (var player in players)
             {
-                if(player.playerGuid == guid)
+                if (player.playerGuid == guid)
                 {
                     Destroy(player.gameObject);
                     players.Remove(player);

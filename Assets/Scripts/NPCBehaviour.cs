@@ -44,6 +44,7 @@ public class NPCBehaviour : MonoBehaviour
                 isSpeak = false;
                 return;
             }
+            npcBubble.StopWriting();
             npcBubble.StartSpeech();
         }
     }
