@@ -413,16 +413,12 @@ public class NetworkManager : MonoBehaviour
         newPlayer.SetIsOnlinePlayer(true);
         newPlayer.transform.position = startPos;
         newPlayer.playerGuid = playerGuid;
-        lock (lockObj)
+        if (socket == null)
         {
-            if (socket == null)
-            {
-                //newPlayer.GetComponent<BoxCollider2D>().enabled = false;
-                players.Add(playerGuid, newPlayer);
-            }
-            else
-                playersSocket.Add(socket, new Tuple<Guid, PlayerController>(playerGuid, newPlayer));
+            players.Add(playerGuid, newPlayer);
         }
+        else 
+            playersSocket.Add(socket, new Tuple<Guid, PlayerController>(playerGuid, newPlayer));
     }
 
     private void LoadNetworkScene(string sceneName, PlayerInfo info)

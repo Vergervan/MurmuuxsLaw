@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+[RequireComponent(typeof(TextFlag), typeof(TMP_Text))]
 public class SpeechBubble : MonoBehaviour
 {
     private TMP_Text text;
@@ -12,6 +13,12 @@ public class SpeechBubble : MonoBehaviour
     public Vector2 bubblePosition;
     public bool useTarget;
     private TextFlag textFlag;
+    private bool m_stopflag = false;
+    private bool m_writing = false;
+    public bool IsWriting
+    {
+        get => m_writing;
+    }
     void Awake()
     {
         text = GetComponentInChildren<TMP_Text>();
@@ -45,6 +52,11 @@ public class SpeechBubble : MonoBehaviour
 
         while(charIndex < text.Length)
         {
+            if (m_stopflag)
+            {
+                m_stopflag = false;
+                yield break;
+            }
             t += Time.deltaTime * writeSpeed;
             charIndex = Mathf.FloorToInt(t);
             charIndex = Mathf.Clamp(charIndex, 0, text.Length);
@@ -53,6 +65,9 @@ public class SpeechBubble : MonoBehaviour
 
             yield return null;
         }
-        this.text.text = text;
+    }
+    public void StopWriting()
+    {
+        m_stopflag = true;
     }
 }
