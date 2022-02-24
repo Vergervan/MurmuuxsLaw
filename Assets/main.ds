@@ -1,0 +1,9 @@
+
+
+[D]defaultDialog
+	defaultPhrase > defaultAnswer
+
+[A!]defaultAnswer=hell
+
+[M]defaultPhrase=defaultPhrase
+
