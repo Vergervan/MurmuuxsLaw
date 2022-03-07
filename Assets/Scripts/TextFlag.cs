@@ -6,7 +6,7 @@ using System;
 public class TextFlag : MonoBehaviour
 {
     [SerializeField] private string _flagName;
-    [SerializeField] private Dialogue _flagValue;
+    [SerializeField] private UnitSpeech _flagValue;
     private TMP_Text _text;
     private void Awake()
     {
@@ -27,7 +27,7 @@ public class TextFlag : MonoBehaviour
     {
         get => _flagName;
     }
-    public Dialogue FlagValue
+    public UnitSpeech FlagValue
     {
         get => _flagValue;
     }
@@ -39,8 +39,8 @@ public class TextFlag : MonoBehaviour
             _text.text = _flagValue.CurrentText();
         }catch(Exception) { Debug.LogError("Error load flag: " + _flagName); }
     }
-    public void SetFlagValue(Dialogue dialogueValue)
+    public void SetFlagValue(UnitSpeech speechValue)
     {
-        _flagValue = dialogueValue;
+        _flagValue = speechValue;
     }
 }

@@ -1,9 +1,7 @@
 
-
-[D]defaultDialog
-	defaultPhrase > defaultAnswer
+[D]defaultDialog=startDialogPhrase
+	defaultAnswer > defaultPhrase
 
 [A!]defaultAnswer=hell
 
 [M]defaultPhrase=defaultPhrase
-

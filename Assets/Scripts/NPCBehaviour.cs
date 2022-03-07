@@ -9,10 +9,11 @@ public class NPCBehaviour : MonoBehaviour
     [Serializable]
     public class NPCSettings
     {
-        public string currentFlag;
+        public string dialogName;
+        public string altDialogName;
     }
 
-    public NPCSettings npcSettings;
+    [SerializeField] private NPCSettings npcSettings;
     [SerializeField] private DialogueManager dManager;
     [SerializeField] private PlayerController player;
     private SpeechBubble npcBubble;
@@ -30,7 +31,10 @@ public class NPCBehaviour : MonoBehaviour
         {
             if (npcBubble == null) npcBubble = dManager.CreateSpeechBubble(transform);
             npcBubble.gameObject.SetActive(true);
-            npcBubble.SetFlagName(npcSettings.currentFlag);
+            DialogScriptCreator.Dialog dialog = dManager.GetDialog(npcSettings.dialogName);
+            if (dialog.IsAnswer) throw new Exception("Can't use an answer as a dialog");
+            if (dialog.IsDialog) dManager.SetRoutesInDialogWindow(dialog.Routes);
+            npcBubble.SetDialog(dialog);
             isSpeak = true;
             npcBubble.StartSpeech();
         }
@@ -44,7 +48,6 @@ public class NPCBehaviour : MonoBehaviour
                 isSpeak = false;
                 return;
             }
-            npcBubble.StopWriting();
             npcBubble.StartSpeech();
         }
     }

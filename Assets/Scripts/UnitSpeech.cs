@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System;
 
 [Serializable]
-public class Dialogue
+public class UnitSpeech
 {
     private List<string> m_dialogueList;
     private int index = 0;
-    public Dialogue()
+    public UnitSpeech()
     {
         m_dialogueList = new List<string>();
     }
-    public Dialogue(IEnumerable<string> strarr)
+    public UnitSpeech(IEnumerable<string> strarr)
     {
         m_dialogueList = new List<string>();
         AddText(strarr);

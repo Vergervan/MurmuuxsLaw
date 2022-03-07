@@ -1,7 +1,9 @@
+using DialogScriptCreator;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.Linq;
 
 public class DialogueController : MonoBehaviour
 {
@@ -9,15 +11,11 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private RectTransform speechSelector;
     [SerializeField] private RectTransform contentMask;
     [SerializeField] private RectTransform content;
-    [SerializeField] private TMP_Text textPrefab;
-    [SerializeField] private List<ChoiceItem> choices = new List<ChoiceItem>();
+    [SerializeField] private ChoiceItem choicePrefab;
+    [SerializeField] private List<Route> choicesRoutes = new List<Route>();
+    private List<ChoiceItem> choices = new List<ChoiceItem>();
     private int currentSelection = 0;
-   
-    void Start()
-    {
-        choices.AddRange(content.GetComponentsInChildren<ChoiceItem>(true));
-    }
-
+    public int ChoicesCount { get => choicesRoutes.Count; }
     private void Update()
     {
         if (window.IsOpened)
@@ -34,6 +32,37 @@ public class DialogueController : MonoBehaviour
             }
         }
     }
+    public void SetRoutes(IEnumerable<Route> routes)
+    {
+        currentSelection = 0;
+        choicesRoutes.Clear();
+        choicesRoutes.AddRange(routes);
+        ClearContent();
+        BuildDialogWindowItems();
+        window.ToggleWindow();
+    }
+    private void ClearContent()
+    {
+        foreach(Transform obj in content.transform)
+        {
+            Destroy(obj.gameObject);
+        }
+    }
+    private void BuildDialogWindowItems()
+    {
+        choices.Clear();
+        foreach (var item in choicesRoutes) 
+        {
+            ChoiceItem choice = Instantiate(choicePrefab.gameObject, content).GetComponent<ChoiceItem>();
+            var speech = LanguageManager.reader.GetUnitSpeech(item.From.Value);
+            if(choice == null)
+            {
+                Debug.Log("Null");
+            }
+            choice.Text = speech.CurrentText();
+        }
+    }
+
     public void SelectChoice(int index, KeyCode arrow = KeyCode.None)
     {
         ChoiceItem item = choices[index];

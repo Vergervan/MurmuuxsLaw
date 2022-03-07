@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,10 +19,11 @@ public class DialogueWindow : MonoBehaviour
     }
     public void ToggleWindow()
     {
+        if (controller.ChoicesCount == 0) return;
         _opened = !_opened;
         buttonBackground.sprite = _opened ? altImage : baseSprite;
         windowObject.SetActive(_opened);
-        if (_opened) 
+        if (_opened && controller.ChoicesCount > 0) 
             controller.SelectChoice(0);
     }
 }

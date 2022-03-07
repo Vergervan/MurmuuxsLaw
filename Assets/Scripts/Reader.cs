@@ -12,7 +12,7 @@ public class Reader
             _filename = value;
         }
     }
-    private Dictionary<string, Dialogue> lines;
+    private Dictionary<string, UnitSpeech> lines;
 
     public bool ReadFile() => ReadFile(Filename);
     public bool ReadFile(string fname)
@@ -43,22 +43,22 @@ public class Reader
             if (indexOfEq == -1) continue;
             stringName = line.Substring(0, indexOfEq).Trim();
             stringValue = line.Substring(indexOfEq + 1).TrimStart(' ');
-            lines.Add(stringName, new Dialogue(stringValue.Split(new string[] { "<br>" }, System.StringSplitOptions.RemoveEmptyEntries)));
+            lines.Add(stringName, new UnitSpeech(stringValue.Split(new string[] { "<br>" }, System.StringSplitOptions.RemoveEmptyEntries)));
         }
         return true;
     }
     public Reader()
     {
-        lines = new Dictionary<string, Dialogue>();
+        lines = new Dictionary<string, UnitSpeech>();
     }
     public Reader(string fname)
     {
-        lines = new Dictionary<string, Dialogue>();
+        lines = new Dictionary<string, UnitSpeech>();
         Filename = fname;
         ReadFile(Filename);
     }
 
-    public Dialogue GetDialogue(string name)
+    public UnitSpeech GetUnitSpeech(string name)
     {
         if (lines.ContainsKey(name))
             return lines[name];

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LanguageManager : MonoBehaviour
 {
-    public static Reader reader = new Reader();
+    public static readonly Reader reader = new Reader();
     void Awake()
     {
         ChangeLanguage("ru_RU");
@@ -38,7 +38,7 @@ public class LanguageManager : MonoBehaviour
         }
         foreach (var flag in flags)
         {
-            flag.SetFlagValue(reader.GetDialogue(flag.FlagName));
+            flag.SetFlagValue(reader.GetUnitSpeech(flag.FlagName));
             flag.RefreshFlagValue();
         }
     }
