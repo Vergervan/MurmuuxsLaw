@@ -16,8 +16,11 @@ public class DialogueManager : MonoBehaviour
 #elif UNITY_STANDALONE
         fullFileName = System.IO.Directory.GetCurrentDirectory() + "\\scripts\\" + fileName;
 #endif
-        Debug.Log(fullFileName);
-        scriptReader.ReadScript(fullFileName);
+        Debug.Log($"Read a dialog script by path: {fullFileName}");
+        if (!scriptReader.ReadScript(fullFileName))
+        {
+            Debug.LogError($"Can't read a dialog script {fileName}");
+        }
     }
     public SpeechBubble CreateSpeechBubble(Transform target)
     {

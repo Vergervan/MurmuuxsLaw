@@ -11,7 +11,7 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private RectTransform speechSelector;
     [SerializeField] private RectTransform contentMask;
     [SerializeField] private RectTransform content;
-    [SerializeField] private ChoiceItem choicePrefab;
+    [SerializeField] private GameObject choicePrefab;
     [SerializeField] private List<Route> choicesRoutes = new List<Route>();
     private List<ChoiceItem> choices = new List<ChoiceItem>();
     private int currentSelection = 0;
@@ -53,13 +53,10 @@ public class DialogueController : MonoBehaviour
         choices.Clear();
         foreach (var item in choicesRoutes) 
         {
-            ChoiceItem choice = Instantiate(choicePrefab.gameObject, content).GetComponent<ChoiceItem>();
+            ChoiceItem choice = Instantiate(choicePrefab, content).GetComponent<ChoiceItem>();
             var speech = LanguageManager.reader.GetUnitSpeech(item.From.Value);
-            if(choice == null)
-            {
-                Debug.Log("Null");
-            }
             choice.Text = speech.CurrentText();
+            choices.Add(choice);
         }
     }
 
