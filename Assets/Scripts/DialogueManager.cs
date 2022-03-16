@@ -8,6 +8,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private DialogueController dialogueController;
     private readonly DialogScriptReader scriptReader = new DialogScriptReader();
     private string fileName = "main.ds";
+    public DialogueController GetDialogController() => dialogueController;
     private void Awake()
     {
         string fullFileName = string.Empty;

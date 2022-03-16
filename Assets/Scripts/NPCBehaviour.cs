@@ -37,18 +37,25 @@ public class NPCBehaviour : MonoBehaviour
             npcBubble.SetDialog(dialog);
             isSpeak = true;
             npcBubble.StartSpeech();
+            if(!npcBubble.GetTextFlag().FlagValue.HasNext())
+                dManager.GetDialogController().GetDialogWindow().ToggleWindow();
         }
         else
         {
-            string nextText = npcBubble.GetTextFlag().FlagValue.Next();
-            if(string.IsNullOrEmpty(nextText))
+            UnitSpeech speech = npcBubble.GetTextFlag().FlagValue;
+            if (!speech.HasNext())
             {
-                DisableBubble();
-                npcBubble.GetTextFlag().FlagValue.SetToStart();
-                isSpeak = false;
                 return;
             }
+            //if (nextIsNull)
+            //{
+            //    DisableBubble();
+            //    npcBubble.GetTextFlag().FlagValue.SetToStart();
+            //    isSpeak = false;
+            //    return;
+            //}
             npcBubble.StartSpeech();
+            dManager.GetDialogController().GetDialogWindow().ToggleWindow();
         }
     }
 

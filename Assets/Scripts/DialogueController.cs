@@ -16,10 +16,15 @@ public class DialogueController : MonoBehaviour
     private List<ChoiceItem> choices = new List<ChoiceItem>();
     private int currentSelection = 0;
     public int ChoicesCount { get => choicesRoutes.Count; }
+    public DialogueWindow GetDialogWindow() => window;
     private void Update()
     {
         if (window.IsOpened)
         {
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+
+            }
             if (Input.GetKeyDown(KeyCode.UpArrow) && currentSelection > 0)
             {
                 --currentSelection;
@@ -39,7 +44,7 @@ public class DialogueController : MonoBehaviour
         choicesRoutes.AddRange(routes);
         ClearContent();
         BuildDialogWindowItems();
-        window.ToggleWindow();
+        //window.ToggleWindow();
     }
     private void ClearContent()
     {
