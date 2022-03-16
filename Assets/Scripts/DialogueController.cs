@@ -15,6 +15,7 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private List<Route> choicesRoutes = new List<Route>();
     private List<ChoiceItem> choices = new List<ChoiceItem>();
     private int currentSelection = 0;
+    private NPCBehaviour currentNpc;
     public int ChoicesCount { get => choicesRoutes.Count; }
     public DialogueWindow GetDialogWindow() => window;
     private void Update()
@@ -23,7 +24,7 @@ public class DialogueController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-
+                currentNpc.ChangeDialog(choicesRoutes[currentSelection].To);
             }
             if (Input.GetKeyDown(KeyCode.UpArrow) && currentSelection > 0)
             {
@@ -37,9 +38,10 @@ public class DialogueController : MonoBehaviour
             }
         }
     }
-    public void SetRoutes(IEnumerable<Route> routes)
+    public void SetRoutes(NPCBehaviour npc, IEnumerable<Route> routes)
     {
         currentSelection = 0;
+        currentNpc = npc;
         choicesRoutes.Clear();
         choicesRoutes.AddRange(routes);
         ClearContent();

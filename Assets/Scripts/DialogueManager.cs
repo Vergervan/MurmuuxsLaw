@@ -31,5 +31,5 @@ public class DialogueManager : MonoBehaviour
         return bubble;
     }
     public Dialog GetDialog(string dialogName) => scriptReader.GetDialogByName(dialogName);
-    public void SetRoutesInDialogWindow(IEnumerable<Route> routes) => dialogueController.SetRoutes(routes);
+    public void SetRoutesInDialogWindow(NPCBehaviour npc, IEnumerable<Route> routes) => dialogueController.SetRoutes(npc, routes);
 }

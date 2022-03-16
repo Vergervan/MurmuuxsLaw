@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using DialogScriptCreator;
 
 public class NPCBehaviour : MonoBehaviour
 {
@@ -17,8 +18,15 @@ public class NPCBehaviour : MonoBehaviour
     [SerializeField] private DialogueManager dManager;
     [SerializeField] private PlayerController player;
     private SpeechBubble npcBubble;
+    private Dialog m_dialog;
+    private Dialog currentDialog;
     private bool isSpeak = false;
     private Coroutine hideBubble = null;
+    private void Start()
+    {
+        m_dialog = dManager.GetDialog(npcSettings.dialogName);
+        currentDialog = m_dialog;
+    }
     void OnMouseDown()
     {
         if (Vector2.Distance(player.transform.position, transform.position) > 2f)
@@ -29,33 +37,42 @@ public class NPCBehaviour : MonoBehaviour
         if (hideBubble != null) StopCoroutine(hideBubble);
         if (!isSpeak)
         {
+            currentDialog = m_dialog;
             if (npcBubble == null) npcBubble = dManager.CreateSpeechBubble(transform);
             npcBubble.gameObject.SetActive(true);
-            DialogScriptCreator.Dialog dialog = dManager.GetDialog(npcSettings.dialogName);
-            if (dialog.IsAnswer) throw new Exception("Can't use an answer as a dialog");
-            if (dialog.IsDialog) dManager.SetRoutesInDialogWindow(dialog.Routes);
-            npcBubble.SetDialog(dialog);
+            if (m_dialog.IsAnswer) throw new Exception("Can't use an answer as a dialog");
+            if (m_dialog.IsDialog) dManager.SetRoutesInDialogWindow(this, m_dialog.Routes);
+            npcBubble.SetDialog(m_dialog);
             isSpeak = true;
+            if (!npcBubble.GetTextFlag().FlagValue.HasNext() && m_dialog.IsDialog)
+            {
+                npcBubble.OnSpeechStop += (o, e) => dManager.GetDialogController().GetDialogWindow().TurnOn();
+            }
             npcBubble.StartSpeech();
-            if(!npcBubble.GetTextFlag().FlagValue.HasNext())
-                dManager.GetDialogController().GetDialogWindow().ToggleWindow();
         }
         else
         {
             UnitSpeech speech = npcBubble.GetTextFlag().FlagValue;
             if (!speech.HasNext())
             {
+                if (currentDialog.IsMonolog)
+                {
+                    DisableBubble();
+                    npcBubble.GetTextFlag().FlagValue.SetToStart();
+                    isSpeak = false;
+                }
                 return;
             }
-            //if (nextIsNull)
-            //{
-            //    DisableBubble();
-            //    npcBubble.GetTextFlag().FlagValue.SetToStart();
-            //    isSpeak = false;
-            //    return;
-            //}
+            speech.Next();
+            if (!speech.HasNext() && npcBubble.GetCurrentDialog().IsDialog)
+            {
+                npcBubble.OnSpeechStop += (o, e) => dManager.GetDialogController().GetDialogWindow().TurnOn();
+            }
+            if (!npcBubble.GetCurrentDialog().IsDialog)
+            {
+                dManager.GetDialogController().GetDialogWindow().TurnOff();
+            }
             npcBubble.StartSpeech();
-            dManager.GetDialogController().GetDialogWindow().ToggleWindow();
         }
     }
 
@@ -74,6 +91,20 @@ public class NPCBehaviour : MonoBehaviour
                 ResetSpeech();
             }
         }
+    }
+    public void ChangeDialog(Dialog newDialog)
+    {
+        currentDialog = newDialog;
+        dManager.GetDialogController().GetDialogWindow().TurnOff();
+        if (newDialog.IsAnswer) throw new Exception("Can't use an answer as a dialog");
+        if (newDialog.IsDialog) dManager.SetRoutesInDialogWindow(this, newDialog.Routes);
+        npcBubble.SetDialog(newDialog);
+        isSpeak = true;
+        //if (!npcBubble.GetTextFlag().FlagValue.HasNext() && newDialog.IsDialog)
+        //{
+        //    npcBubble.OnSpeechStop += (o, e) => dManager.GetDialogController().GetDialogWindow().ToggleWindow();
+        //}
+        npcBubble.StartSpeech();
     }
     public void ResetSpeech()
     {

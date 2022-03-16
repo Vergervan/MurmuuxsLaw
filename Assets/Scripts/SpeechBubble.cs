@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using DialogScriptCreator;
+using System;
 
 [RequireComponent(typeof(TextFlag), typeof(TMP_Text))]
 public class SpeechBubble : MonoBehaviour
@@ -16,6 +17,7 @@ public class SpeechBubble : MonoBehaviour
     public bool useTarget;
     private TextFlag textFlag;
     private bool m_writing = false;
+    public event EventHandler OnSpeechStop;
     public bool IsWriting
     {
         get => m_writing;
@@ -35,6 +37,10 @@ public class SpeechBubble : MonoBehaviour
     {
         _dialog = dialog;
         textFlag.SetFlagValue(LanguageManager.reader.GetUnitSpeech(dialog.Value));
+    }
+    public Dialog GetCurrentDialog()
+    {
+        return _dialog ?? null;
     }
     public void StartSpeech()
     {
@@ -66,5 +72,11 @@ public class SpeechBubble : MonoBehaviour
 
             yield return null;
         }
+        OnSpeechStop?.Invoke(this, new EventArgs());
+        ClearEvents();
+    }
+    public void ClearEvents()
+    {
+        OnSpeechStop = null;
     }
 }
