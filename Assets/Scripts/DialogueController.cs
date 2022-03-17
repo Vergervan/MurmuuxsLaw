@@ -24,7 +24,10 @@ public class DialogueController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                currentNpc.ChangeDialog(choicesRoutes[currentSelection].To);
+                Route route = choicesRoutes[currentSelection];
+                currentNpc.ChangeDialog(route.To);
+                if (route.Switchable)
+                    route.TurnOff();
             }
             if (Input.GetKeyDown(KeyCode.UpArrow) && currentSelection > 0)
             {
@@ -43,7 +46,7 @@ public class DialogueController : MonoBehaviour
         currentSelection = 0;
         currentNpc = npc;
         choicesRoutes.Clear();
-        choicesRoutes.AddRange(routes);
+        choicesRoutes.AddRange(routes.Where(route => route.Available));
         ClearContent();
         BuildDialogWindowItems();
         //window.ToggleWindow();

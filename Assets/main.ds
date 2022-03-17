@@ -1,7 +1,11 @@
 
 [D]defaultDialog=startDialogPhrase
 	defaultAnswer > defaultPhrase
+	endTalking > goodbye
 
 [A!]defaultAnswer=hell
+[A]endTalking=end
+
 
 [M]defaultPhrase=defaultPhrase
+[M]goodbye=bye
