@@ -108,8 +108,11 @@ public class PlayerController : MonoBehaviour
                     if (Vector2.Distance(transform.position, hit.collider.transform.position) < 1.5f)
                     {
                         //Debug.Log("You can take item " + hit.collider.GetComponent<LevelItem>().item.ToString());
-                        inventory.AddItemToInventory(hit.collider.GetComponent<LevelItem>().item);
-                        Destroy(hit.collider.gameObject);
+                        if (inventory.HasFreeCells())
+                        {
+                            inventory.AddItemToInventory(hit.collider.GetComponent<LevelItem>().item);
+                            Destroy(hit.collider.gameObject);
+                        }
                     }
                 }
             }

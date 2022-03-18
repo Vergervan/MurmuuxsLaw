@@ -1,11 +1,15 @@
 
 [D]defaultDialog=startDialogPhrase
 	defaultAnswer > defaultPhrase
+	giveCakeSmoker > thanks
 	endTalking > goodbye
 
 [A!]defaultAnswer=hell
 [A]endTalking=end
 
+[A(Cake)]giveCakeSmoker=cakeSmoker
+
 
 [M]defaultPhrase=defaultPhrase
 [M]goodbye=bye
+[M]thanks=thanks

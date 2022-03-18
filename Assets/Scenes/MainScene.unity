@@ -10076,6 +10076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84b13e4c887bd846987846b37f1b276, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueManager: {fileID: 813345022}
   items: []
 --- !u!222 &1340369432
 CanvasRenderer:

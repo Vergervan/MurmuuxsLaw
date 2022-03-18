@@ -7,6 +7,8 @@ using System;
 
 public class Inventory : MonoBehaviour
 {
+    [SerializeField] private DialogueManager dialogueManager;
+
     public enum ItemType
     {
         Nothing, Pistol, Phone, Cake, Wallet, Magazine, Tape
@@ -54,5 +56,34 @@ public class Inventory : MonoBehaviour
                 break;
             }
         }
+        SetConditionValue(type.ToString(), true);
+    }
+    public void RefreshConditions()
+    {
+        DialogScriptCreator.ConditionKeeper keeper = dialogueManager.GetConditionKeeper();
+        foreach (var cell in items)
+        {
+            if(cell.Type != ItemType.Nothing)
+            {
+                var cellStr = cell.Type.ToString();
+                if (keeper.HasCondition(cellStr))
+                {
+                    keeper.SetConditionValue(cellStr, true);
+                }
+            }
+        }
+    }
+    public void SetConditionValue(string name, bool b)
+    {
+        DialogScriptCreator.ConditionKeeper keeper = dialogueManager.GetConditionKeeper();
+        if (keeper.HasCondition(name))
+            keeper.SetConditionValue(name, b);
+    }
+    public bool HasFreeCells()
+    {
+        foreach(var cell in items)
+            if (cell.Type == ItemType.Nothing)
+                return true;
+        return false;
     }
 }

@@ -119,6 +119,7 @@ public class ItemCell : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
         Vector2 pos = player.transform.position;
         pos.y -= 1.05f;
         Instantiate(droppedItem, pos, Quaternion.identity, player.transform.parent);
+        inventory.SetConditionValue(Type.ToString(), false);
         Type = Inventory.ItemType.Nothing;
     }
 
