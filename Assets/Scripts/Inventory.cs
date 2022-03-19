@@ -9,6 +9,7 @@ public class Inventory : MonoBehaviour
 {
     [SerializeField] private DialogueManager dialogueManager;
 
+    [Serializable]
     public enum ItemType
     {
         Nothing, Pistol, Phone, Cake, Wallet, Magazine, Tape
@@ -85,5 +86,27 @@ public class Inventory : MonoBehaviour
             if (cell.Type == ItemType.Nothing)
                 return true;
         return false;
+    }
+    public void RemoveItem(ItemType itemType)
+    {
+        foreach (var cell in items)
+        {
+            if (cell.Type == itemType)
+            {
+                cell.SetItem(ItemType.Nothing);
+                return;
+            }
+        }
+    }
+    public void RemoveItem(string itemName)
+    {
+        foreach (var cell in items)
+        {
+            if (cell.Type.ToString() == itemName)
+            {
+                cell.SetItem(ItemType.Nothing);
+                return;
+            }
+        }
     }
 }
