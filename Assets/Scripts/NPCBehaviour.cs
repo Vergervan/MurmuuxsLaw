@@ -55,7 +55,7 @@ public class NPCBehaviour : MonoBehaviour
             UnitSpeech speech = npcBubble.GetTextFlag().FlagValue;
             if (!speech.HasNext())
             {
-                if (currentDialog.IsMonolog)
+                if (!dManager.GetDialogController().GetDialogWindow().IsOpened)
                 {
                     DisableBubble();
                     npcBubble.GetTextFlag().FlagValue.SetToStart();
@@ -97,13 +97,13 @@ public class NPCBehaviour : MonoBehaviour
         currentDialog = newDialog;
         dManager.GetDialogController().GetDialogWindow().TurnOff();
         if (newDialog.IsAnswer) throw new Exception("Can't use an answer as a dialog");
-        if (newDialog.IsDialog) dManager.SetRoutesInDialogWindow(this, newDialog.Routes);
         npcBubble.SetDialog(newDialog);
+        if (newDialog.IsDialog)
+        {
+            dManager.SetRoutesInDialogWindow(this, newDialog.Routes);
+            npcBubble.OnSpeechStop += (o, e) => dManager.GetDialogController().GetDialogWindow().ToggleWindow();
+        }
         isSpeak = true;
-        //if (!npcBubble.GetTextFlag().FlagValue.HasNext() && newDialog.IsDialog)
-        //{
-        //    npcBubble.OnSpeechStop += (o, e) => dManager.GetDialogController().GetDialogWindow().ToggleWindow();
-        //}
         npcBubble.StartSpeech();
     }
     public void ResetSpeech()
