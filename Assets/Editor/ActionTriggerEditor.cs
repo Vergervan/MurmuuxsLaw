@@ -28,8 +28,12 @@ public class ActionTriggerEditor : Editor
         EditorGUILayout.Space();
         if (GUILayout.Button("Add Event"))
         {
-            lock(lockObj)
-              trigger.AddAction(new ActionTriggerInfo());
+            lock (lockObj)
+            {
+                trigger.AddAction(new ActionTriggerInfo());
+                serializedObject.ApplyModifiedProperties();
+                return;
+            }
         }
         EditorGUILayout.Space();
         GUILine(1);
