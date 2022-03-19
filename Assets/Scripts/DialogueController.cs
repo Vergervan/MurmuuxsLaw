@@ -7,6 +7,7 @@ using System.Linq;
 
 public class DialogueController : MonoBehaviour
 {
+    [SerializeField] private ActionTrigger actionTrigger;
     [SerializeField] private DialogueWindow window;
     [SerializeField] private RectTransform speechSelector;
     [SerializeField] private RectTransform contentMask;
@@ -28,6 +29,14 @@ public class DialogueController : MonoBehaviour
                 currentNpc.ChangeDialog(route.To);
                 if (route.Switchable)
                     route.TurnOff();
+                if (route.HasTriggers)
+                {
+                    foreach(var trigger in route.Triggers)
+                    {
+                        actionTrigger.TryToInvokeEvent(trigger);
+                    }
+                }
+                    
             }
             if (Input.GetKeyDown(KeyCode.UpArrow) && currentSelection > 0)
             {

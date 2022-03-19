@@ -23,4 +23,16 @@ public class ActionTrigger : MonoBehaviour
     {
         _actions.Remove(info);
     }
+    public bool TryToInvokeEvent(string triggerName)
+    {
+        foreach(var item in _actions)
+        {
+            if(item.triggerName == triggerName)
+            {
+                item.triggerEvent?.Invoke();
+                return true;
+            }
+        }
+        return false;
+    }
 }

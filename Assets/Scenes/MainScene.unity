@@ -3718,6 +3718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3a6f98171cef184e86e5b254c4eb302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionTrigger: {fileID: 841649481}
   window: {fileID: 490514884}
   speechSelector: {fileID: 1183642864}
   contentMask: {fileID: 1969960720}
@@ -6222,10 +6223,6 @@ MonoBehaviour:
             m_StringArgument: Cake
             m_BoolArgument: 0
           m_CallState: 2
-  - triggerName: 
-    triggerEvent:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!1 &842661185
 GameObject:
   m_ObjectHideFlags: 0
