@@ -17,7 +17,7 @@ public class FollowCameraEditor : Editor
     {
         serializedObject.Update();
         DrawDefaultInspector();
-        EditorGUILayout.LabelField("Horizontal Camera Borders");
+        GUILayout.Label("Horizontal Camera Borders");
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PropertyField(minXProp);
         EditorGUILayout.PropertyField(maxXProp);

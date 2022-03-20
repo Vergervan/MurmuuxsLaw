@@ -27,7 +27,7 @@ public class DialogueController : MonoBehaviour
             {
                 Route route = choicesRoutes[currentSelection];
                 currentNpc.ChangeDialog(route.To);
-                if (route.Switchable)
+                if (route.Switchable && !route.To.HasAvailableRoutes)
                     route.TurnOff();
                 if (route.HasTriggers)
                 {
@@ -36,7 +36,6 @@ public class DialogueController : MonoBehaviour
                         actionTrigger.TryToInvokeEvent(trigger);
                     }
                 }
-                    
             }
             if (Input.GetKeyDown(KeyCode.UpArrow) && currentSelection > 0)
             {
@@ -55,7 +54,7 @@ public class DialogueController : MonoBehaviour
         currentSelection = 0;
         currentNpc = npc;
         choicesRoutes.Clear();
-        choicesRoutes.AddRange(routes.Where(route => route.Available));
+        choicesRoutes.AddRange(routes.Where(route => route.Available && (!route.To.IsDialog || route.To.HasAvailableRoutes)));
         ClearContent();
         BuildDialogWindowItems();
         //window.ToggleWindow();
