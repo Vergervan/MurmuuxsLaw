@@ -10,8 +10,8 @@
 [A!]defaultAnswer=hell
 [A]endTalking=end
 
-[A(Cake)]giveCakeSmoker=cakeSmoker
-[A]giveSmokerInfo=giveSmokerInfo
+[A!(Cake)]giveCakeSmoker=cakeSmoker
+[A!]giveSmokerInfo=giveSmokerInfo
 
 
 [M]defaultPhrase=defaultPhrase

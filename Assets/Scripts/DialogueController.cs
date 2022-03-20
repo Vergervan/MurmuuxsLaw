@@ -54,7 +54,7 @@ public class DialogueController : MonoBehaviour
         currentSelection = 0;
         currentNpc = npc;
         choicesRoutes.Clear();
-        choicesRoutes.AddRange(routes.Where(route => route.Available && (!route.To.IsDialog || route.To.HasAvailableRoutes)));
+        choicesRoutes.AddRange(routes.Where(route => route.Available && route.ConditionsMet && (!route.To.IsDialog || route.To.HasAvailableRoutes)));
         ClearContent();
         BuildDialogWindowItems();
         //window.ToggleWindow();
