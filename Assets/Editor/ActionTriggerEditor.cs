@@ -1,10 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
 using ActionTriggerInfo = ActionTrigger.ActionTriggerInfo;
+using TriggerEvent = ActionTrigger.TriggerEvent;
+using ActionType = ActionTrigger.TriggerEvent.ActionType;
 
 [CustomEditor(typeof(ActionTrigger))]
 [CanEditMultipleObjects]
@@ -12,8 +16,6 @@ public class ActionTriggerEditor : Editor
 {
     private ActionTrigger trigger;
     private readonly object lockObj = new object();
-    private int actionsCount;
-    private SerializedProperty _event;
     private SerializedProperty _currentAction;
     private SerializedProperty _showFoldout;
     private SerializedProperty actions;
@@ -29,7 +31,7 @@ public class ActionTriggerEditor : Editor
         serializedObject.Update();
         EditorGUILayout.LabelField("Actions Count: " + trigger.ActionsCount);
         EditorGUILayout.Space();
-        if (GUILayout.Button("Add Event"))
+        if (GUILayout.Button("Add Trigger"))
         {
             lock (lockObj)
             {
@@ -53,21 +55,43 @@ public class ActionTriggerEditor : Editor
                 EditorGUILayout.EndHorizontal();
                 _currentAction = actions.GetArrayElementAtIndex(counter);
                 _showFoldout = _currentAction.FindPropertyRelative("_showFoldout");
+                EditorGUILayout.BeginHorizontal();
                 _showFoldout.boolValue = GUILayout.Toggle(_showFoldout.boolValue, "Show Events");
+                if(GUILayout.Button("Add Event"))
+                {
+                    trigger.Actions.ElementAt(counter).AddEvent(new TriggerEvent());
+                }
+                EditorGUILayout.EndHorizontal();
                 if (_showFoldout.boolValue)
                 {
-                    _event = _currentAction.FindPropertyRelative("triggerEvent");
-                    EditorGUILayout.PropertyField(_event);
+                    var events = trigger.Actions.ElementAt(counter).Events;
+                    if (events != null)
+                    {
+                        foreach (var evnt in events)
+                        {
+                            EditorGUILayout.Space();
+                            EditorGUILayout.BeginHorizontal();
+                            evnt.type = (ActionType)EditorGUILayout.EnumPopup(evnt.type);
+                            if (GUILayout.Button("-"))
+                            {
+                                trigger.Actions.ElementAt(counter).Events.Remove(evnt);
+                                serializedObject.ApplyModifiedProperties();
+                                return;
+                            }
+                            EditorGUILayout.EndHorizontal();
+                            ShowEventFields(evnt);
+                        }
+                    }
                 }
-
                 EditorGUILayout.Space();
 
-                if (GUILayout.Button("Remove Event"))
+                if (GUILayout.Button("Remove Trigger"))
                 {
                     trigger.RemoveAction(item);
                     break;
                 }
                 counter++;
+                item.GenerateEvents();
             }
         }
         serializedObject.ApplyModifiedProperties();
@@ -78,5 +102,18 @@ public class ActionTriggerEditor : Editor
         Rect rect = EditorGUILayout.GetControlRect(false, height);
         rect.height = height;
         EditorGUI.DrawRect(rect, new Color(0.5f, 0.5f, 0.5f, 1));
+    }
+
+    private void ShowEventFields(TriggerEvent _event)
+    {
+        switch (_event.type)
+        {
+            case ActionType.RemoveItem:
+                EditorGUILayout.BeginHorizontal();
+                _event.inventory = (Inventory)EditorGUILayout.ObjectField(_event.inventory, typeof(Inventory), true);
+                _event.item = (Inventory.ItemType)EditorGUILayout.EnumPopup(_event.item);
+                EditorGUILayout.EndHorizontal();
+                break;
+        }
     }
 }
