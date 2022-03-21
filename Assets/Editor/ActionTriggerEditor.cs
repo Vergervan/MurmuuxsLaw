@@ -38,14 +38,14 @@ public class ActionTriggerEditor : Editor
                 return;
             }
         }
-        EditorGUILayout.Space();
-        GUILine(1);
-        EditorGUILayout.Space();
         int counter = 0;
         lock (lockObj)
         {
             foreach (var item in trigger.Actions)
             {
+                EditorGUILayout.Space();
+                GUILine(1);
+                EditorGUILayout.Space();
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label("Trigger Name:");
                 item.triggerName = EditorGUILayout.TextField(item.triggerName);
@@ -67,9 +67,6 @@ public class ActionTriggerEditor : Editor
                     trigger.RemoveAction(item);
                     break;
                 }
-                EditorGUILayout.Space();
-                GUILine(1);
-                EditorGUILayout.Space();
                 counter++;
             }
         }
