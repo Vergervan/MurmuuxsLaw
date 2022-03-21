@@ -6223,6 +6223,7 @@ MonoBehaviour:
             m_StringArgument: Cake
             m_BoolArgument: 0
           m_CallState: 2
+    _showFoldout: 0
 --- !u!1 &842661185
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ public class ActionTrigger : MonoBehaviour
     {
         public string triggerName;
         public UnityEvent triggerEvent;
+        [SerializeField] private bool _showFoldout;
     }
     [SerializeField] private List<ActionTriggerInfo> _actions;
     public int ActionsCount => _actions.Count;

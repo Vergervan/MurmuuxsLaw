@@ -14,6 +14,8 @@ public class ActionTriggerEditor : Editor
     private readonly object lockObj = new object();
     private int actionsCount;
     private SerializedProperty _event;
+    private SerializedProperty _currentAction;
+    private SerializedProperty _showFoldout;
     private SerializedProperty actions;
 
     void OnEnable()
@@ -24,6 +26,7 @@ public class ActionTriggerEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        serializedObject.Update();
         EditorGUILayout.LabelField("Actions Count: " + trigger.ActionsCount);
         EditorGUILayout.Space();
         if (GUILayout.Button("Add Event"))
@@ -48,10 +51,17 @@ public class ActionTriggerEditor : Editor
                 item.triggerName = EditorGUILayout.TextField(item.triggerName);
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
-                EditorGUILayout.BeginHorizontal();
-                _event = actions.GetArrayElementAtIndex(counter).FindPropertyRelative("triggerEvent");
-                EditorGUILayout.PropertyField(_event);
-                EditorGUILayout.EndHorizontal();
+                _currentAction = actions.GetArrayElementAtIndex(counter);
+                _showFoldout = _currentAction.FindPropertyRelative("_showFoldout");
+                _showFoldout.boolValue = GUILayout.Toggle(_showFoldout.boolValue, "Show Events");
+                if (_showFoldout.boolValue)
+                {
+                    _event = _currentAction.FindPropertyRelative("triggerEvent");
+                    EditorGUILayout.PropertyField(_event);
+                }
+
+                EditorGUILayout.Space();
+
                 if (GUILayout.Button("Remove Event"))
                 {
                     trigger.RemoveAction(item);
