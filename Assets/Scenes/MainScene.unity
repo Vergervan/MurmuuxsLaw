@@ -6207,7 +6207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _actions:
   - triggerName: removeCake
-    _showFoldout: 0
+    _showFoldout: 1
     events:
     - type: 0
       item: 3
@@ -11085,8 +11085,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcSettings:
     dialogName: defaultDialog
-    altDialogName: 
-    limitToAlt: 0
+    altDialogName: noTalks
+    limitToAlt: 1
   dManager: {fileID: 813345022}
   player: {fileID: 1799956603}
 --- !u!61 &1497674837

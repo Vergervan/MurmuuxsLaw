@@ -28,7 +28,13 @@ public class DialogueController : MonoBehaviour
                 Route route = choicesRoutes[currentSelection];
                 currentNpc.ChangeDialog(route.To);
                 if (route.Switchable && !route.To.HasAvailableRoutes)
+                {
                     route.TurnOff();
+                    if (!route.Parent.HasAvailableRoutes)
+                    {
+                        route.Parent.ParentRoute.TurnOff();
+                    }
+                }
                 if (route.HasTriggers)
                 {
                     foreach(var trigger in route.Triggers)

@@ -41,6 +41,9 @@ public class NPCBehaviour : MonoBehaviour
         if (!isSpeak)
         {
             currentDialog = m_dialog;
+            Debug.Log(currentDialog.AvailableRoutesCount);
+            if (currentDialog.AvailableRoutesCount <= npcSettings.limitToAlt)
+                currentDialog = m_altdialog;
             if (npcBubble == null) npcBubble = dManager.CreateSpeechBubble(transform);
             npcBubble.gameObject.SetActive(true);
             if (currentDialog.IsAnswer) throw new Exception("Can't use an answer as a dialog");
