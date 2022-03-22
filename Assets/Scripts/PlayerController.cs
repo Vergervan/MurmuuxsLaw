@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
         direction = ReadMovementKeys();
         if (direction.magnitude > 0)
         {
-            switch (network.networkType)
+            switch (network.Type)
             {
                 case NetworkType.Client:
                     SendPositionToServer(direction);

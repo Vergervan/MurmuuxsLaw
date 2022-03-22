@@ -12,19 +12,22 @@ public class NPCBehaviour : MonoBehaviour
     {
         public string dialogName;
         public string altDialogName;
+        public int limitToAlt;
     }
 
     [SerializeField] private NPCSettings npcSettings;
     [SerializeField] private DialogueManager dManager;
     [SerializeField] private PlayerController player;
     private SpeechBubble npcBubble;
-    private Dialog m_dialog;
+    private Dialog m_dialog, m_altdialog;
     private Dialog currentDialog;
     private bool isSpeak = false;
     private Coroutine hideBubble = null;
     private void Start()
     {
         m_dialog = dManager.GetDialog(npcSettings.dialogName);
+        if(!string.IsNullOrWhiteSpace(npcSettings.altDialogName))
+            m_altdialog = dManager.GetDialog(npcSettings.altDialogName);
         currentDialog = m_dialog;
     }
     void OnMouseDown()
@@ -40,11 +43,11 @@ public class NPCBehaviour : MonoBehaviour
             currentDialog = m_dialog;
             if (npcBubble == null) npcBubble = dManager.CreateSpeechBubble(transform);
             npcBubble.gameObject.SetActive(true);
-            if (m_dialog.IsAnswer) throw new Exception("Can't use an answer as a dialog");
-            if (m_dialog.IsDialog) dManager.SetRoutesInDialogWindow(this, m_dialog.Routes);
+            if (currentDialog.IsAnswer) throw new Exception("Can't use an answer as a dialog");
+            if (currentDialog.IsDialog) dManager.SetRoutesInDialogWindow(this, currentDialog.Routes);
             npcBubble.SetDialog(m_dialog);
             isSpeak = true;
-            if (!npcBubble.GetTextFlag().FlagValue.HasNext() && m_dialog.IsDialog)
+            if (!npcBubble.GetTextFlag().FlagValue.HasNext() && currentDialog.IsDialog)
             {
                 npcBubble.OnSpeechStop += (o, e) => dManager.GetDialogController().GetDialogWindow().TurnOn();
             }

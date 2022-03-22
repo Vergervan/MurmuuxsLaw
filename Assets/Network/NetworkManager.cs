@@ -40,7 +40,7 @@ public class NetworkManager : MonoBehaviour
     private SceneManager sceneManager;
     private LanguageManager languageManager;
     [SerializeField] private PlayerController localPlayer;
-    public NetworkType networkType = NetworkType.None;
+    private NetworkType networkType = NetworkType.None;
     private Socket m_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     public Socket Socket { get => m_socket; private set => m_socket = value; }
     private MemoryStream messageStream;
@@ -53,6 +53,8 @@ public class NetworkManager : MonoBehaviour
     private Dictionary<Socket, Tuple<Guid, PlayerController>> playersSocket;
     private int serverPort = 0;
     public static readonly object lockObj = new object();
+    public NetworkType Type => networkType;
+
 
     private void Awake()
     {

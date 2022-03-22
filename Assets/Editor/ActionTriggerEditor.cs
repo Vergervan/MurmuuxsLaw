@@ -72,7 +72,7 @@ public class ActionTriggerEditor : Editor
                             EditorGUILayout.Space();
                             EditorGUILayout.BeginHorizontal();
                             evnt.type = (ActionType)EditorGUILayout.EnumPopup(evnt.type);
-                            if (GUILayout.Button("-"))
+                            if (GUILayout.Button("✖"))
                             {
                                 trigger.Actions.ElementAt(counter).Events.Remove(evnt);
                                 serializedObject.ApplyModifiedProperties();
