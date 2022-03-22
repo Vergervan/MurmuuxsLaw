@@ -114,6 +114,15 @@ public class ActionTriggerEditor : Editor
                 _event.item = (Inventory.ItemType)EditorGUILayout.EnumPopup(_event.item);
                 EditorGUILayout.EndHorizontal();
                 break;
+            case ActionType.Rotate:
+            case ActionType.Move:
+                _event.target = (Transform)EditorGUILayout.ObjectField(_event.target, typeof(Transform), true);
+                EditorGUILayout.BeginHorizontal();
+                _event.vector3.x = EditorGUILayout.FloatField(_event.vector3.x);
+                _event.vector3.y = EditorGUILayout.FloatField(_event.vector3.y);
+                _event.vector3.z = EditorGUILayout.FloatField(_event.vector3.z);
+                EditorGUILayout.EndHorizontal();
+                break;
         }
     }
 }

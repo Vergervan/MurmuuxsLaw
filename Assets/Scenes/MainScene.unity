@@ -6208,15 +6208,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _actions:
   - triggerName: removeCake
-    triggerEvent:
-      m_PersistentCalls:
-        m_Calls: []
-    _showFoldout: 0
+    _showFoldout: 1
     events:
     - type: 0
       item: 3
       target: {fileID: 0}
       inventory: {fileID: 1340369431}
+      vector3: {x: 0, y: 0, z: 0}
+      duration: 0
+    - type: 1
+      item: 0
+      target: {fileID: 0}
+      inventory: {fileID: 0}
       vector3: {x: 0, y: 0, z: 0}
       duration: 0
 --- !u!1 &842661185
