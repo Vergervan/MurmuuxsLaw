@@ -91,7 +91,6 @@ public class ActionTriggerEditor : Editor
                     break;
                 }
                 counter++;
-                item.GenerateEvents();
             }
         }
         serializedObject.ApplyModifiedProperties();

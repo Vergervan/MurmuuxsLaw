@@ -71,6 +71,13 @@ public class ActionTrigger : MonoBehaviour
     }
 
     [SerializeField] private List<ActionTriggerInfo> _actions;
+    private void Awake()
+    {
+        foreach(var action in _actions)
+        {
+            action.GenerateEvents();
+        }
+    }
     public int ActionsCount => _actions.Count;
     public ICollection<ActionTriggerInfo> Actions => _actions;
     public void AddAction(ActionTriggerInfo info)
