@@ -55,17 +55,10 @@ public class DialogueController : MonoBehaviour
     private void CheckParentRoutes(Route route)
     {
         if (Equals(route.Parent, null) || Equals(route.Parent.ParentRoute, null)) return;
-        foreach(var item in route.Parent.ParentRoute.Parent.Routes)
+        if(!route.Parent.ParentRoute.To.HasAvailableRoutes)
         {
-            if(item.To.Name == route.Parent.Name)
-            {
-                if (!item.To.HasAvailableRoutes)
-                {
-                    item.TurnOff();
-                    CheckParentRoutes(item);
-                    break;
-                }
-            }
+            route.Parent.ParentRoute.TurnOff();
+            CheckParentRoutes(route.Parent.ParentRoute);
         }
     }
     public void SetRoutes(NPCBehaviour npc, IEnumerable<Route> routes)
@@ -73,18 +66,7 @@ public class DialogueController : MonoBehaviour
         currentSelection = 0;
         currentNpc = npc;
         choicesRoutes.Clear();
-        
-        foreach(var route in routes)
-        {
-            if (route.Parent != null)
-                Debug.Log(route.Parent.Name);
-            //Debug.Log($"Route {route.From.Name} | Available {route.Available} {route.ConditionsMet} \n{route.To.IsDialog} {route.To.HasAvailableRoutes}");
-            //Debug.Log(route.To.RoutesCount + " " + route.To.AvailableRoutesCount);
-            if (route.Available && route.ConditionsMet && (!route.To.IsDialog || route.To.HasAvailableRoutes))
-                choicesRoutes.Add(route);
-        }
-
-        //choicesRoutes.AddRange(routes.Where(route => route.Available && route.ConditionsMet && (!route.To.IsDialog || route.To.HasAvailableRoutes)));
+        choicesRoutes.AddRange(routes.Where(route => route.Available && route.ConditionsMet && (!route.To.IsDialog || route.To.HasAvailableRoutes)));
         ClearContent();
         BuildDialogWindowItems();
         //window.ToggleWindow();
