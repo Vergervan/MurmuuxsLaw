@@ -45,6 +45,10 @@ public class ActionTrigger : MonoBehaviour
                         if (evnt.target == null) continue;
                         handler += () => evnt.target.DORotate(evnt.vector3, evnt.duration);
                         break;
+                    case ActionType.SetCondition:
+                        if (evnt.dialogManager == null) return;
+                        handler += () => evnt.dialogManager.SetConditionValue(evnt.name, evnt.boolValue);
+                        break;
                 }
             }
         }
@@ -60,12 +64,16 @@ public class ActionTrigger : MonoBehaviour
         {
             RemoveItem,
             Move, 
-            Rotate
+            Rotate,
+            SetCondition
         }
         public ActionType type;
         public Inventory.ItemType item;
         public Transform target;
         public Inventory inventory;
+        public DialogueManager dialogManager;
+        public string name;
+        public bool boolValue;
         public Vector3 vector3;
         public float duration;
     }

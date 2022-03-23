@@ -122,6 +122,13 @@ public class ActionTriggerEditor : Editor
                 _event.vector3.z = EditorGUILayout.FloatField(_event.vector3.z);
                 EditorGUILayout.EndHorizontal();
                 break;
+            case ActionType.SetCondition:
+                _event.dialogManager = (DialogueManager)EditorGUILayout.ObjectField(_event.dialogManager, typeof(DialogueManager), true);
+                EditorGUILayout.BeginHorizontal();
+                _event.name = EditorGUILayout.TextField(_event.name);
+                _event.boolValue = GUILayout.Toggle(_event.boolValue, "Value");
+                EditorGUILayout.EndHorizontal();
+                break;
         }
     }
 }

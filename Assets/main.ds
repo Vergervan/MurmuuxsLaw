@@ -2,16 +2,18 @@
 [D]defaultDialog=startDialogPhrase
 	defaultAnswer > defaultPhrase
 	giveSmokerInfo > smokeCakeDialog
+	testAnswer > testMonolog
 	endTalking > goodbye
 
 [D]smokeCakeDialog=bringSmokerCake
-	giveCakeSmoker > thanks[removeCake]
+	giveCakeSmoker > thanks[removeCake,testOn]
 
 [A!]defaultAnswer=hell
 [A]endTalking=end
 
 [A!(Cake)]giveCakeSmoker=cakeSmoker
 [A!]giveSmokerInfo=giveSmokerInfo
+[A(test)]testAnswer=test
 
 
 [M]defaultPhrase=defaultPhrase
@@ -19,3 +21,4 @@
 [M]thanks=thanks
 
 [M]noTalks=noTalks
+[M]testMonolog=test

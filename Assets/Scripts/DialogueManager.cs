@@ -33,4 +33,5 @@ public class DialogueManager : MonoBehaviour
     public Dialog GetDialog(string dialogName) => scriptReader.GetDialogByName(dialogName);
     public ConditionKeeper GetConditionKeeper() => scriptReader.GetConditionKeeper();
     public void SetRoutesInDialogWindow(NPCBehaviour npc, IEnumerable<Route> routes) => dialogueController.SetRoutes(npc, routes);
+    public void SetConditionValue(string name, bool b) => GetConditionKeeper().SetConditionValue(name, b);
 }
