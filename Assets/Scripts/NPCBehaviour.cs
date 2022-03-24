@@ -41,8 +41,9 @@ public class NPCBehaviour : MonoBehaviour
         if (!isSpeak)
         {
             currentDialog = m_dialog;
-            Debug.Log("Available routes: " + currentDialog.AvailableRoutesCount);
-            if (currentDialog.AvailableRoutesCount <= npcSettings.limitToAlt)
+            int num = currentDialog.GetAvailableRoutesCount(true);
+            Debug.Log("Available routes: " + num);
+            if (num <= npcSettings.limitToAlt)
                 currentDialog = m_altdialog;
             if (npcBubble == null) npcBubble = dManager.CreateSpeechBubble(transform);
             npcBubble.gameObject.SetActive(true);

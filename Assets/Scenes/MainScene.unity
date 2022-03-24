@@ -5527,7 +5527,7 @@ MonoBehaviour:
       vector3: {x: 0, y: 0, z: 0}
       duration: 0
   - triggerName: testOn
-    _showFoldout: 0
+    _showFoldout: 1
     events:
     - type: 3
       item: 0
