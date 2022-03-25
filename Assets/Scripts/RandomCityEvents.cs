@@ -5,6 +5,7 @@ using UnityEngine;
 public class RandomCityEvents : MonoBehaviour
 {
     [SerializeField] private GameObject suspectEyes;
+    [SerializeField] private int randTime;
     void Start()
     {
         suspectEyes.SetActive(false);
@@ -17,7 +18,7 @@ public class RandomCityEvents : MonoBehaviour
         while (true)
         {
             System.Random rand = new System.Random();
-            int randTime = rand.Next(10, 150);
+            randTime = rand.Next(10, 150);
             yield return new WaitForSeconds(randTime);
             animator.SetBool("show", true);
             yield return new WaitForSeconds(6);
