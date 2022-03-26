@@ -57,4 +57,9 @@ public class SceneManager : MonoBehaviour
         Debug.Log("Sounds found: " + sounds.Length);
         foreach (var sound in sounds) sound.mute = !musicOn;
     }
+
+    public void QuitGame()
+    {
+        Application.Quit(0);
+    }
 }
