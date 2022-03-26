@@ -5516,7 +5516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _actions:
   - triggerName: removeCake
-    _showFoldout: 1
+    _showFoldout: 0
     events:
     - type: 0
       item: 3
@@ -5528,7 +5528,7 @@ MonoBehaviour:
       vector3: {x: 0, y: 0, z: 0}
       duration: 0
   - triggerName: testOn
-    _showFoldout: 1
+    _showFoldout: 0
     events:
     - type: 3
       item: 0

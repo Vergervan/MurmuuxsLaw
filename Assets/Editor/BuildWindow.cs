@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +11,6 @@ public class BuildWindow : EditorWindow
     [SerializeField] private List<Object> scenesToBuild;
     [SerializeField] private List<Object> dialogScripts;
     [SerializeField] private List<Object> localeFiles;
-
     [SerializeField] private bool dialogScriptsFoldout, localeFilesFoldout;
 
     [MenuItem("Window/Custom Build Window")]
@@ -20,9 +20,9 @@ public class BuildWindow : EditorWindow
     }
     private void OnGUI()
     {
-        if (GUILayout.Button("Choose build folder", GUILayout.Width(150)))
+        if (GUILayout.Button("Choose a build folder", GUILayout.Width(150)))
         {
-            buildPath = EditorUtility.OpenFolderPanel("Choose folder", string.Empty, string.Empty);
+            buildPath = EditorUtility.OpenFolderPanel("Choose a folder", string.Empty, string.Empty);
         }
         bool hasPath = !string.IsNullOrWhiteSpace(buildPath);
         if (hasPath)
@@ -51,15 +51,16 @@ public class BuildWindow : EditorWindow
         ShowDialogScriptsGUI();
         ShowLocaleFilesGUI();
     }
-    private void BuildAll()
+    private void BuildAll(bool run = false)
     {
         if (Directory.Exists(buildPath))
         {
             Directory.Delete(buildPath, true);
         }
-        BuildPipeline.BuildPlayer(new string[] { "Assets/Scenes/MainScene.unity" }, buildPath + "/MurmuuxsLaw.exe", BuildTarget.StandaloneWindows64, BuildOptions.None);
+        string exePath = buildPath + "/MurmuuxsLaw.exe";
         CopyDialogScripts();
         CopyLocaleFiles();
+        BuildPipeline.BuildPlayer(new string[] { "Assets/Scenes/MainScene.unity" }, exePath, BuildTarget.StandaloneWindows64, BuildOptions.None);
     }
     private void CopyDialogScripts()
     {
@@ -70,6 +71,7 @@ public class BuildWindow : EditorWindow
         }
         foreach (var dialog in dialogScripts)
         {
+            if (dialog == null) continue;
             string assetPath = AssetDatabase.GetAssetPath(dialog);
             FileUtil.CopyFileOrDirectory(assetPath, scriptsPath + Path.GetFileName(assetPath));
         }
@@ -83,6 +85,7 @@ public class BuildWindow : EditorWindow
         }
         foreach (var file in localeFiles)
         {
+            if (file == null) continue;
             string assetPath = AssetDatabase.GetAssetPath(file);
             FileUtil.CopyFileOrDirectory(assetPath, localePath + Path.GetFileName(assetPath));
         }
@@ -131,7 +134,16 @@ public class BuildWindow : EditorWindow
             for (int i = 0; i < localeFiles.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                localeFiles[i] = EditorGUILayout.ObjectField(localeFiles[i], typeof(Object), false);
+                Object file = EditorGUILayout.ObjectField(localeFiles[i], typeof(Object), false);
+                string path = AssetDatabase.GetAssetPath(file);
+                if (Path.GetExtension(path) == ".lc")
+                {
+                    localeFiles[i] = file;
+                }
+                else
+                {
+                    localeFiles[i] = null;
+                }
                 if (GUILayout.Button("✖"))
                 {
                     localeFiles.RemoveAt(i);

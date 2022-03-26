@@ -11,6 +11,7 @@ public class LanguageManager : MonoBehaviour
     }
     public void ChangeLanguage(string fileName)
     {
+        fileName += ".lc"; //Add a file extension
         string fullFileName = string.Empty;
 #if UNITY_EDITOR
             fullFileName = Application.dataPath + "/" + fileName;
