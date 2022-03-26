@@ -23,7 +23,7 @@ public class InGameButton : MonoBehaviour
     }
     [SerializeField] private bool IsToggle;
     private bool toggleState = false;
-    [SerializeField] private UnityEvent altenrateAction;
+    [SerializeField] private UnityEvent alternateAction;
 
     private Vector3 baseScale;
     void OnMouseDown()
@@ -33,7 +33,7 @@ public class InGameButton : MonoBehaviour
         {
             toggleState = !toggleState;
             if (toggleState)
-                altenrateAction?.Invoke();
+                alternateAction?.Invoke();
             else 
                 action?.Invoke();
             return;
