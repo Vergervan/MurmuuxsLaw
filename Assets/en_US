@@ -12,5 +12,6 @@ menuOnlineText = MULTIPLAYER
 menuServerText = HOST
 menuClientText = CONNECT
 menuBackText = BACK
+menuQuitText = QUIT
 
 endNpcDialog = End

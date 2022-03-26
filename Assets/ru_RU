@@ -20,6 +20,7 @@ satanJudge = Хорошо-с. <br> Таким образом, исходя из 
 #Главное меню
 menuStartText = НАЧАТЬ
 menuOnlineText = МУЛЬТИПЛЕЕР
+menuQuitText = ВЫЙТИ
 
 menuServerText = СОЗДАТЬ СЕРВЕР
 menuClientText = ПОДКЛЮЧИТЬСЯ
