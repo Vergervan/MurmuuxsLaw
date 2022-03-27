@@ -21,15 +21,20 @@ public class BuildWindow : EditorWindow
 
     private void OnEnable()
     {
-        var json = EditorPrefs.GetString("CustomBuildSettings", null);
-        if(json != null)
+        if (File.Exists("custombuildsettings.json"))
         {
+            var json = File.ReadAllText("custombuildsettings.json");
             JsonUtility.FromJsonOverwrite(json, this);
         }
     }
     private void OnDisable()
     {
-        EditorPrefs.SetString("CustomBuildSettings", JsonUtility.ToJson(this));
+        var json = JsonUtility.ToJson(this);
+        using (var settings = File.CreateText("custombuildsettings.json"))
+        {
+            settings.Write(json);
+            settings.Flush();
+        }
     }
     private void OnGUI()
     {
