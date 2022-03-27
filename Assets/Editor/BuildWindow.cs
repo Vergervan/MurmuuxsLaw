@@ -18,6 +18,19 @@ public class BuildWindow : EditorWindow
     {
         GetWindow<BuildWindow>("Custom Build");
     }
+
+    private void OnEnable()
+    {
+        var json = EditorPrefs.GetString("CustomBuildSettings", null);
+        if(json != null)
+        {
+            JsonUtility.FromJsonOverwrite(json, this);
+        }
+    }
+    private void OnDisable()
+    {
+        EditorPrefs.SetString("CustomBuildSettings", JsonUtility.ToJson(this));
+    }
     private void OnGUI()
     {
         if (GUILayout.Button("Choose a build folder", GUILayout.Width(150)))
