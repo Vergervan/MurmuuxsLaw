@@ -14,9 +14,23 @@ public class DebugTriggerWindow : EditorWindow
         GetWindow<DebugTriggerWindow>("Debug Trigger Utility").ShowAuxWindow();
     }
 
+    private void OnEnable()
+    {
+        var json = EditorPrefs.GetString("DebugTriggerWindowConfig", null);
+        if (!string.IsNullOrWhiteSpace(json))
+        {
+            JsonUtility.FromJsonOverwrite(EditorPrefs.GetString("DebugTriggerWindowConfig"), this);
+        }
+    }
+
+    private void OnDisable()
+    {
+        EditorPrefs.SetString("DebugTriggerWindowConfig",JsonUtility.ToJson(this));
+    }
+
     private void OnGUI()
     {
-        _actionTrigger = (ActionTrigger)EditorGUILayout.ObjectField(_actionTrigger, typeof(ActionTrigger), true);
+        _actionTrigger = (ActionTrigger)EditorGUILayout.ObjectField(_actionTrigger, typeof(ActionTrigger), true, GUILayout.Width(240));
         if(_actionTrigger == null)
         {
             EditorGUILayout.HelpBox("You Must Set Up Action Trigger", MessageType.Error);
@@ -24,26 +38,29 @@ public class DebugTriggerWindow : EditorWindow
         }
         EditorGUILayout.BeginHorizontal();
         _showTriggers = EditorGUILayout.Foldout(_showTriggers, "Triggers");
-        if(GUILayout.Button("Add Trigger"))
+        if(GUILayout.Button("Add Trigger", GUILayout.Width(120)))
         {
+            if (_triggers == null)
+            {
+                _triggers = new List<string>();
+            }
             _triggers.Add(string.Empty);
         }
         EditorGUILayout.EndHorizontal();
         if (_showTriggers && _triggers != null)
         {
-            foreach(var trigger in _triggers)
+            for(int i = 0; i < _triggers.Count; i++)
             {
-                var str = trigger;
                 EditorGUILayout.BeginHorizontal();
-                str = GUILayout.TextField(trigger, "Trigger");
-                if(GUILayout.Button("✖", GUILayout.Width(15)))
+                _triggers[i] = GUILayout.TextField(_triggers[i]);
+                if(GUILayout.Button("✖", GUILayout.Width(20)))
                 {
-                    _triggers.Remove(trigger);
+                    _triggers.Remove(_triggers[i]);
                     return;
                 }
-                if (GUILayout.Button("Call"))
+                if (GUILayout.Button("Call", GUILayout.Width(80)))
                 {
-                    _actionTrigger.TryToInvokeEvent(trigger);
+                    _actionTrigger.TryToInvokeEvent(_triggers[i]);
                 }
                 EditorGUILayout.EndHorizontal();
             }

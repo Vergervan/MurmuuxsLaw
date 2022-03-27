@@ -5539,6 +5539,18 @@ MonoBehaviour:
       boolValue: 1
       vector3: {x: 0, y: 0, z: 0}
       duration: 0
+  - triggerName: smokerMoves
+    _showFoldout: 1
+    events:
+    - type: 1
+      item: 0
+      target: {fileID: 1497674835}
+      inventory: {fileID: 0}
+      dialogManager: {fileID: 0}
+      name: 
+      boolValue: 0
+      vector3: {x: 10, y: 10, z: 0}
+      duration: 5
 --- !u!1 &842661185
 GameObject:
   m_ObjectHideFlags: 0
