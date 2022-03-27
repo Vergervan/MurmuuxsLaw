@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.Events;
-using ActionTriggerInfo = ActionTrigger.ActionTriggerInfo;
-using TriggerEvent = ActionTrigger.TriggerEvent;
-using ActionType = ActionTrigger.TriggerEvent.ActionType;
+using ActionType = TriggerEvent.ActionType;
 
 [CustomEditor(typeof(ActionTrigger))]
 [CanEditMultipleObjects]
@@ -115,8 +108,13 @@ public class ActionTriggerEditor : Editor
                 break;
             case ActionType.Rotate:
             case ActionType.Move:
-                _event.target = (Transform)EditorGUILayout.ObjectField(_event.target, typeof(Transform), true);
                 EditorGUILayout.BeginHorizontal();
+                _event.target = (Transform)EditorGUILayout.ObjectField(_event.target, typeof(Transform), true);
+                GUILayout.Label("Duration:", GUILayout.Width(55));
+                _event.duration = EditorGUILayout.FloatField(_event.duration);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("Vector3:");
                 _event.vector3.x = EditorGUILayout.FloatField(_event.vector3.x);
                 _event.vector3.y = EditorGUILayout.FloatField(_event.vector3.y);
                 _event.vector3.z = EditorGUILayout.FloatField(_event.vector3.z);

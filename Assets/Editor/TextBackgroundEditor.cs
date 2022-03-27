@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEngine;
 
 [CustomEditor(typeof(TextBackground))]
 public class TextBackgroundEditor : Editor
