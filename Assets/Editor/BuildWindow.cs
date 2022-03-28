@@ -26,7 +26,7 @@ public class BuildWindow : EditorWindow
             JsonUtility.FromJsonOverwrite(json, this);
         }
     }
-    private void OnDisable()
+    private void SaveSettings()
     {
         var json = JsonUtility.ToJson(this);
         using (var settings = File.CreateText("custombuildsettings.json"))
@@ -37,10 +37,16 @@ public class BuildWindow : EditorWindow
     }
     private void OnGUI()
     {
+        EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Choose a build folder", GUILayout.Width(150)))
         {
             buildPath = EditorUtility.OpenFolderPanel("Choose a folder", string.Empty, string.Empty);
         }
+        if(GUILayout.Button("Save", GUILayout.Width(60)))
+        {
+            SaveSettings();
+        }
+        EditorGUILayout.EndHorizontal();
         bool hasPath = !string.IsNullOrWhiteSpace(buildPath);
         if (hasPath)
         {
