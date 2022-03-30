@@ -11,8 +11,10 @@ public class CutsceneCharacter : MonoBehaviour
     {
         
     }
-    public void StartDialog()
+    public void StartDialog(string dialogName)
     {
-
+        m_dialog = dialogManager.GetDialog(dialogName);
+        if (_bubble == null)
+            _bubble = dialogManager.CreateSpeechBubble(transform);
     }
 }
