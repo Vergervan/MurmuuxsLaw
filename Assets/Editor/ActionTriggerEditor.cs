@@ -8,7 +8,6 @@ using ActionType = TriggerEvent.ActionType;
 public class ActionTriggerEditor : Editor
 {
     private ActionTriggerEditorInfo _info;
-    private SerializedObject infoObject;
     private ActionTrigger trigger;
     private readonly object lockObj = new object();
     private SerializedProperty _currentAction;
