@@ -7,16 +7,29 @@ using ActionType = TriggerEvent.ActionType;
 [CanEditMultipleObjects]
 public class ActionTriggerEditor : Editor
 {
+    private ActionTriggerEditorInfo _info;
+    private SerializedObject infoObject;
     private ActionTrigger trigger;
     private readonly object lockObj = new object();
     private SerializedProperty _currentAction;
     private SerializedProperty _showFoldout;
     private SerializedProperty actions;
-
     void OnEnable()
     {
         trigger = (ActionTrigger)target;
         actions = serializedObject.FindProperty("_actions");
+        _info = AssetDatabase.LoadAssetAtPath<ActionTriggerEditorInfo>("Assets/Editor/ATEditorInfo.asset");
+        if (!_info)
+        {
+            _info = CreateInstance<ActionTriggerEditorInfo>();
+            AssetDatabase.CreateAsset(_info, "Assets/Editor/ATEditorInfo.asset");
+            AssetDatabase.Refresh();
+        }
+    }
+
+    private void OnDisable()
+    {
+        AssetDatabase.SaveAssets();
     }
 
     public override void OnInspectorGUI()
@@ -119,6 +132,30 @@ public class ActionTriggerEditor : Editor
                 _event.vector3.y = EditorGUILayout.FloatField(_event.vector3.y);
                 _event.vector3.z = EditorGUILayout.FloatField(_event.vector3.z);
                 EditorGUILayout.EndHorizontal();
+
+                bool isCurrentEvent = _event.Equals(_info.currentEvent);
+                if (GUILayout.Button((_info.setupVector && isCurrentEvent) ? "Stop" : "Set Up"))
+                {
+                    if (!isCurrentEvent)
+                    {
+                        _info.currentEvent = _event;
+                        _info.setupVector = true;
+                        _info.prevVector = _event.target.position;
+                        serializedObject.ApplyModifiedProperties();
+                        return;
+                    }
+                    if (_info.setupVector)
+                    {
+                        _event.vector3 = _event.type == ActionType.Move ? _event.target.position : _event.target.rotation.eulerAngles;
+                        if(_info.prevVector == _event.vector3)
+                        {
+                            _event.vector3 = Vector3.zero;
+                        }
+                        _event.target.position = _info.prevVector;
+                        GUILayout.Label(_info.prevVector.ToString());
+                        _info.setupVector = false;
+                    }
+                }
                 break;
             case ActionType.SetCondition:
                 _event.dialogManager = (DialogueManager)EditorGUILayout.ObjectField(_event.dialogManager, typeof(DialogueManager), true);

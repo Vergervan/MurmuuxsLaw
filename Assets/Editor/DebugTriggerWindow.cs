@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class DebugTriggerWindow : EditorWindow
 {
-    [SerializeField] private ActionTrigger _actionTrigger;
-    [SerializeField] private bool _showTriggers;
-    [SerializeField] private List<string> _triggers;
+    [System.Serializable]
+    private class DebugTriggerWindowInfo : ScriptableObject
+    {
+        [SerializeReference] public ActionTrigger actionTrigger;
+        public bool showTriggers;
+        public List<string> triggers;
+    }
+    [SerializeField] private DebugTriggerWindowInfo _info;
+    private const string configPath = "Assets/Editor/DebugTriggerWindowConfig.asset";
 
     [MenuItem("Tools/Debug Trigger Utility")]
     static void ShowWindow()
@@ -14,53 +20,60 @@ public class DebugTriggerWindow : EditorWindow
         GetWindow<DebugTriggerWindow>("Debug Trigger Utility").ShowAuxWindow();
     }
 
+    private void LoadAsset()
+    {
+        _info = AssetDatabase.LoadAssetAtPath<DebugTriggerWindowInfo>(configPath);
+        if (!_info)
+        {
+            _info = CreateInstance<DebugTriggerWindowInfo>();
+            AssetDatabase.CreateAsset(_info, configPath);
+            AssetDatabase.Refresh();
+        }
+    }
+
     private void OnEnable()
     {
-        var json = EditorPrefs.GetString("DebugTriggerWindowConfig", null);
-        if (!string.IsNullOrWhiteSpace(json))
-        {
-            JsonUtility.FromJsonOverwrite(EditorPrefs.GetString("DebugTriggerWindowConfig"), this);
-        }
+        LoadAsset();
     }
 
     private void OnDisable()
     {
-        EditorPrefs.SetString("DebugTriggerWindowConfig",JsonUtility.ToJson(this));
+        AssetDatabase.SaveAssets();
     }
 
     private void OnGUI()
     {
-        _actionTrigger = (ActionTrigger)EditorGUILayout.ObjectField(_actionTrigger, typeof(ActionTrigger), true, GUILayout.Width(240));
-        if(_actionTrigger == null)
+        _info.actionTrigger = (ActionTrigger)EditorGUILayout.ObjectField(_info.actionTrigger, typeof(ActionTrigger), true, GUILayout.Width(240));
+        if(_info.actionTrigger == null)
         {
             EditorGUILayout.HelpBox("You Must Set Up Action Trigger", MessageType.Error);
             return;
         }
         EditorGUILayout.BeginHorizontal();
-        _showTriggers = EditorGUILayout.Foldout(_showTriggers, "Triggers");
+        _info.showTriggers = EditorGUILayout.Foldout(_info.showTriggers, "Triggers");
         if(GUILayout.Button("Add Trigger", GUILayout.Width(120)))
         {
-            if (_triggers == null)
+            if (_info.triggers == null)
             {
-                _triggers = new List<string>();
+                _info.triggers = new List<string>();
             }
-            _triggers.Add(string.Empty);
+            _info.triggers.Add(string.Empty);
         }
         EditorGUILayout.EndHorizontal();
-        if (_showTriggers && _triggers != null)
+        if (_info.showTriggers && _info.triggers != null)
         {
-            for(int i = 0; i < _triggers.Count; i++)
+            for(int i = 0; i < _info.triggers.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                _triggers[i] = GUILayout.TextField(_triggers[i]);
+                _info.triggers[i] = GUILayout.TextField(_info.triggers[i]);
                 if(GUILayout.Button("✖", GUILayout.Width(20)))
                 {
-                    _triggers.Remove(_triggers[i]);
+                    _info.triggers.Remove(_info.triggers[i]);
                     return;
                 }
                 if (GUILayout.Button("Call", GUILayout.Width(80)))
                 {
-                    _actionTrigger.TryToInvokeEvent(_triggers[i]);
+                    _info.actionTrigger.TryToInvokeEvent(_info.triggers[i]);
                 }
                 EditorGUILayout.EndHorizontal();
             }

@@ -5549,7 +5549,7 @@ MonoBehaviour:
       dialogManager: {fileID: 0}
       name: 
       boolValue: 0
-      vector3: {x: 10, y: 10, z: 0}
+      vector3: {x: -9.83, y: 1.6673999, z: 0}
       duration: 5
 --- !u!1 &842661185
 GameObject:
