@@ -5539,30 +5539,6 @@ MonoBehaviour:
       boolValue: 1
       vector3: {x: 0, y: 0, z: 0}
       duration: 0
-  - triggerName: smokerMoves
-    _showFoldout: 1
-    events:
-    - type: 1
-      item: 0
-      target: {fileID: 1497674835}
-      inventory: {fileID: 0}
-      dialogManager: {fileID: 0}
-      name: 
-      boolValue: 0
-      vector3: {x: -9.83, y: 1.6673999, z: 0}
-      duration: 5
-  - triggerName: rotateSmoker
-    _showFoldout: 1
-    events:
-    - type: 2
-      item: 0
-      target: {fileID: 1497674835}
-      inventory: {fileID: 0}
-      dialogManager: {fileID: 0}
-      name: 
-      boolValue: 0
-      vector3: {x: -0, y: 0, z: 271.20825}
-      duration: 5
 --- !u!1 &842661185
 GameObject:
   m_ObjectHideFlags: 0
@@ -10231,14 +10207,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1497674832}
-  m_LocalRotation: {x: -0.07129666, y: 0.01451326, z: 0.0010374973, w: 0.9973491}
-  m_LocalPosition: {x: -8.181076, y: 1.6706046, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -8.178385, y: 1.6720107, z: 0}
   m_LocalScale: {x: 5.5705, y: 5.5705, z: 1.1141}
   m_Children:
   - {fileID: 456852334}
   m_Father: {fileID: 417538257}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -88.792}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 55.184}
 --- !u!114 &1497674836
 MonoBehaviour:
   m_ObjectHideFlags: 0

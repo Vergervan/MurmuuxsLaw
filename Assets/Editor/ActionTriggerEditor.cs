@@ -129,7 +129,7 @@ public class ActionTriggerEditor : Editor
                     {
                         _info.currentEvent = _event;
                         _info.setupVector = true;
-                        _info.prevVector = _event.target.position;
+                        _info.prevVector = _event.type == ActionType.Move ? _event.target.position : _event.target.eulerAngles;
                         serializedObject.ApplyModifiedProperties();
                         return;
                     }
