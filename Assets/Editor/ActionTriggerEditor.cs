@@ -121,17 +121,7 @@ public class ActionTriggerEditor : Editor
                 break;
             case ActionType.Rotate:
             case ActionType.Move:
-                EditorGUILayout.BeginHorizontal();
-                _event.target = (Transform)EditorGUILayout.ObjectField(_event.target, typeof(Transform), true);
-                GUILayout.Label("Duration:", GUILayout.Width(55));
-                _event.duration = EditorGUILayout.FloatField(_event.duration);
-                EditorGUILayout.EndHorizontal();
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("Vector3:");
-                _event.vector3.x = EditorGUILayout.FloatField(_event.vector3.x);
-                _event.vector3.y = EditorGUILayout.FloatField(_event.vector3.y);
-                _event.vector3.z = EditorGUILayout.FloatField(_event.vector3.z);
-                EditorGUILayout.EndHorizontal();
+                DrawBaseVectorField(_event);
 
                 bool isCurrentEvent = _event.Equals(_info.currentEvent);
                 if (GUILayout.Button((_info.setupVector && isCurrentEvent) ? "Stop" : "Set Up"))
@@ -146,12 +136,20 @@ public class ActionTriggerEditor : Editor
                     }
                     if (_info.setupVector)
                     {
-                        _event.vector3 = _event.type == ActionType.Move ? _event.target.position : _event.target.rotation.eulerAngles;
-                        if(_info.prevVector == _event.vector3)
+                        _event.vector3 = _event.type == ActionType.Move ? _event.target.position : _event.target.eulerAngles;
+                        if (_info.prevVector == _event.vector3)
                         {
                             _event.vector3 = Vector3.zero;
                         }
-                        _event.target.position = _info.prevVector;
+                        switch (_event.type) 
+                        {
+                            case ActionType.Move:
+                                _event.target.position = _info.prevVector;
+                                break;
+                            case ActionType.Rotate:
+                                _event.target.eulerAngles = _info.prevVector;
+                                break;
+                        }
                         GUILayout.Label(_info.prevVector.ToString());
                         _info.setupVector = false;
                     }
@@ -165,5 +163,19 @@ public class ActionTriggerEditor : Editor
                 EditorGUILayout.EndHorizontal();
                 break;
         }
+    }
+    private void DrawBaseVectorField(TriggerEvent _event)
+    {
+        EditorGUILayout.BeginHorizontal();
+        _event.target = (Transform)EditorGUILayout.ObjectField(_event.target, typeof(Transform), true);
+        GUILayout.Label("Duration:", GUILayout.Width(55));
+        _event.duration = EditorGUILayout.FloatField(_event.duration);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Vector3:");
+        _event.vector3.x = EditorGUILayout.FloatField(_event.vector3.x);
+        _event.vector3.y = EditorGUILayout.FloatField(_event.vector3.y);
+        _event.vector3.z = EditorGUILayout.FloatField(_event.vector3.z);
+        EditorGUILayout.EndHorizontal();
     }
 }
