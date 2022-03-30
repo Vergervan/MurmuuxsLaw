@@ -116,7 +116,7 @@ public class BuildWindow : EditorWindow
     private void ShowDialogScriptsGUI()
     {
         dialogScriptsFoldout = EditorGUILayout.Foldout(dialogScriptsFoldout, "Dialog Scripts");
-        if (dialogScriptsFoldout)
+        if (dialogScriptsFoldout && dialogScripts != null)
         {
             if (GUILayout.Button("Add Dialog Script", GUILayout.Width(150)))
             {
@@ -148,7 +148,7 @@ public class BuildWindow : EditorWindow
     private void ShowLocaleFilesGUI()
     {
         localeFilesFoldout = EditorGUILayout.Foldout(localeFilesFoldout, "Locale Files");
-        if (localeFilesFoldout)
+        if (localeFilesFoldout && localeFiles != null)
         {
             if (GUILayout.Button("Add Locale File", GUILayout.Width(150)))
             {
