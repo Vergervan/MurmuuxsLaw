@@ -48,6 +48,7 @@ public class CutsceneCharacter : MonoBehaviour
                 await Task.Yield();
             await Task.Delay(1700);
             Debug.Log(unit.HasNext());
+            Debug.Log(unit.ExcerptCount);
             if (!unit.HasNext()) break;
             unit.Next();
         }

@@ -6,6 +6,7 @@ public class UnitSpeech
 {
     private List<string> m_dialogueList;
     private int index = 0;
+    public int ExcerptCount => m_dialogueList == null ? 0 : m_dialogueList.Count;
     public UnitSpeech()
     {
         m_dialogueList = new List<string>();
