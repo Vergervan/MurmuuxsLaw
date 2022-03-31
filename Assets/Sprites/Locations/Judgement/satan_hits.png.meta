@@ -7,12 +7,18 @@ TextureImporter:
     second: satan_hits_0
   - first:
       213: -7693126582170177323
-    second: satan_hits_1
+    second: satan_hits_2
   - first:
       213: 6345531234557026248
     second: satan_hits_2
   - first:
       213: 193846397997805493
+    second: satan_hits_3
+  - first:
+      213: 3240031248620810639
+    second: satan_hits_2
+  - first:
+      213: -4803176818075851360
     second: satan_hits_3
   externalObjects: {}
   serializedVersion: 11
@@ -35,6 +41,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -44,8 +51,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -66,9 +73,12 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
@@ -114,10 +124,10 @@ TextureImporter:
       name: satan_hits_0
       rect:
         serializedVersion: 2
-        x: 133
-        y: 300
-        width: 52
-        height: 41
+        x: 128
+        y: 296
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -132,13 +142,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: satan_hits_1
+      name: satan_hits_2
       rect:
         serializedVersion: 2
-        x: 455
-        y: 300
-        width: 52
-        height: 41
+        x: 128
+        y: 105
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,13 +163,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: satan_hits_2
+      name: satan_hits_1
       rect:
         serializedVersion: 2
-        x: 134
-        y: 125
-        width: 52
-        height: 41
+        x: 448
+        y: 296
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -167,8 +177,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8cfdaeaa90bdf0850800000000000000
-      internalID: 6345531234557026248
+      spriteID: f8175331147e6fc20800000000000000
+      internalID: 3240031248620810639
       vertices: []
       indices: 
       edges: []
@@ -177,10 +187,10 @@ TextureImporter:
       name: satan_hits_3
       rect:
         serializedVersion: 2
-        x: 458
-        y: 124
-        width: 52
-        height: 41
+        x: 448
+        y: 104
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -188,8 +198,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5bfe5ad954ea0b200800000000000000
-      internalID: 193846397997805493
+      spriteID: 0a5a23dd120b75db0800000000000000
+      internalID: -4803176818075851360
       vertices: []
       indices: 
       edges: []

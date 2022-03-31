@@ -12,7 +12,7 @@ public class ActionTriggerInfo
     [SerializeField] private List<TriggerEvent> events;
     private delegate void TriggerEventHandler();
     private event TriggerEventHandler handler;
-    [SerializeField] private bool _useUnityEvent = false;
+    [SerializeField] private bool _useUnityEvent;
     [SerializeField] private UnityEvent _unityEvent;
     public ICollection<TriggerEvent> Events => events;
     public void AddEvent(TriggerEvent triggerEvent)
