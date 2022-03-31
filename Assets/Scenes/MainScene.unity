@@ -2727,6 +2727,9 @@ MonoBehaviour:
   - {fileID: 1168142414}
   - {fileID: 337844105}
   - {fileID: 1962909565}
+  OnStartScene:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &417538256
 GameObject:
   m_ObjectHideFlags: 0
@@ -2801,6 +2804,9 @@ MonoBehaviour:
   DependentObjects:
   - {fileID: 813345016}
   InactiveObjects: []
+  OnStartScene:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &432071272
 GameObject:
   m_ObjectHideFlags: 0
@@ -2926,8 +2932,9 @@ GameObject:
   - component: {fileID: 464098374}
   - component: {fileID: 464098375}
   - component: {fileID: 464098376}
-  - component: {fileID: 464098377}
+  - component: {fileID: 464098379}
   - component: {fileID: 464098378}
+  - component: {fileID: 464098377}
   m_Layer: 0
   m_Name: satan_hits_0
   m_TagString: Untagged
@@ -3029,12 +3036,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 464098373}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1700f99ff3e9fd42b179374ab5383cb, type: 3}
+  m_Script: {fileID: 11500000, guid: f39dd7c8359ac92489a5da44f48aa5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneManager: {fileID: 841649478}
-  dManager: {fileID: 1085479543}
-  satanBubble: {fileID: 0}
+  _actions:
+  - triggerName: 
+    _showFoldout: 1
+    events: []
+    _useUnityEvent: 0
+    _unityEvent:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!82 &464098378
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3131,6 +3143,35 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &464098379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464098373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9d4d460165bfa34bbe22f5ec43836df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogManager: {fileID: 1085479543}
+  _bubble: {fileID: 0}
+  OnSpeechStop:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 464098376}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: SetTrigger
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: start
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &490514882
 GameObject:
   m_ObjectHideFlags: 0
@@ -10600,6 +10641,21 @@ MonoBehaviour:
   SceneFlag: judgement
   DependentObjects: []
   InactiveObjects: []
+  OnStartScene:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 464098379}
+        m_TargetAssemblyTypeName: CutsceneCharacter, Assembly-CSharp
+        m_MethodName: StartDialog
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: satanJudge
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1529923529
 GameObject:
   m_ObjectHideFlags: 0
@@ -12780,6 +12836,9 @@ MonoBehaviour:
   SceneFlag: start
   DependentObjects: []
   InactiveObjects: []
+  OnStartScene:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1830038930
 GameObject:
   m_ObjectHideFlags: 0

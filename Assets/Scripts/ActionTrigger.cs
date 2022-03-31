@@ -4,15 +4,20 @@ using UnityEngine;
 [System.Serializable]
 public class ActionTrigger : MonoBehaviour
 {
+    private static Dictionary<string, ActionTriggerInfo> _globalActions = new Dictionary<string, ActionTriggerInfo>();
     [SerializeField] private List<ActionTriggerInfo> _actions;
     private void Awake()
     {
         foreach(var action in _actions)
         {
             action.GenerateEvents();
+            if (!_globalActions.ContainsKey(action.triggerName))
+            {
+                _globalActions.Add(action.triggerName, action);
+            }
         }
     }
-    public int ActionsCount => _actions.Count;
+    public int ActionsCount => _actions == null ? 0 : _actions.Count;
     public ICollection<ActionTriggerInfo> Actions => _actions;
     public void AddAction(ActionTriggerInfo info)
     {
@@ -24,13 +29,10 @@ public class ActionTrigger : MonoBehaviour
     }
     public bool TryToInvokeEvent(string triggerName)
     {
-        foreach(var item in _actions)
+        if (_globalActions.ContainsKey(triggerName))
         {
-            if(item.triggerName == triggerName)
-            {
-                item.InvokeAllEvents();
-                return true;
-            }
+            _globalActions[triggerName].InvokeAllEvents();
+            return true;
         }
         return false;
     }

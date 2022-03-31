@@ -15,11 +15,11 @@ public class SpeechBubble : MonoBehaviour
     public Vector2 bubblePosition;
     public bool useTarget;
     private TextFlag textFlag;
-    private bool m_writing = false;
+    private bool m_typing = false;
     public event EventHandler OnSpeechStop;
-    public bool IsWriting
+    public bool IsTyping
     {
-        get => m_writing;
+        get => m_typing;
     }
     void Awake()
     {
@@ -61,6 +61,7 @@ public class SpeechBubble : MonoBehaviour
         float t =  0;
         int charIndex = 0;
 
+        m_typing = true;
         while(charIndex < text.Length)
         {
             t += Time.deltaTime * writeSpeed;
@@ -71,6 +72,7 @@ public class SpeechBubble : MonoBehaviour
 
             yield return null;
         }
+        m_typing = false;
         OnSpeechStop?.Invoke(this, new EventArgs());
         ClearEvents();
     }

@@ -1,11 +1,12 @@
 using DialogScriptCreator;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Threading.Tasks;
 
 public class CutsceneCharacter : MonoBehaviour
 {
     [SerializeField] private DialogueManager dialogManager;
-    [SerializeField] private SpeechBubble _bubble;
+    private SpeechBubble _bubble;
     private Dialog _dialog;
     private bool isSpeak = false;
     [SerializeField] private UnityEvent OnSpeechStop;
@@ -29,12 +30,27 @@ public class CutsceneCharacter : MonoBehaviour
 
     public void StartDialog(string dialogName)
     {
-        _dialog = dialogManager.GetDialog(dialogName);
-        _bubble.SetDialog(_dialog);
-        if (_bubble == null)
+        if (!_bubble)
             _bubble = dialogManager.CreateSpeechBubble(transform);
         _bubble.gameObject.SetActive(true);
-        _bubble.StartSpeech();
+        _bubble.SetFlagName(dialogName);
         isSpeak = true;
+        CallBubble();
+    }
+
+    private async void CallBubble()
+    {
+        UnitSpeech unit = _bubble.GetTextFlag().FlagValue;
+        while (true)
+        {
+            _bubble.StartSpeech();
+            while (_bubble.IsTyping)
+                await Task.Yield();
+            await Task.Delay(1700);
+            Debug.Log(unit.HasNext());
+            if (!unit.HasNext()) break;
+            unit.Next();
+        }
+        OnSpeechStop?.Invoke();
     }
 }

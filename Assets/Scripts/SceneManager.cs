@@ -42,6 +42,7 @@ public class SceneManager : MonoBehaviour
                 currentScene.gameObject.SetActive(true);
                 foreach (var obj in scene.DependentObjects) obj.SetActive(true);
                 languageManager.LoadTextFlags(scene);
+                scene.OnStartScene?.Invoke();
                 return;
             }
         }
