@@ -5467,7 +5467,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scenes: []
   languageManager: {fileID: 841649477}
-  startSceneName: city
+  startSceneName: mainmenu
 --- !u!4 &841649479
 Transform:
   m_ObjectHideFlags: 0
@@ -5527,6 +5527,10 @@ MonoBehaviour:
       boolValue: 0
       vector3: {x: 0, y: 0, z: 0}
       duration: 0
+    _useUnityEvent: 0
+    _unityEvent:
+      m_PersistentCalls:
+        m_Calls: []
   - triggerName: testOn
     _showFoldout: 0
     events:
@@ -5539,6 +5543,10 @@ MonoBehaviour:
       boolValue: 1
       vector3: {x: 0, y: 0, z: 0}
       duration: 0
+    _useUnityEvent: 0
+    _unityEvent:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &842661185
 GameObject:
   m_ObjectHideFlags: 0

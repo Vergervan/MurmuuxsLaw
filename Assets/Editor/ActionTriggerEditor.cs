@@ -13,6 +13,8 @@ public class ActionTriggerEditor : Editor
     private SerializedProperty _currentAction;
     private SerializedProperty _showFoldout;
     private SerializedProperty actions;
+    private SerializedProperty _useUnityEvent;
+    private SerializedProperty _unityEvent;
     void OnEnable()
     {
         trigger = (ActionTrigger)target;
@@ -61,14 +63,21 @@ public class ActionTriggerEditor : Editor
                 _currentAction = actions.GetArrayElementAtIndex(counter);
                 _showFoldout = _currentAction.FindPropertyRelative("_showFoldout");
                 EditorGUILayout.BeginHorizontal();
-                _showFoldout.boolValue = GUILayout.Toggle(_showFoldout.boolValue, "Show Events");
+                _showFoldout.boolValue = EditorGUILayout.Foldout(_showFoldout.boolValue, "Events");
                 if(GUILayout.Button("Add Event"))
                 {
                     trigger.Actions.ElementAt(counter).AddEvent(new TriggerEvent());
                 }
                 EditorGUILayout.EndHorizontal();
+                _useUnityEvent = _currentAction.FindPropertyRelative("_useUnityEvent");
                 if (_showFoldout.boolValue)
                 {
+                    _useUnityEvent.boolValue = GUILayout.Toggle(_useUnityEvent.boolValue, "Use UEvent");
+                    if (_useUnityEvent.boolValue)
+                    {
+                        _unityEvent = _currentAction.FindPropertyRelative("_unityEvent");
+                        EditorGUILayout.PropertyField(_unityEvent);
+                    }
                     var events = trigger.Actions.ElementAt(counter).Events;
                     if (events != null)
                     {

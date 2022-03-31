@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using ActionType = TriggerEvent.ActionType;
+using UnityEngine.Events;
 
 [System.Serializable]
 public class ActionTriggerInfo
@@ -11,6 +12,8 @@ public class ActionTriggerInfo
     [SerializeField] private List<TriggerEvent> events;
     private delegate void TriggerEventHandler();
     private event TriggerEventHandler handler;
+    [SerializeField] private bool _useUnityEvent = false;
+    [SerializeField] private UnityEvent _unityEvent;
     public ICollection<TriggerEvent> Events => events;
     public void AddEvent(TriggerEvent triggerEvent)
     {
@@ -48,6 +51,7 @@ public class ActionTriggerInfo
     }
     public void InvokeAllEvents()
     {
+        _unityEvent?.Invoke();
         handler?.Invoke();
     }
 }
