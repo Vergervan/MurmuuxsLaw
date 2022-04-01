@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 public class CutsceneCharacter : MonoBehaviour
 {
     [SerializeField] private DialogueManager dialogManager;
+    [SerializeField] private int _excerptDelay;
     private SpeechBubble _bubble;
     private Dialog _dialog;
     private bool isSpeak = false;
@@ -46,7 +47,7 @@ public class CutsceneCharacter : MonoBehaviour
             _bubble.StartSpeech();
             while (_bubble.IsTyping)
                 await Task.Yield();
-            await Task.Delay(1700);
+            await Task.Delay(_excerptDelay);
             Debug.Log(unit.HasNext());
             Debug.Log(unit.ExcerptCount);
             if (!unit.HasNext()) break;
