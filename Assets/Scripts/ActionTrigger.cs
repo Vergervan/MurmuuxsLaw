@@ -11,7 +11,7 @@ public class ActionTrigger : MonoBehaviour
         foreach(var action in _actions)
         {
             action.GenerateEvents();
-            if (!_globalActions.ContainsKey(action.triggerName))
+            if (!_globalActions.ContainsKey(action.triggerName) && !string.IsNullOrWhiteSpace(action.triggerName))
             {
                 _globalActions.Add(action.triggerName, action);
             }
