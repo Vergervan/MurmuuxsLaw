@@ -3,24 +3,17 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Threading.Tasks;
 
+[RequireComponent(typeof(ActionTrigger))]
 public class CutsceneCharacter : MonoBehaviour
 {
     [SerializeField] private DialogueManager dialogManager;
     [SerializeField] private int _excerptDelay;
     private SpeechBubble _bubble;
     private Dialog _dialog;
-    private bool isSpeak = false;
+    private bool _speaking = false;
     [SerializeField] private UnityEvent OnSpeechStop;
-    [SerializeField] private bool _useAnimationEvents;
-    private Animator _animator;
 
-    private void Awake()
-    {
-        if (_useAnimationEvents)
-        {
-            _animator = GetComponent<Animator>();
-        }
-    }
+    public bool IsSpeaking => _speaking;
 
     public void StartDialog(string flagName)
     {
@@ -28,13 +21,13 @@ public class CutsceneCharacter : MonoBehaviour
             _bubble = dialogManager.CreateSpeechBubble(transform);
         _bubble.SetFlagName(flagName);
         _bubble.gameObject.SetActive(true);
-        isSpeak = true;
         CallBubble();
     }
 
     private async void CallBubble()
     {
         UnitSpeech unit = _bubble.GetTextFlag().FlagValue;
+        _speaking = true;
         while (true)
         {
             _bubble.StartSpeech();
@@ -44,6 +37,7 @@ public class CutsceneCharacter : MonoBehaviour
             if (!unit.HasNext()) break;
             unit.Next();
         }
+        _speaking = false;
         _bubble.gameObject.SetActive(false);
         OnSpeechStop?.Invoke();
     }

@@ -51,6 +51,7 @@ public class ActionTriggerInfo
     }
     public void InvokeAllEvents()
     {
+        Debug.Log(triggerName);
         _unityEvent?.Invoke();
         handler?.Invoke();
     }
