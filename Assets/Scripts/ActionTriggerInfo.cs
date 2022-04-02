@@ -43,7 +43,7 @@ public class ActionTriggerInfo
                     handler += () => evnt.target.DORotate(evnt.vector3, evnt.duration);
                     break;
                 case ActionType.SetCondition:
-                    if (evnt.dialogManager == null) return;
+                    if (evnt.dialogManager == null) continue;
                     handler += () => evnt.dialogManager.SetConditionValue(evnt.name, evnt.boolValue);
                     break;
             }
