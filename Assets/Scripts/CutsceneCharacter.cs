@@ -12,12 +12,12 @@ public class CutsceneCharacter : MonoBehaviour
     private bool isSpeak = false;
     [SerializeField] private UnityEvent OnSpeechStop;
 
-    public void StartDialog(string dialogName)
+    public void StartDialog(string flagName)
     {
         if (!_bubble)
             _bubble = dialogManager.CreateSpeechBubble(transform);
+        _bubble.SetFlagName(flagName);
         _bubble.gameObject.SetActive(true);
-        _bubble.SetDialog(dialogManager.GetDialog(dialogName));
         isSpeak = true;
         CallBubble();
     }

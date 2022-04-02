@@ -20,6 +20,7 @@ public class LanguageManager : MonoBehaviour
         if (reader.Filename == fileName) return;
         reader.Filename = fullFileName;
         reader.ReadFile();
+        Debug.Log("Read a locale file: " + fullFileName);
     }
     public void LoadTextFlags(Scene scene)
     {
@@ -29,7 +30,7 @@ public class LanguageManager : MonoBehaviour
         {
             flags.AddRange(obj.GetComponentsInChildren<TextFlag>(true));
         }
-        foreach(var obj in scene.InactiveObjects)
+        foreach (var obj in scene.InactiveObjects)
         {
             bool vis = obj.gameObject.activeSelf;
             obj.SetActive(true);

@@ -27,7 +27,7 @@ public class SceneManager : MonoBehaviour
     public Scene GetCurrentScene() => currentScene;
     public void SetScene(string sceneFlag)
     {
-        if (sceneFlag == string.Empty) return;
+        if (string.IsNullOrWhiteSpace(sceneFlag)) return;
         foreach (var scene in scenes)
         {
             if(scene.SceneFlag == sceneFlag)

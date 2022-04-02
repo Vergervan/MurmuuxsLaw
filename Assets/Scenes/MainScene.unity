@@ -1534,18 +1534,6 @@ MonoBehaviour:
           m_StringArgument: judgement
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 841649477}
-        m_TargetAssemblyTypeName: LanguageManager, Assembly-CSharp
-        m_MethodName: LoadTextFlags
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1514396989}
-          m_ObjectArgumentAssemblyTypeName: Scene, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   allowScale: 1
   scaleRatio: 1.25
   _buttonEnabled: 1
@@ -2616,7 +2604,7 @@ Transform:
   - {fileID: 16349030}
   - {fileID: 323486773}
   m_Father: {fileID: 841649479}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &375115194
 AudioSource:
@@ -5273,7 +5261,7 @@ RectTransform:
   - {fileID: 1626857920}
   - {fileID: 1834133449}
   m_Father: {fileID: 841649479}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5541,9 +5529,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 519420032}
-  - {fileID: 813345020}
   - {fileID: 1817032608}
   - {fileID: 375115193}
+  - {fileID: 813345020}
   - {fileID: 417538257}
   - {fileID: 1514396987}
   - {fileID: 1398143493}
@@ -10671,7 +10659,19 @@ MonoBehaviour:
   InactiveObjects: []
   OnStartScene:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 464098379}
+        m_TargetAssemblyTypeName: CutsceneCharacter, Assembly-CSharp
+        m_MethodName: StartDialog
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: satanJudge
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1529923529
 GameObject:
   m_ObjectHideFlags: 0
@@ -12838,7 +12838,7 @@ Transform:
   m_Children:
   - {fileID: 2043106289}
   m_Father: {fileID: 841649479}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1817032609
 MonoBehaviour:

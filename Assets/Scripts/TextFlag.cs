@@ -36,6 +36,10 @@ public class TextFlag : MonoBehaviour
             _text.text = _flagValue.CurrentText();
         }catch(Exception) { Debug.LogError("Error load flag: " + _flagName); }
     }
+    public void SetFlagName(string flagName)
+    {
+        _flagName = flagName;
+    }
     public void SetFlagValue(UnitSpeech speechValue)
     {
         _flagValue = speechValue;
