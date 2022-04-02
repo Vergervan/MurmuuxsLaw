@@ -174,6 +174,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _flagName: menuOnlineText
+  _flagValue:
+    index: 0
 --- !u!114 &14156075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1876,6 +1878,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _flagName: 
+  _flagValue:
+    index: 0
 --- !u!114 &302521610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2437,6 +2441,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _flagName: menuServerText
+  _flagValue:
+    index: 0
 --- !u!114 &361453895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3156,7 +3162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogManager: {fileID: 1085479543}
-  _bubble: {fileID: 0}
+  _excerptDelay: 1700
   OnSpeechStop:
     m_PersistentCalls:
       m_Calls:
@@ -3171,6 +3177,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: start
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 464098378}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: set_mute
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!1 &490514882
 GameObject:
@@ -3973,6 +3991,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _flagName: menuServerText
+  _flagValue:
+    index: 0
 --- !u!114 &560310699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7675,6 +7695,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _flagName: menuBackText
+  _flagValue:
+    index: 0
 --- !u!114 &1144544319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8644,6 +8666,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _flagName: menuClientText
+  _flagValue:
+    index: 0
 --- !u!114 &1295435274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9008,6 +9032,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _flagName: menuBackText
+  _flagValue:
+    index: 0
 --- !u!114 &1327870376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10359,6 +10385,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _flagName: menuBackText
+  _flagValue:
+    index: 0
 --- !u!114 &1507835266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10643,19 +10671,7 @@ MonoBehaviour:
   InactiveObjects: []
   OnStartScene:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 464098379}
-        m_TargetAssemblyTypeName: CutsceneCharacter, Assembly-CSharp
-        m_MethodName: StartDialog
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: satanJudge
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1529923529
 GameObject:
   m_ObjectHideFlags: 0
@@ -11104,6 +11120,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _flagName: menuStartText
+  _flagValue:
+    index: 0
 --- !u!1 &1578074435
 GameObject:
   m_ObjectHideFlags: 0
@@ -11155,6 +11173,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _flagName: menuClientText
+  _flagValue:
+    index: 0
 --- !u!114 &1578074438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13655,6 +13675,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _flagName: menuQuitText
+  _flagValue:
+    index: 0
 --- !u!114 &2034643658
 MonoBehaviour:
   m_ObjectHideFlags: 0

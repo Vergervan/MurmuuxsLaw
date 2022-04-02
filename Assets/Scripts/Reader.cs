@@ -61,7 +61,7 @@ public class Reader
     public UnitSpeech GetUnitSpeech(string name)
     {
         if (lines.ContainsKey(name))
-            return lines[name];
+            return lines[name].Clone();
         return null;
     }
 }

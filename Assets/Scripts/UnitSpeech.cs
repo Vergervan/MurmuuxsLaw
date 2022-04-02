@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 [Serializable]
 public class UnitSpeech
 {
     private List<string> m_dialogueList;
-    private int index = 0;
+    [SerializeField] private int index = 0;
     public int ExcerptCount => m_dialogueList == null ? 0 : m_dialogueList.Count;
     public UnitSpeech()
     {
@@ -38,4 +39,6 @@ public class UnitSpeech
         m_dialogueList.Clear();
         index = 0;
     }
+
+    public UnitSpeech Clone() => new UnitSpeech(m_dialogueList);
 }

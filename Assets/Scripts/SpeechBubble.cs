@@ -37,10 +37,7 @@ public class SpeechBubble : MonoBehaviour
         _dialog = dialog;
         textFlag.SetFlagValue(LanguageManager.reader.GetUnitSpeech(dialog.Value));
     }
-    public Dialog GetCurrentDialog()
-    {
-        return _dialog ?? null;
-    }
+    public Dialog GetCurrentDialog() => _dialog;
     public void StartSpeech()
     {
         WriteText(textFlag.FlagValue.CurrentText());

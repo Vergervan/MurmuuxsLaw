@@ -12,29 +12,12 @@ public class CutsceneCharacter : MonoBehaviour
     private bool isSpeak = false;
     [SerializeField] private UnityEvent OnSpeechStop;
 
-    private void OnMouseDown()
-    {
-        if (isSpeak)
-        {
-            UnitSpeech unit = _bubble.GetTextFlag().FlagValue;
-            if (!unit.HasNext())
-            {
-                _bubble.gameObject.SetActive(false);
-                isSpeak = false;
-                unit.SetToStart();
-                OnSpeechStop?.Invoke();
-                return;
-            }
-            _bubble.StartSpeech();
-        }
-    }
-
     public void StartDialog(string dialogName)
     {
         if (!_bubble)
             _bubble = dialogManager.CreateSpeechBubble(transform);
         _bubble.gameObject.SetActive(true);
-        _bubble.SetFlagName(dialogName);
+        _bubble.SetDialog(dialogManager.GetDialog(dialogName));
         isSpeak = true;
         CallBubble();
     }
@@ -48,11 +31,10 @@ public class CutsceneCharacter : MonoBehaviour
             while (_bubble.IsTyping)
                 await Task.Yield();
             await Task.Delay(_excerptDelay);
-            Debug.Log(unit.HasNext());
-            Debug.Log(unit.ExcerptCount);
             if (!unit.HasNext()) break;
             unit.Next();
         }
+        _bubble.gameObject.SetActive(false);
         OnSpeechStop?.Invoke();
     }
 }

@@ -19,7 +19,9 @@ public class SceneManager : MonoBehaviour
                 obj.SetActive(false);
             }
         }
-
+    }
+    private void Start()
+    {
         SetScene(startSceneName);
     }
     public Scene GetCurrentScene() => currentScene;

@@ -9,7 +9,6 @@ public class TextFlag : MonoBehaviour
     private void Awake()
     {
         _text = transform.GetComponent<TMP_Text>();
-        _flagValue = null;
     }
     //private void Start()
     //{
