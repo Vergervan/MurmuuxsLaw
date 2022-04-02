@@ -3034,13 +3034,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _actions:
-  - triggerName: 
+  - triggerName: endSatanJudge
     _showFoldout: 1
     events: []
-    _useUnityEvent: 0
+    _useUnityEvent: 1
     _unityEvent:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 841649478}
+          m_TargetAssemblyTypeName: SceneManager, Assembly-CSharp
+          m_MethodName: SetScene
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: city
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!82 &464098378
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3178,6 +3190,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+  _useAnimationEvents: 0
 --- !u!1 &490514882
 GameObject:
   m_ObjectHideFlags: 0

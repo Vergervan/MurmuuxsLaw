@@ -11,6 +11,16 @@ public class CutsceneCharacter : MonoBehaviour
     private Dialog _dialog;
     private bool isSpeak = false;
     [SerializeField] private UnityEvent OnSpeechStop;
+    [SerializeField] private bool _useAnimationEvents;
+    private Animator _animator;
+
+    private void Awake()
+    {
+        if (_useAnimationEvents)
+        {
+            _animator = GetComponent<Animator>();
+        }
+    }
 
     public void StartDialog(string flagName)
     {
