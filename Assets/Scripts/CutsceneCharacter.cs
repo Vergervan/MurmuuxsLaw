@@ -8,10 +8,14 @@ public class CutsceneCharacter : MonoBehaviour
 {
     [SerializeField] private DialogueManager dialogManager;
     [SerializeField] private int _excerptDelay;
+    [SerializeField] private Vector2 _bubblePosition;
     private SpeechBubble _bubble;
     private Dialog _dialog;
     private bool _speaking = false;
     [SerializeField] private UnityEvent OnSpeechStop;
+
+    //TODO Установка позиции облачка
+    //Стрелочку для переключения под облачком
 
     public bool IsSpeaking => _speaking;
 
@@ -19,6 +23,7 @@ public class CutsceneCharacter : MonoBehaviour
     {
         if (!_bubble)
             _bubble = dialogManager.CreateSpeechBubble(transform);
+        _bubble.transform.localPosition = _bubblePosition;
         _bubble.SetFlagName(flagName);
         _bubble.gameObject.SetActive(true);
         CallBubble();
@@ -40,5 +45,10 @@ public class CutsceneCharacter : MonoBehaviour
         _speaking = false;
         _bubble.gameObject.SetActive(false);
         OnSpeechStop?.Invoke();
+    }
+
+    public void SetBubblePosition(Vector2 position)
+    {
+        _bubblePosition = position;
     }
 }
