@@ -15,6 +15,7 @@ public class SetPositionWindow : EditorWindow
     private Transform _target;
     private EditorSceneManager sceneManager;
     public event EventHandler<Vector2> OnPositionSet;
+    private Vector2 cameraPosition;
 
     public static SetPositionWindow Init(Transform target)
     {
@@ -23,7 +24,6 @@ public class SetPositionWindow : EditorWindow
         window.originCameraPosition = Camera.main.transform.position;
         var targetPos = target.position;
         targetPos.z = Camera.main.transform.position.z;
-        Camera.main.transform.position = targetPos;
         return window;
     }
 
@@ -31,7 +31,7 @@ public class SetPositionWindow : EditorWindow
     {
         if (obj)
         {
-            currentPosition = obj.transform.position;
+            currentPosition = obj.transform.localPosition;
             Repaint();
         }
     }
@@ -53,22 +53,33 @@ public class SetPositionWindow : EditorWindow
         {
             canvas = (Canvas)EditorGUILayout.ObjectField(canvas, typeof(Canvas), true);
         }
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Camera position:");
+        cameraPosition.x = EditorGUILayout.FloatField(cameraPosition.x);
+        cameraPosition.y = EditorGUILayout.FloatField(cameraPosition.y);
+        EditorGUILayout.EndHorizontal();
+
         if (GUILayout.Button("Create", GUILayout.Width(80)))
         {
+            Vector3 targetPos = cameraPosition;
+            targetPos.z = Camera.main.transform.position.z;
+            Camera.main.transform.position = targetPos;
+
             if (obj)
                 DestroyImmediate(obj);
             obj = Instantiate(objectPrefab, _isui ? canvas.transform : null);
-            originPosition = obj.transform.position;
+            originPosition = obj.transform.localPosition;
+            Selection.activeGameObject = obj;
         }
         EditorGUILayout.BeginHorizontal();
         if(GUILayout.Button("Set", GUILayout.Width(80)))
         {
-            OnPositionSet?.Invoke(this, obj.transform.position);
-            obj.transform.position = originPosition;
+            OnPositionSet?.Invoke(this, obj.transform.localPosition);
+            obj.transform.localPosition = originPosition;
         }
         if (GUILayout.Button("Cancel", GUILayout.Width(80)))
         {
-            obj.transform.position = originPosition;
+            obj.transform.localPosition = originPosition;
         }
         EditorGUILayout.EndHorizontal();
     }

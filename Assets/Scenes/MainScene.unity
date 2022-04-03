@@ -3163,7 +3163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogManager: {fileID: 1085479543}
   _excerptDelay: 1700
-  _bubblePosition: {x: 221.13155, y: 232.21454}
+  _bubblePosition: {x: 156, y: 360}
   OnSpeechStop:
     m_PersistentCalls:
       m_Calls:
