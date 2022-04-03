@@ -51,4 +51,5 @@ public class CutsceneCharacter : MonoBehaviour
     {
         _bubblePosition = position;
     }
+    public Vector2 GetBubblePosition() => _bubblePosition;
 }
