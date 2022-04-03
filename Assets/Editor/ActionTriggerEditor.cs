@@ -30,7 +30,9 @@ public class ActionTriggerEditor : Editor
 
     private void OnDisable()
     {
+        EditorUtility.SetDirty(_info);
         AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 
     public override void OnInspectorGUI()
