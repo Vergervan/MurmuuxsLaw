@@ -24,7 +24,8 @@ public class EventStateMachine : StateMachineBehaviour
     }
     private async void CallActions(ActionTrigger actionTrigger, IEnumerable<string> triggers, float delayTime = 0f)
     {
-        await Task.Delay((int)(delayTime*1000));
+        if(delayTime > 0)
+            await Task.Delay((int)(delayTime*1000));
         if (triggersOnEnd != null && triggers.Count() > 0)
         {
             foreach (var trigger in triggers)
