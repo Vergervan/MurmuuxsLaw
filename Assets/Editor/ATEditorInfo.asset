@@ -8,19 +8,19 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
-  m_EditorHideFlags: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 836cdbea14bb16f498186b73762b00c1, type: 3}
   m_Name: ATEditorInfo
   m_EditorClassIdentifier: 
-  setupVector: 1
+  setupVector: 0
   currentEvent:
-    type: 1
+    type: 0
     item: 0
     target: {fileID: 0}
     inventory: {fileID: 0}
     dialogManager: {fileID: 0}
     name: 
     boolValue: 0
-    vector3: {x: 10, y: 10, z: 0}
-    duration: 5
+    vector3: {x: 0, y: 0, z: 0}
+    duration: 0
   prevVector: {x: 0, y: 0, z: 0}

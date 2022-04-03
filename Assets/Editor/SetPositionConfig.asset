@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SetPositionConfig
   m_EditorClassIdentifier: Assembly-CSharp-Editor::SetPositionWindow/SetPositionConfig
   prefab: {fileID: 1726258590030874963, guid: 0b902cc117c1f83498d44f3116f6aaa6, type: 3}
-  isUI: 1
+  isUI: 0

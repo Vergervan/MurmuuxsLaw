@@ -18,7 +18,7 @@ public class CutsceneCharacterEditor : Editor
         {
             _window = SetPositionWindow.Init(character.transform);
             _window.OnPositionSet += (o, e) => character.SetBubblePosition(e);
-            _window.ShowAuxWindow();
+            _window.Show();
         }
     }
 }

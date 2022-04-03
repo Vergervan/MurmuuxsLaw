@@ -20,7 +20,7 @@ public class SetPositionWindow : EditorWindow
 
     public static SetPositionWindow Init(Transform target)
     {
-        var window = GetWindow<SetPositionWindow>("Set Position Window");
+        var window = GetWindow<SetPositionWindow>(true, "Set Position Window");
         window._target = target;
         window.originCameraPosition = Camera.main.transform.position;
         window.Start();

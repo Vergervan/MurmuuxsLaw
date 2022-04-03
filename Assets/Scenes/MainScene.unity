@@ -558,9 +558,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 66036882}
+  - component: {fileID: 66036885}
   - component: {fileID: 66036883}
+  - component: {fileID: 66036884}
   m_Layer: 0
-  m_Name: CityCollider1 (3)
+  m_Name: CityCenterGarbage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -593,7 +595,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -4.9914627, y: 0.5884695}
+  m_Offset: {x: -4.9715614, y: -0.9107844}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -604,8 +606,45 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.78461075, y: 0.56233406}
+  m_Size: {x: 0.8244133, y: 0.35005343}
   m_EdgeRadius: 0
+--- !u!68 &66036884
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66036881}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -4.342146, y: 0.6637289}
+  - {x: -5.2057424, y: 0.6482889}
+  - {x: -5.213561, y: 0.2354102}
+  - {x: -4.3580666, y: 0.23526213}
+  - {x: -4.3418713, y: 0.66368264}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
+--- !u!114 &66036885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66036881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64a1bc4b4b25aff4ba95ae326a98171e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &79242016
 GameObject:
   m_ObjectHideFlags: 0
@@ -2753,12 +2792,12 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1497674835}
   - {fileID: 910516141}
   - {fileID: 856769415}
   - {fileID: 626191732}
   - {fileID: 1681878362}
   - {fileID: 1799956602}
-  - {fileID: 1497674835}
   - {fileID: 1802330667}
   - {fileID: 1011276517}
   - {fileID: 1453975086}
@@ -5496,6 +5535,7 @@ GameObject:
   - component: {fileID: 841649477}
   - component: {fileID: 841649480}
   - component: {fileID: 841649481}
+  - component: {fileID: 841649482}
   m_Layer: 0
   m_Name: GameHandler
   m_TagString: Untagged
@@ -5529,7 +5569,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scenes: []
   languageManager: {fileID: 841649477}
-  startSceneName: mainmenu
+  startSceneName: city
 --- !u!4 &841649479
 Transform:
   m_ObjectHideFlags: 0
@@ -5609,6 +5649,18 @@ MonoBehaviour:
     _unityEvent:
       m_PersistentCalls:
         m_Calls: []
+--- !u!114 &841649482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841649476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64a1bc4b4b25aff4ba95ae326a98171e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &842661185
 GameObject:
   m_ObjectHideFlags: 0
@@ -10289,7 +10341,7 @@ Transform:
   m_Children:
   - {fileID: 456852334}
   m_Father: {fileID: 417538257}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 55.184}
 --- !u!114 &1497674836
 MonoBehaviour:
