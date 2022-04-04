@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace BrokenVector.PersistentComponents
 {
+    [System.Obsolete]
     public partial class PersistentComponents
     {
         [MenuItem("GameObject/" + Constants.CONTEXTMENU_TOGGLESTRING, false, 0)]

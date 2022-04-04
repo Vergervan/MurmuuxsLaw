@@ -8,6 +8,8 @@ namespace BrokenVector.PersistentComponents
     public partial class PersistentComponents
     {
         private static PersistentComponents instance;
+
+        [System.Obsolete]
         public static PersistentComponents Instance
         {
             get
@@ -23,6 +25,7 @@ namespace BrokenVector.PersistentComponents
         private Dictionary<GameObject, List<int>> components = new Dictionary<GameObject, List<int>>();
         private Dictionary<int, SerializedObject> serializedObjects = new Dictionary<int, SerializedObject>();
 
+        [System.Obsolete]
         public PersistentComponents()
         {
             EditorApplication.playmodeStateChanged += OnPlaymodeChanged;

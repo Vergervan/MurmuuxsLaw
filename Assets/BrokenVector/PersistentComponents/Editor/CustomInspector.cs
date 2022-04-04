@@ -12,6 +12,7 @@ namespace BrokenVector.PersistentComponents
 # else
     [CustomEditor(typeof(Component), true)]
 #endif
+    [System.Obsolete]
     public class CustomInspector : UnityEditor.Editor
     {
         private static GUIStyle toolbarButtonStyle;

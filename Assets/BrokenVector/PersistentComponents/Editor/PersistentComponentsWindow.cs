@@ -7,6 +7,7 @@ using UnityEditor;
 
 namespace BrokenVector.PersistentComponents
 {
+    [System.Obsolete]
 	public class PersistentComponentsWindow : EditorWindow
 	{
         public static PersistentComponentsWindow Instance { private set; get; }
