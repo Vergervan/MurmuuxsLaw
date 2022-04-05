@@ -19,6 +19,8 @@ MonoBehaviour:
     target: {fileID: 0}
     inventory: {fileID: 0}
     dialogManager: {fileID: 0}
+    animator: {fileID: 0}
+    animOption: 0
     name: 
     boolValue: 0
     vector3: {x: 0, y: 0, z: 0}
