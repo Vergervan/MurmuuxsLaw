@@ -12,8 +12,8 @@ public class CarPoint : MonoBehaviour
             Destroy(collision.gameObject);
     }
 
-    public void CreateCar(Car car)
+    public void CreateCar(CarModel car)
     {
-        Instantiate(car.gameObject);
+
     }
 }
