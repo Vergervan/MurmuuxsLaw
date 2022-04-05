@@ -53,6 +53,9 @@ public class SmartColliderEditor : Editor
             _collider.Collider.offset = originOffset.vector2Value;
             _collider.Collider.GetComponent<BoxCollider2D>().size = originSize.vector2Value;
         }
+        EditorGUILayout.Space();
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("_onTrigger"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("_onExit"));
 
         serializedObject.ApplyModifiedProperties();
     }
