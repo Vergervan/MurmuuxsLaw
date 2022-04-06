@@ -3041,7 +3041,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 457227793}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.32, y: -2.46, z: 0}
+  m_LocalPosition: {x: 24.98, y: -2.43, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1412539180}
@@ -10232,7 +10232,7 @@ MonoBehaviour:
   _muteSpawn: 0
   startPoint: {fileID: 457227795}
   endPoint: {fileID: 1789216955}
-  _spawnDelayMin: 900
+  _spawnDelayMin: 1100
   _spawnDelayMax: 5000
   _minSpeed: 4
   _maxSpeed: 14
@@ -12512,7 +12512,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1700278763}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.75, y: -0.55, z: 0}
+  m_LocalPosition: {x: 26.75, y: -0.43, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1412539180}
