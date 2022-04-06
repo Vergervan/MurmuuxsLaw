@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 
 public class CarSpawner : MonoBehaviour
@@ -12,6 +14,14 @@ public class CarSpawner : MonoBehaviour
     [SerializeField] private Car _carPrefab;
     [SerializeField] private List<CarModel> _models;
     private bool _work = false;
+
+    private void Awake()
+    {
+        if (_models == null || _models.Count <= 0)
+        {
+            _models = Resources.LoadAll<CarModel>("Models/Cars").ToList();
+        }
+    }
 
     public async void StartSpawn()
     {
@@ -33,5 +43,4 @@ public class CarSpawner : MonoBehaviour
     {
         _work = false;
     }
-
 }

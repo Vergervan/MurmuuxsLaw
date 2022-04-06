@@ -28,9 +28,9 @@ public class Car : MonoBehaviour
         RaycastHit2D hit;
         Vector2 start = transform.position;
         start.x += 2f;
-        if(hit = Physics2D.Raycast(start, Vector2.right, 1.5f))
+        if (hit = Physics2D.Raycast(start, (_renderer.flipX ? Vector2.right : Vector2.left), 1.5f))
         {
-            Debug.DrawRay(start, Vector2.right * 1.5f, Color.red);
+            Debug.DrawRay(start, (_renderer.flipX ? Vector2.right : Vector2.left) * 1.5f, Color.red);
             if(hit.collider.tag == "Car" && hit.transform != transform)
             {
                 float carSpeed = hit.transform.GetComponent<Car>().Speed;
