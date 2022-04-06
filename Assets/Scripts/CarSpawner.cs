@@ -33,7 +33,9 @@ public class CarSpawner : MonoBehaviour
             Car car = startPoint.CreateCar(_carPrefab, _models[Random.Range(0, _models.Count-1)]);
             car.tag = "Car";
             if ((car.gameObject.transform.position.x - endPoint.transform.position.x) < 0)
-                car.GetComponent<SpriteRenderer>().flipX = true;
+                car.Direction = Car.MoveDirection.Right;
+            else
+                car.Direction = Car.MoveDirection.Left;
             car.Speed = Random.Range(_minSpeed, _maxSpeed);
             car.MoveTo(endPoint.transform.position);
             await Task.Yield();

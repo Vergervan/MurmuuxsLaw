@@ -4,20 +4,19 @@ using UnityEngine;
 [CustomEditor(typeof(FollowCamera))]
 public class FollowCameraEditor : Editor
 {
-    SerializedProperty minXProp, maxXProp;
-    private void OnEnable()
-    {
-        minXProp = serializedObject.FindProperty("minX");
-        maxXProp = serializedObject.FindProperty("maxX");
-    }
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
         DrawDefaultInspector();
         GUILayout.Label("Horizontal Camera Borders");
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.PropertyField(minXProp);
-        EditorGUILayout.PropertyField(maxXProp);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("minX"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("maxX"));
+        EditorGUILayout.EndHorizontal();
+        GUILayout.Label("Vertical Camera Borders");
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("minY"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("maxY"));
         EditorGUILayout.EndHorizontal();
         serializedObject.ApplyModifiedProperties();
     }

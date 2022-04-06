@@ -5,12 +5,38 @@ using System.Threading.Tasks;
 [RequireComponent(typeof(SpriteRenderer), typeof(Rigidbody2D))]
 public class Car : MonoBehaviour
 {
+    public enum MoveDirection
+    {
+        Left,
+        Right
+    }
     [SerializeField] private CarModel model;
+    private MoveDirection _moveDirection;
     private SpriteRenderer _renderer;
     private Rigidbody2D _rigidbody;
     private float _speed = 1f;
     private bool _moving;
+    private Vector2 _dir;
     public float Speed { get => _speed; set => _speed = value; }
+    public MoveDirection Direction
+    {
+        get => _moveDirection;
+        set
+        {
+            switch (value)
+            {
+                case MoveDirection.Left:
+                    _renderer.flipX = false;
+                    _dir = Vector2.left;
+                    break;
+                case MoveDirection.Right:
+                    _renderer.flipX = true;
+                    _dir = Vector2.right;
+                    break;
+            }
+            _moveDirection = value;
+        }
+    }
     public Sprite CarSprite => model.Sprite;
     private void Awake()
     {
@@ -28,19 +54,21 @@ public class Car : MonoBehaviour
         RaycastHit2D hit;
         Vector2 start = transform.position;
         start.x += _renderer.flipX ? 2f : -2f;
-        if (hit = Physics2D.Raycast(start, (_renderer.flipX ? Vector2.right : Vector2.left), 1.5f))
+        if (hit = Physics2D.Raycast(start, _dir, 1.8f))
         {
-            Debug.DrawRay(start, (_renderer.flipX ? Vector2.right : Vector2.left) * 1.5f, Color.red);
+            Debug.DrawRay(start, _dir * 1.8f, Color.red);
             if(hit.collider.tag == "Car" && hit.transform != transform)
             {
                 float carSpeed = hit.transform.GetComponent<Car>().Speed;
                 if (Speed != carSpeed)
                 {
                     float speedRatio = Speed / carSpeed;
+                    if((speedRatio-1) < 0.01f)
+                    {
+                        Speed = carSpeed;
+                    }
                     float newSpeed = (Speed - carSpeed) / (24/speedRatio);
                     Speed -= newSpeed;
-                    if (Speed < carSpeed)
-                        Speed = carSpeed;
                 }
             }
         }
@@ -54,13 +82,12 @@ public class Car : MonoBehaviour
 
     public async void MoveTo(Vector3 endpoint)
     {
-        Vector2 dir = _renderer.flipX ? Vector2.right : Vector2.left;
         _moving = true;
         try
         {
             while (_moving)
             {
-                transform.Translate(dir * Speed * Time.deltaTime);
+                transform.Translate(_dir * Speed * Time.deltaTime);
                 await Task.Yield();
             }
         }
