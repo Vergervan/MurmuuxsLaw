@@ -27,7 +27,7 @@ public class Car : MonoBehaviour
     {
         RaycastHit2D hit;
         Vector2 start = transform.position;
-        start.x += 2f;
+        start.x += _renderer.flipX ? 2f : -2f;
         if (hit = Physics2D.Raycast(start, (_renderer.flipX ? Vector2.right : Vector2.left), 1.5f))
         {
             Debug.DrawRay(start, (_renderer.flipX ? Vector2.right : Vector2.left) * 1.5f, Color.red);
@@ -41,7 +41,6 @@ public class Car : MonoBehaviour
                     Speed -= newSpeed;
                     if (Speed < carSpeed)
                         Speed = carSpeed;
-                    Debug.Log(Speed);
                 }
             }
         }
@@ -55,12 +54,13 @@ public class Car : MonoBehaviour
 
     public async void MoveTo(Vector3 endpoint)
     {
+        Vector2 dir = _renderer.flipX ? Vector2.right : Vector2.left;
         _moving = true;
         try
         {
             while (_moving)
             {
-                transform.Translate(Vector2.right * Speed * Time.deltaTime);
+                transform.Translate(dir * Speed * Time.deltaTime);
                 await Task.Yield();
             }
         }
