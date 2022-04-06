@@ -3399,7 +3399,10 @@ MonoBehaviour:
   _muteSpawn: 0
   startPoint: {fileID: 0}
   endPoint: {fileID: 0}
-  _spawnDelay: 0
+  _spawnDelayMin: 0
+  _spawnDelayMax: 0
+  _minSpeed: 0
+  _maxSpeed: 0
   _carPrefab: {fileID: 0}
   _models: []
 --- !u!1 &519420028
@@ -10119,11 +10122,25 @@ MonoBehaviour:
   _muteSpawn: 0
   startPoint: {fileID: 841651262}
   endPoint: {fileID: 1700278765}
-  _spawnDelay: 2000
+  _spawnDelayMin: 1000
+  _spawnDelayMax: 5000
+  _minSpeed: 4
+  _maxSpeed: 16
   _carPrefab: {fileID: 1338869193308303437, guid: 66471eeb5ba7a4a4a9af107e8dfb577a,
     type: 3}
   _models:
   - {fileID: 11400000, guid: a575430f71b55934591d45663b234f97, type: 2}
+  - {fileID: 11400000, guid: 9584e95648de3714fa2e267bb79e109f, type: 2}
+  - {fileID: 11400000, guid: e27a53f6e0923f54c81170e893db6afa, type: 2}
+  - {fileID: 11400000, guid: 931b7fb958edb884884196442480d73c, type: 2}
+  - {fileID: 11400000, guid: 6e8c7313d78aa954aabe3800ec553c0f, type: 2}
+  - {fileID: 11400000, guid: d42b83f8dcded084e8c1d6278e48d79f, type: 2}
+  - {fileID: 11400000, guid: b1efa48793d0e4c4ea27ab9dc91d2b6d, type: 2}
+  - {fileID: 11400000, guid: 9f47b5a49d87b55499d0999a7615b692, type: 2}
+  - {fileID: 11400000, guid: 5d8cd53f0de23f34c82f3ff8498165a3, type: 2}
+  - {fileID: 11400000, guid: 7c8ae6352b48726408b4dddf0a3362b7, type: 2}
+  - {fileID: 11400000, guid: fecd5d2aae66ed546b93e6a84826b682, type: 2}
+  - {fileID: 11400000, guid: 4c3a38f95616fda4198f8e6378ce450c, type: 2}
 --- !u!1 &1443056911
 GameObject:
   m_ObjectHideFlags: 0
@@ -12397,7 +12414,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1700278763}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.18, y: -0.55, z: 0}
+  m_LocalPosition: {x: 26.75, y: -0.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1412539180}
