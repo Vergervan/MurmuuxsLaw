@@ -136,7 +136,7 @@ public class BuildWindow : EditorWindow
                     dialogScripts[i] = null;
                 }
 
-                if (GUILayout.Button("✖"))
+                if (GUILayout.Button("✖", GUILayout.Width(40)))
                 {
                     dialogScripts.RemoveAt(i);
                     return;
@@ -167,7 +167,7 @@ public class BuildWindow : EditorWindow
                 {
                     localeFiles[i] = null;
                 }
-                if (GUILayout.Button("✖"))
+                if (GUILayout.Button("✖", GUILayout.Width(40)))
                 {
                     localeFiles.RemoveAt(i);
                     return;

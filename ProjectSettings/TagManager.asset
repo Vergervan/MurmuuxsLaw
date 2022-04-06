@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ItemImage
   - ItemCell
+  - Car
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - NetworkPlayer
   - 
   - EventCollider
-  - 
+  - CarCollider
   - 
   - 
   - 
