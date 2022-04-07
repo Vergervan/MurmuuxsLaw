@@ -14971,6 +14971,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 417538257}
     m_Modifications:
+    - target: {fileID: 412621702446675536, guid: b5955948af4789c40bddbb229338adbd,
+        type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 412621702446675536, guid: b5955948af4789c40bddbb229338adbd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 351dc30d10f3ad14b9b7b7c166df6715, type: 2}
     - target: {fileID: 412621702446675538, guid: b5955948af4789c40bddbb229338adbd,
         type: 3}
       propertyPath: speed

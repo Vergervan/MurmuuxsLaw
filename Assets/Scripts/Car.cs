@@ -49,6 +49,18 @@ public class Car : MonoBehaviour
         _renderer.sprite = model.Sprite;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+            collision.GetComponent<SpriteRenderer>().material.SetTexture("MainTex1", _renderer.material.mainTexture);
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.tag == "Player")
+            collision.GetComponent<SpriteRenderer>().material.SetTexture("MainTex1", null);
+    }
+
     private void Update()
     {
         RaycastHit2D hit;
