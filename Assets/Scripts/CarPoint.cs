@@ -15,7 +15,6 @@ public class CarPoint : MonoBehaviour
     {
         if (isEndpoint && collision.tag == "Car")
         {
-            collision.transform.DOKill();
             collision.transform.GetComponent<Car>().StopMove();
             Destroy(collision.gameObject);
         }
