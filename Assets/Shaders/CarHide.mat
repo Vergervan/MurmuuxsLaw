@@ -7,27 +7,19 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HidingBehindObjects
-  m_Shader: {fileID: -6465566751694194690, guid: a7ea5d99bc90666428e3a4e8fd539fbc,
+  m_Name: CarHide
+  m_Shader: {fileID: -6465566751694194690, guid: 65d87395d30ec0c418d8c3fec235dd88,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: dec30d8540a22084ea857d3698fe862c, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex1:
-        m_Texture: {fileID: 2800000, guid: 53710d0f65885f94190d29acac2b9232, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}

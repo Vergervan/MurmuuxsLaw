@@ -10,11 +10,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Inventory inventory;
     [SerializeField] private NetworkManager network;
     public Guid playerGuid;
+    private SpriteRenderer _renderer;
     private Rigidbody2D rb;
     private Animator animator;
     private bool isOnline = false;
     private Vector2 direction;
     private bool _isMoving;
+    private Texture _defaultTexture;
     public bool IsMoving { get => _isMoving; }
     public enum AnimationState
     {
@@ -27,6 +29,9 @@ public class PlayerController : MonoBehaviour
     private AnimationState state = AnimationState.Idle;
     private void Start()
     {
+        _renderer = GetComponent<SpriteRenderer>();
+        _renderer.material.EnableKeyword("_MainTex1");
+        _defaultTexture = _renderer.material.GetTexture("_MainTex1");
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
@@ -56,6 +61,11 @@ public class PlayerController : MonoBehaviour
         }
         
         RefreshAnimation(direction);
+    }
+
+    public void SetDefaultShaderTexture()
+    {
+        _renderer.material.SetTexture("_MainTex1", _defaultTexture); 
     }
 
     private Vector2 ReadMovementKeys()

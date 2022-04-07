@@ -26,20 +26,24 @@ public class CarSpawner : MonoBehaviour
     public async void StartSpawn()
     {
         _work = true;
-        while (_work)
+        try
         {
-            await Task.Delay(Random.Range(_spawnDelayMin, _spawnDelayMax));
-            if (_muteSpawn) continue;
-            Car car = startPoint.CreateCar(_carPrefab, _models[Random.Range(0, _models.Count-1)]);
-            car.tag = "Car";
-            if ((car.gameObject.transform.position.x - endPoint.transform.position.x) < 0)
-                car.Direction = Car.MoveDirection.Right;
-            else
-                car.Direction = Car.MoveDirection.Left;
-            car.Speed = Random.Range(_minSpeed, _maxSpeed);
-            car.MoveTo(endPoint.transform.position);
-            await Task.Yield();
+            while (_work)
+            {
+                await Task.Delay(Random.Range(_spawnDelayMin, _spawnDelayMax));
+                if (_muteSpawn) continue;
+                Car car = startPoint.CreateCar(_carPrefab, _models[Random.Range(0, _models.Count - 1)]);
+                car.tag = "Car";
+                if ((car.gameObject.transform.position.x - endPoint.transform.position.x) < 0)
+                    car.Direction = Car.MoveDirection.Right;
+                else
+                    car.Direction = Car.MoveDirection.Left;
+                car.Speed = Random.Range(_minSpeed, _maxSpeed);
+                car.MoveTo(endPoint.transform.position);
+                await Task.Yield();
+            }
         }
+        catch (System.Exception) { }
     }
     public void StopSpawn()
     {

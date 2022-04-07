@@ -45,20 +45,25 @@ public class Car : MonoBehaviour
     }
     private void Start()
     {
-        _renderer.sortingOrder = 14;
         _renderer.sprite = model.Sprite;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
-            collision.GetComponent<SpriteRenderer>().material.SetTexture("MainTex1", _renderer.material.mainTexture);
+        {
+            Debug.Log("Player");
+            var rend = collision.GetComponent<SpriteRenderer>();
+            Debug.Log(_renderer.sprite.texture);
+            rend.material.SetTexture("_MainTex1", _renderer.sprite.texture);
+            Debug.Log(rend.material.GetTexture("_MainTex1").name);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.tag == "Player")
-            collision.GetComponent<SpriteRenderer>().material.SetTexture("MainTex1", null);
+        if (collision.tag == "Player")
+            collision.GetComponent<PlayerController>().SetDefaultShaderTexture();
     }
 
     private void Update()
