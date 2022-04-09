@@ -8,6 +8,8 @@
 /[Bb]uilds/
 /Assets/AssetStoreTools*
 
+/.plastic/
+
 # Visual Studio 2015 cache directory
 /.vs/
 *.vsconfig
