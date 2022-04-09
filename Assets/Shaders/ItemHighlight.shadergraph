@@ -1717,7 +1717,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"27f6c3c30bfbdf54a9815d0d29242e1f\",\"type\":3}}",
+        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"f6088ff6c1418174aacebdeae8eae832\",\"type\":3}}",
         "m_Guid": ""
     },
     "m_Modifiable": true,
@@ -2066,7 +2066,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 0.9399999976158142,
+    "m_Value": 1.0,
     "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,

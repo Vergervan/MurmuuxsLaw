@@ -21,17 +21,32 @@ public class LevelItem : MonoBehaviour
     };
 
     public Inventory.ItemType item;
+    private SpriteRenderer _renderer;
 
     private void Start()
     {
+        _renderer = GetComponent<SpriteRenderer>();
+        _renderer.material.EnableKeyword("_MainTex");
+        _renderer.material.EnableKeyword("_Scale");
+        _renderer.material.SetTexture("_MainTex", _renderer.material.mainTexture);
         try
         {
-            GetComponent<SpriteRenderer>().sprite = Inventory.ItemSprites[item];
+            _renderer.sprite = Inventory.ItemSprites[item];
             foreach (var prop in ItemProperties[item])
             {
                 gameObject.AddComponent(ItemPropertyScripts[prop]);
             }
         }
         catch (KeyNotFoundException) { }
+    }
+
+    private void OnMouseEnter()
+    {
+        _renderer.material.SetFloat("_Scale", 0.95f);
+    }
+
+    private void OnMouseExit()
+    {
+        _renderer.material.SetFloat("_Scale", 1f);
     }
 }
