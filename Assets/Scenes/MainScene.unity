@@ -2853,6 +2853,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1799956602}
   followSpeed: 2
+  zoom: 0
   minX: -13.3
   maxX: 13.3
   minY: 0.9
