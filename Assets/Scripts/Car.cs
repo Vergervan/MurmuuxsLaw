@@ -14,10 +14,25 @@ public class Car : MonoBehaviour
     private MoveDirection _moveDirection;
     private SpriteRenderer _renderer;
     private Rigidbody2D _rigidbody;
-    private float _speed = 1f;
-    private bool _moving;
+    private float triggerDistance = 3f;
+    private float _speed = 1f, _startSpeed = 0, _frontCarSpeed = 0, k, m;
+    private float _firstSpeed, _strivingSpeed;
+    private bool _moving, _changingSpeed;
     private Vector2 _dir;
-    public float Speed { get => _speed; set => _speed = value; }
+    public bool IsChangingSpeed => _changingSpeed;
+    public float StrivingSpeed => _strivingSpeed;
+    public float Speed
+    {
+        get
+        {
+            return _speed;
+        }
+        set
+        {
+            _speed = value;
+            triggerDistance = (_speed - 3f) * 1.8f;
+        }
+    }
     public MoveDirection Direction
     {
         get => _moveDirection;
@@ -71,21 +86,58 @@ public class Car : MonoBehaviour
         RaycastHit2D hit;
         Vector2 start = transform.position;
         start.x += _renderer.flipX ? 2f : -2f;
-        if (hit = Physics2D.Raycast(start, _dir, 1.8f))
+        if (hit = Physics2D.Raycast(start, _dir, triggerDistance))
         {
-            Debug.DrawRay(start, _dir * 1.8f, Color.red);
-            if(hit.collider.tag == "Car" && hit.transform != transform)
+            Debug.DrawRay(start, _dir * triggerDistance, Color.red);
+            var tag = hit.collider.tag;
+            switch (tag) 
             {
-                float carSpeed = hit.transform.GetComponent<Car>().Speed;
-                if (Speed != carSpeed)
+                case "Car":
+                    if(hit.transform != transform)
+                        OnCarHit(hit.transform.GetComponent<Car>(), start, hit);
+                    break;
+                case "Player":
+                    OnPlayerHit(hit);
+                    break;
+            }
+        }
+    }
+    private void OnPlayerHit(RaycastHit2D hit)
+    {
+
+    }
+    private void OnCarHit(Car car, Vector2 start, RaycastHit2D hit)
+    {
+        if (car.Speed >= Speed) return;
+        if (_startSpeed == 0f)
+        {
+            _frontCarSpeed = car.IsChangingSpeed ? car.StrivingSpeed : car.Speed;
+            _startSpeed = Speed - _frontCarSpeed;
+            float _stopDistance = Random.Range(0.2f, 1f);
+            m = -_startSpeed * _stopDistance / (triggerDistance - _stopDistance);
+            k = m / _stopDistance;
+            _changingSpeed = true;
+            _strivingSpeed = _frontCarSpeed;
+        }
+        else
+        {
+            if ((Speed - _frontCarSpeed) < 0.0001f)
+            {
+                Speed = _frontCarSpeed;
+                _startSpeed = 0f;
+                _changingSpeed = false;
+            }
+            else
+            {
+                float distance = (hit.point - start).magnitude;
+                if (distance < 0.1f)
                 {
-                    float speedRatio = Speed / carSpeed;
-                    if((speedRatio-1) < 0.01f)
-                    {
-                        Speed = carSpeed;
-                    }
-                    float newSpeed = (Speed - carSpeed) / (24/speedRatio);
-                    Speed -= newSpeed;
+                    Speed = _frontCarSpeed;
+                    _startSpeed = 0f;
+                }
+                else
+                {
+                    Speed = _frontCarSpeed + (k / (-1 / distance)) + m;
                 }
             }
         }

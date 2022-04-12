@@ -8675,6 +8675,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CarPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 1338869193308303435, guid: 66471eeb5ba7a4a4a9af107e8dfb577a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1338869193308303436, guid: 66471eeb5ba7a4a4a9af107e8dfb577a,
         type: 3}
       propertyPath: m_Sprite
@@ -10340,10 +10345,10 @@ MonoBehaviour:
   _muteSpawn: 0
   startPoint: {fileID: 841651262}
   endPoint: {fileID: 1700278765}
-  _spawnDelayMin: 700
+  _spawnDelayMin: 1100
   _spawnDelayMax: 5000
-  _minSpeed: 4
-  _maxSpeed: 14
+  _minSpeed: 5
+  _maxSpeed: 22
   _carPrefab: {fileID: 1338869193308303437, guid: 66471eeb5ba7a4a4a9af107e8dfb577a,
     type: 3}
   _models: []
@@ -10364,8 +10369,8 @@ MonoBehaviour:
   endPoint: {fileID: 1789216955}
   _spawnDelayMin: 1100
   _spawnDelayMax: 5000
-  _minSpeed: 4
-  _maxSpeed: 14
+  _minSpeed: 5
+  _maxSpeed: 22
   _carPrefab: {fileID: 1338869193308303437, guid: 66471eeb5ba7a4a4a9af107e8dfb577a,
     type: 3}
   _models: []

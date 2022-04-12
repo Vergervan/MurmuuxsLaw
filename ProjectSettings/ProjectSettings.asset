@@ -666,11 +666,11 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 0
-  cloudProjectId: 7ca8e0e3-c2ce-49c2-a055-9cfb96a32c3c
+  cloudProjectId:
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: Murmuuxs Law
-  organizationId: vergervan-4790425
+  organizationId:
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   virtualTexturingSupportEnabled: 0
