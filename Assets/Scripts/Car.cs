@@ -15,10 +15,11 @@ public class Car : MonoBehaviour
     private SpriteRenderer _renderer;
     private Rigidbody2D _rigidbody;
     private float triggerDistance = 3f;
-    private float _speed = 1f, _startSpeed = 0, _frontCarSpeed = 0, k, m;
-    private float _firstSpeed, _strivingSpeed;
+    private float _speed = 1f, _startSpeed = 0, _frontCarSpeed = 0, k, m, _deltaSpeed = 0f;
+    private float _strivingSpeed;
     private bool _moving, _changingSpeed;
     private Vector2 _dir;
+    private bool _isFrontObject = false;
     public bool IsChangingSpeed => _changingSpeed;
     public float StrivingSpeed => _strivingSpeed;
     public float Speed
@@ -31,6 +32,8 @@ public class Car : MonoBehaviour
         {
             _speed = value;
             triggerDistance = (_speed - 3f) * 1.8f;
+            if (triggerDistance < 0)
+                triggerDistance = 1.8f;
         }
     }
     public MoveDirection Direction
@@ -83,62 +86,87 @@ public class Car : MonoBehaviour
 
     private void Update()
     {
-        RaycastHit2D hit;
         Vector2 start = transform.position;
         start.x += _renderer.flipX ? 2f : -2f;
-        if (hit = Physics2D.Raycast(start, _dir, triggerDistance))
+        RaycastHit2D hit = Physics2D.Raycast(start, _dir, triggerDistance);
+        if (hit.collider)
         {
-            Debug.DrawRay(start, _dir * triggerDistance, Color.red);
+            float distance = (hit.point - start).magnitude;
+            Debug.DrawRay(start, _dir * distance, Color.red);
             var tag = hit.collider.tag;
             switch (tag) 
             {
                 case "Car":
                     if(hit.transform != transform)
-                        OnCarHit(hit.transform.GetComponent<Car>(), start, hit);
+                        OnCarHit(hit.transform.GetComponent<Car>(), distance);
                     break;
                 case "Player":
-                    OnPlayerHit(hit);
+                    OnPlayerHit(start, hit);
                     break;
             }
         }
+        else if (_isFrontObject)
+        {
+            Debug.Log("Front object");
+            _isFrontObject = false;
+            Speed = _startSpeed;
+            _deltaSpeed = 0f;
+        }
+        else if(Speed != _startSpeed)
+        {
+            Speed = _startSpeed;
+        }
     }
-    private void OnPlayerHit(RaycastHit2D hit)
+    private void OnPlayerHit(Vector2 start, RaycastHit2D hit)
     {
-
-    }
-    private void OnCarHit(Car car, Vector2 start, RaycastHit2D hit)
-    {
-        if (car.Speed >= Speed) return;
+        _isFrontObject = true;
         if (_startSpeed == 0f)
         {
-            _frontCarSpeed = car.IsChangingSpeed ? car.StrivingSpeed : car.Speed;
-            _startSpeed = Speed - _frontCarSpeed;
+            _startSpeed = Speed;
             float _stopDistance = Random.Range(0.2f, 1f);
             m = -_startSpeed * _stopDistance / (triggerDistance - _stopDistance);
+            k = m / _stopDistance;
+            _changingSpeed = true;
+            _strivingSpeed = 0;
+        }
+        else
+        {
+            if (Speed < 0.0001f)
+            {
+                Speed = 0;
+                _changingSpeed = false;
+            }
+            else
+            {
+                Speed = (k / (-1 / (hit.point-start).magnitude)) + m;
+            }
+        }
+    }
+    private void OnCarHit(Car car, float distance)
+    {
+        if (car.Speed >= Speed) return;
+        if (_deltaSpeed == 0f)
+        {
+            _startSpeed = _deltaSpeed;
+            _frontCarSpeed = car.IsChangingSpeed ? car.StrivingSpeed : car.Speed;
+            _deltaSpeed = Speed - _frontCarSpeed;
+            float _stopDistance = Random.Range(0.2f, 1f);
+            m = -_deltaSpeed * _stopDistance / (triggerDistance - _stopDistance);
             k = m / _stopDistance;
             _changingSpeed = true;
             _strivingSpeed = _frontCarSpeed;
         }
         else
         {
-            if ((Speed - _frontCarSpeed) < 0.0001f)
+            if (_startSpeed < 0.0001f)
             {
                 Speed = _frontCarSpeed;
-                _startSpeed = 0f;
+                _deltaSpeed = 0f;
                 _changingSpeed = false;
             }
             else
             {
-                float distance = (hit.point - start).magnitude;
-                if (distance < 0.1f)
-                {
-                    Speed = _frontCarSpeed;
-                    _startSpeed = 0f;
-                }
-                else
-                {
-                    Speed = _frontCarSpeed + (k / (-1 / distance)) + m;
-                }
+                Speed = _frontCarSpeed + (k / (-1 / distance)) + m;
             }
         }
     }

@@ -12,7 +12,7 @@ public class CarSpawner : MonoBehaviour
     [SerializeField] private int _spawnDelayMin, _spawnDelayMax;
     [SerializeField] private float _minSpeed, _maxSpeed;
     [SerializeField] private Car _carPrefab;
-    [SerializeField] private List<CarModel> _models;
+    private List<CarModel> _models;
     private bool _work = false;
 
     private void Awake()

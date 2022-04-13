@@ -10345,9 +10345,9 @@ MonoBehaviour:
   _muteSpawn: 0
   startPoint: {fileID: 841651262}
   endPoint: {fileID: 1700278765}
-  _spawnDelayMin: 1100
+  _spawnDelayMin: 800
   _spawnDelayMax: 5000
-  _minSpeed: 5
+  _minSpeed: 4
   _maxSpeed: 22
   _carPrefab: {fileID: 1338869193308303437, guid: 66471eeb5ba7a4a4a9af107e8dfb577a,
     type: 3}
@@ -10367,9 +10367,9 @@ MonoBehaviour:
   _muteSpawn: 0
   startPoint: {fileID: 457227795}
   endPoint: {fileID: 1789216955}
-  _spawnDelayMin: 1100
+  _spawnDelayMin: 800
   _spawnDelayMax: 5000
-  _minSpeed: 5
+  _minSpeed: 4
   _maxSpeed: 22
   _carPrefab: {fileID: 1338869193308303437, guid: 66471eeb5ba7a4a4a9af107e8dfb577a,
     type: 3}
