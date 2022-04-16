@@ -3027,6 +3027,7 @@ GameObject:
   - component: {fileID: 457227794}
   - component: {fileID: 457227796}
   - component: {fileID: 457227795}
+  - component: {fileID: 457227797}
   m_Layer: 9
   m_Name: StartPoint (1)
   m_TagString: Untagged
@@ -3061,6 +3062,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEndpoint: 0
+  _carInTrigger: 0
+  _carsInTrigger: 0
 --- !u!61 &457227796
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3086,6 +3089,32 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 0.29863548, y: 0.6015444}
+  m_EdgeRadius: 0
+--- !u!61 &457227797
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457227793}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -1.4144754, y: -0.296865}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.828951, y: 0.5760412}
   m_EdgeRadius: 0
 --- !u!1 &464098373
 GameObject:
@@ -3490,7 +3519,6 @@ MonoBehaviour:
   _minSpeed: 0
   _maxSpeed: 0
   _carPrefab: {fileID: 0}
-  _models: []
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -5904,6 +5932,7 @@ GameObject:
   - component: {fileID: 841651261}
   - component: {fileID: 841651263}
   - component: {fileID: 841651262}
+  - component: {fileID: 841651264}
   m_Layer: 9
   m_Name: StartPoint
   m_TagString: Untagged
@@ -5938,6 +5967,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEndpoint: 0
+  _carInTrigger: 0
+  _carsInTrigger: 0
 --- !u!61 &841651263
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5963,6 +5994,32 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 0.32390988}
+  m_EdgeRadius: 0
+--- !u!61 &841651264
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841651260}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 1.4254055, y: -0.48733705}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.8809776, y: 0.41893673}
   m_EdgeRadius: 0
 --- !u!1 &842661185
 GameObject:
@@ -10351,7 +10408,6 @@ MonoBehaviour:
   _maxSpeed: 22
   _carPrefab: {fileID: 1338869193308303437, guid: 66471eeb5ba7a4a4a9af107e8dfb577a,
     type: 3}
-  _models: []
 --- !u!114 &1412539182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10373,7 +10429,6 @@ MonoBehaviour:
   _maxSpeed: 22
   _carPrefab: {fileID: 1338869193308303437, guid: 66471eeb5ba7a4a4a9af107e8dfb577a,
     type: 3}
-  _models: []
 --- !u!1 &1443056911
 GameObject:
   m_ObjectHideFlags: 0
@@ -12666,6 +12721,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEndpoint: 1
+  _carInTrigger: 0
+  _carsInTrigger: 0
 --- !u!61 &1700278766
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -13368,6 +13425,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEndpoint: 1
+  _carInTrigger: 0
+  _carsInTrigger: 0
 --- !u!61 &1789216956
 BoxCollider2D:
   m_ObjectHideFlags: 0

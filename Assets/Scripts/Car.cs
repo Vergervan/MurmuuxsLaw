@@ -20,6 +20,7 @@ public class Car : MonoBehaviour
     private bool _moving, _changingSpeed;
     private Vector2 _dir;
     private bool _isFrontObject = false;
+    public bool IsObjectInFront => _isFrontObject;
     public bool IsChangingSpeed => _changingSpeed;
     public float StrivingSpeed => _strivingSpeed;
     public float Speed
@@ -31,9 +32,11 @@ public class Car : MonoBehaviour
         set
         {
             _speed = value;
-            triggerDistance = (_speed - 3f) * 1.8f;
-            if (triggerDistance < 0)
-                triggerDistance = 1.8f;
+            if (_speed < 0f)
+                _speed = 0f;
+            triggerDistance = (_speed - 3f) * 1.5f;
+            if (_speed < 3f)
+                triggerDistance = 3f;
         }
     }
     public MoveDirection Direction
@@ -70,11 +73,8 @@ public class Car : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            Debug.Log("Player");
             var rend = collision.GetComponent<SpriteRenderer>();
-            Debug.Log(_renderer.sprite.texture);
             rend.material.SetTexture("_MainTex1", _renderer.sprite.texture);
-            Debug.Log(rend.material.GetTexture("_MainTex1").name);
         }
     }
 
@@ -112,10 +112,6 @@ public class Car : MonoBehaviour
             Speed = _startSpeed;
             _deltaSpeed = 0f;
         }
-        else if(Speed != _startSpeed)
-        {
-            Speed = _startSpeed;
-        }
     }
     private void OnPlayerHit(Vector2 start, RaycastHit2D hit)
     {
@@ -127,7 +123,7 @@ public class Car : MonoBehaviour
             m = -_startSpeed * _stopDistance / (triggerDistance - _stopDistance);
             k = m / _stopDistance;
             _changingSpeed = true;
-            _strivingSpeed = 0;
+            _strivingSpeed = 0f;
         }
         else
         {
@@ -144,11 +140,11 @@ public class Car : MonoBehaviour
     }
     private void OnCarHit(Car car, float distance)
     {
-        if (car.Speed >= Speed) return;
-        if (_deltaSpeed == 0f)
+        if (car.Speed >= Speed && car.StrivingSpeed >= Speed) return; //Если машина впереди быстрее нашей, то ничего не делаем
+        if (_deltaSpeed == 0f) //deltaSpeed = 0, когда машина не изменяет свою скорость
         {
-            _startSpeed = _deltaSpeed;
-            _frontCarSpeed = car.IsChangingSpeed ? car.StrivingSpeed : car.Speed;
+            //_startSpeed = _deltaSpeed;
+            _frontCarSpeed = car.IsChangingSpeed ? car.StrivingSpeed : car.Speed; //Проверяем стремиться ли машина спереди к какой-либо скорости
             _deltaSpeed = Speed - _frontCarSpeed;
             float _stopDistance = Random.Range(0.2f, 1f);
             m = -_deltaSpeed * _stopDistance / (triggerDistance - _stopDistance);
@@ -158,7 +154,7 @@ public class Car : MonoBehaviour
         }
         else
         {
-            if (_startSpeed < 0.0001f)
+            if (_deltaSpeed < 0.0001f)
             {
                 Speed = _frontCarSpeed;
                 _deltaSpeed = 0f;
