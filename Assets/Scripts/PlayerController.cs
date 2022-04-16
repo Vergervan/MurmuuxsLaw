@@ -65,6 +65,16 @@ public class PlayerController : MonoBehaviour
         RefreshAnimation(direction);
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        _renderer.material.SetTexture("_MainTex1", collision.GetComponent<SpriteRenderer>().sprite.texture);
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        _renderer.material.SetTexture("_MainTex1", _defaultTexture);
+    }
+
     public void SetDefaultShaderTexture()
     {
         _renderer.material.SetTexture("_MainTex1", _defaultTexture); 
