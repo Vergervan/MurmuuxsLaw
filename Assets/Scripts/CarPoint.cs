@@ -6,6 +6,9 @@ public class CarPoint : MonoBehaviour
 {
     [SerializeField] private bool isEndpoint;
     private Collider2D _collider;
+    [SerializeField] private bool _carInTrigger;
+    public bool IsCarInTrigger => _carInTrigger;
+    [SerializeField] private int _carsInTrigger = 0;
 
     private void Awake()
     {
@@ -13,11 +16,28 @@ public class CarPoint : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isEndpoint && collision.tag == "Car")
+        Debug.Log(collision.isTrigger);
+        if (collision.tag == "Car")
         {
-            collision.transform.GetComponent<Car>().StopMove();
-            Destroy(collision.gameObject);
+            if (isEndpoint)
+            {
+                collision.transform.GetComponent<Car>().StopMove();
+                Destroy(collision.gameObject);
+            }
+            _carsInTrigger++;
         }
+        RefreshTriggerOptions();
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Car")
+            _carsInTrigger--;
+        RefreshTriggerOptions();
+    }
+
+    private void RefreshTriggerOptions()
+    {
+        _carInTrigger = _carsInTrigger > 0;
     }
 
     public Car CreateCar(Car prefab, CarModel model)

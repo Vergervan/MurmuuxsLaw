@@ -30,6 +30,8 @@ public class CarSpawner : MonoBehaviour
         {
             while (_work)
             {
+                while (startPoint.IsCarInTrigger)
+                    await Task.Yield();
                 await Task.Delay(Random.Range(_spawnDelayMin, _spawnDelayMax));
                 if (_muteSpawn) continue;
                 Car car = startPoint.CreateCar(_carPrefab, _models[Random.Range(0, _models.Count - 1)]);
