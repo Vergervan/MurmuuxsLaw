@@ -7,10 +7,10 @@ TextureImporter:
     second: murmur_angry_0
   - first:
       213: -4561309748931920664
-    second: murmur_angry_1
+    second: murmur_angry_2
   - first:
       213: -5138558671464672175
-    second: murmur_angry_1
+    second: murmur_angry_2
   - first:
       213: 5950694351027980381
     second: murmur_angry_3
@@ -19,6 +19,15 @@ TextureImporter:
     second: murmur_angry_2
   - first:
       213: 6136836036194226429
+    second: murmur_angry_5
+  - first:
+      213: 2763025060175155249
+    second: murmur_angry_2
+  - first:
+      213: 5497018161619514469
+    second: murmur_angry_3
+  - first:
+      213: 457584053497079222
     second: murmur_angry_5
   externalObjects: {}
   serializedVersion: 11
@@ -41,6 +50,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -50,8 +60,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -72,9 +82,12 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
@@ -120,10 +133,10 @@ TextureImporter:
       name: murmur_angry_0
       rect:
         serializedVersion: 2
-        x: 3
+        x: 0
         y: 32
-        width: 24
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -138,13 +151,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: murmur_angry_1
+      name: murmur_angry_2
       rect:
         serializedVersion: 2
-        x: 35
+        x: 64
         y: 32
-        width: 24
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -159,13 +172,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: murmur_angry_2
+      name: murmur_angry_4
       rect:
         serializedVersion: 2
-        x: 67
-        y: 32
-        width: 24
-        height: 31
+        x: 32
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -180,13 +193,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: murmur_angry_3
+      name: murmur_angry_1
       rect:
         serializedVersion: 2
-        x: 3
-        y: 0
-        width: 24
-        height: 31
+        x: 32
+        y: 32
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -194,20 +207,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d5842ffebfc159250800000000000000
-      internalID: 5950694351027980381
+      spriteID: 1301e3137ac385620800000000000000
+      internalID: 2763025060175155249
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: murmur_angry_4
+      name: murmur_angry_3
       rect:
         serializedVersion: 2
-        x: 35
+        x: 0
         y: 0
-        width: 24
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -215,8 +228,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 514e41d6751a6b000800000000000000
-      internalID: 51405842625651733
+      spriteID: 564b33fb4e4594c40800000000000000
+      internalID: 5497018161619514469
       vertices: []
       indices: 
       edges: []
@@ -225,10 +238,10 @@ TextureImporter:
       name: murmur_angry_5
       rect:
         serializedVersion: 2
-        x: 67
+        x: 64
         y: 0
-        width: 24
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -236,8 +249,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: df05c2e4cdb6a2550800000000000000
-      internalID: 6136836036194226429
+      spriteID: 6b5a393b54aa95600800000000000000
+      internalID: 457584053497079222
       vertices: []
       indices: 
       edges: []
