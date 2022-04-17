@@ -16,10 +16,10 @@ TextureImporter:
     second: murmur_walk_back_3
   - first:
       213: -1185546832427555981
-    second: murmur_walk_back_4
+    second: murmur_walk_back_5
   - first:
       213: 3385845636420675228
-    second: murmur_walk_back_4
+    second: murmur_walk_back_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -41,6 +41,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -50,8 +51,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -72,9 +73,12 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
@@ -120,9 +124,9 @@ TextureImporter:
       name: murmur_walk_back_0
       rect:
         serializedVersion: 2
-        x: 4
+        x: 0
         y: 32
-        width: 19
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -141,9 +145,9 @@ TextureImporter:
       name: murmur_walk_back_1
       rect:
         serializedVersion: 2
-        x: 36
+        x: 32
         y: 32
-        width: 19
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -162,9 +166,9 @@ TextureImporter:
       name: murmur_walk_back_2
       rect:
         serializedVersion: 2
-        x: 68
+        x: 64
         y: 32
-        width: 19
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -183,9 +187,9 @@ TextureImporter:
       name: murmur_walk_back_3
       rect:
         serializedVersion: 2
-        x: 4
+        x: 0
         y: 0
-        width: 19
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -201,12 +205,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: murmur_walk_back_5
+      name: murmur_walk_back_4
       rect:
         serializedVersion: 2
-        x: 68
+        x: 32
         y: 0
-        width: 19
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -222,12 +226,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: murmur_walk_back_4
+      name: murmur_walk_back_5
       rect:
         serializedVersion: 2
-        x: 36
+        x: 64
         y: 0
-        width: 19
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
