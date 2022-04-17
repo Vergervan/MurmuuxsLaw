@@ -1875,6 +1875,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 412621702446675550, guid: b5955948af4789c40bddbb229338adbd,
         type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 412621702446675550, guid: b5955948af4789c40bddbb229338adbd,
+        type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -5632,7 +5637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &813345017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9849,7 +9854,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 117.4, y: -85.4}
+  m_AnchoredPosition: {x: 117.3999, y: -85.400024}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1334837883
@@ -15451,6 +15456,21 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 412621702446675536, guid: b5955948af4789c40bddbb229338adbd,
         type: 3}
+      propertyPath: m_Size.x
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 412621702446675536, guid: b5955948af4789c40bddbb229338adbd,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 412621702446675536, guid: b5955948af4789c40bddbb229338adbd,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 412621702446675536, guid: b5955948af4789c40bddbb229338adbd,
+        type: 3}
       propertyPath: m_RenderingLayerMask
       value: 1
       objectReference: {fileID: 0}
@@ -15458,7 +15478,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: ce2edb4b17af3bc43bb40fe7a0739c05, type: 2}
+      objectReference: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
     - target: {fileID: 412621702446675538, guid: b5955948af4789c40bddbb229338adbd,
         type: 3}
       propertyPath: speed
