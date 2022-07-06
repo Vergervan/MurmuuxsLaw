@@ -7,6 +7,7 @@ using static PlayerInfo.Types;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private bool useShaders;
     [SerializeField] private Inventory inventory;
     [SerializeField] private NetworkManager network;
     public Guid playerGuid;
@@ -67,12 +68,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        _renderer.material.SetTexture("_MainTex1", collision.GetComponent<SpriteRenderer>().sprite.texture);
+        if(useShaders)
+            _renderer.material.SetTexture("_MainTex1", collision.GetComponent<SpriteRenderer>().sprite.texture);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        _renderer.material.SetTexture("_MainTex1", _defaultTexture);
+        if(useShaders)
+            _renderer.material.SetTexture("_MainTex1", _defaultTexture);
     }
 
     public void SetDefaultShaderTexture()
