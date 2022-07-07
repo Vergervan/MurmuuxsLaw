@@ -30,13 +30,17 @@ public class PlayerController : MonoBehaviour
     private AnimationState state = AnimationState.Idle;
     private void Start()
     {
-        _renderer = GetComponent<SpriteRenderer>();
-        _renderer.material.EnableKeyword("_MainTex");
-        _renderer.material.SetTexture("_MainTex", _renderer.material.mainTexture);
-        _renderer.material.EnableKeyword("_MainTex1");
-        _defaultTexture = _renderer.material.GetTexture("_MainTex1");
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        _renderer = GetComponent<SpriteRenderer>();
+        if (useShaders)
+        {
+            _renderer.material.EnableKeyword("_MainTex");
+            _renderer.material.SetTexture("_MainTex", _renderer.material.mainTexture);
+            _renderer.material.EnableKeyword("_MainTex1");
+            _defaultTexture = _renderer.material.GetTexture("_MainTex1");
+        }
     }
     void Update()
     {

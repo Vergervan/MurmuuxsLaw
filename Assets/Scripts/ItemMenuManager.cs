@@ -14,15 +14,13 @@ public class ItemMenuManager : MonoBehaviour
             menuObject.gameObject.SetActive(value);
         }
     }
-    public void ExecuteInPosition(Vector2 pos)
+    public void ExecuteInPosition(Vector2 pos, Vector2 objectSize)
     {
-        Debug.Log(pos);
-        if (pos.y < menuObject.sizeDelta.y)
-        {
-            pos.y -= (pos.y - menuObject.sizeDelta.y);
-        }
+        Vector2 menuScaledSize = menuObject.sizeDelta * menuObject.localScale;
+        Debug.Log("Start pos: " + pos);
+        pos.y += (((menuScaledSize.y + objectSize.y) * 0.5f) * canvas.scaleFactor);
         menuObject.transform.position = pos;
-        Debug.Log(pos);
+        Debug.Log("Processed pos: " + pos);
         if (!Enabled) Enabled = true;
     }
 }

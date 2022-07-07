@@ -22,11 +22,12 @@ public class ItemCell : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     [SerializeField] private Canvas canvas;
     [SerializeField] private ItemMenuManager itemMenuManager;
     private GraphicRaycaster gr;
-    private RectTransform rectTransform;
+    private RectTransform rectTransform, imageTransform;
     private Vector2 posBeforeDrag;
 
     private void Awake() {
-        rectTransform = itemImage.gameObject.GetComponent<RectTransform>();
+        rectTransform = GetComponent<RectTransform>();
+        imageTransform = itemImage.gameObject.GetComponent<RectTransform>();
         inventory = GetComponentInParent<Inventory>();
         gr = GetComponentInParent<GraphicRaycaster>();
     }
@@ -126,7 +127,7 @@ public class ItemCell : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     {
         if(eventData.button == PointerEventData.InputButton.Right)
         {
-            itemMenuManager.ExecuteInPosition(itemImage.transform.position);
+            itemMenuManager.ExecuteInPosition(itemImage.transform.position, rectTransform.sizeDelta * rectTransform.localScale);
         }
     }
 }
