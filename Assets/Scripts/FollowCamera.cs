@@ -7,7 +7,7 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] private float zoom = 1f;
     private float _defFollowSpeed, _defZoom;
     [SerializeField, HideInInspector] private float minX, maxX, minY, maxY;
-    private Camera camera;
+    private Camera _camera;
 
     private bool makeZoom = false;
     private float zoomLerpVal;
@@ -17,7 +17,7 @@ public class FollowCamera : MonoBehaviour
         _defFollowSpeed = followSpeed;
         _defZoom = zoom;
         zoomLerpVal = _defZoom;
-        camera = Camera.main;
+        _camera = Camera.main;
     }
     void Update()
     {
@@ -26,18 +26,18 @@ public class FollowCamera : MonoBehaviour
             ZoomCamera();
         }
 
-        Vector3 newPos = new Vector3(target.position.x, target.position.y, camera.transform.position.z);
-        Vector3 slerpedPos = Vector3.Slerp(camera.transform.position, newPos, followSpeed * Time.deltaTime);
+        Vector3 newPos = new Vector3(target.position.x, target.position.y, _camera.transform.position.z);
+        Vector3 slerpedPos = Vector3.Slerp(_camera.transform.position, newPos, followSpeed * Time.deltaTime);
         slerpedPos.y = Mathf.Clamp(slerpedPos.y, minY, maxY);
         slerpedPos.z = newPos.z;
         slerpedPos.x = Mathf.Clamp(slerpedPos.x, minX, maxX);
-        camera.transform.position = slerpedPos;
+        _camera.transform.position = slerpedPos;
     }
 
     private void ZoomCamera()
     {
         zoomLerpVal = Mathf.Lerp(zoomLerpVal, zoom, followSpeed * Time.deltaTime);
-        camera.orthographicSize = zoomLerpVal;
+        _camera.orthographicSize = zoomLerpVal;
         if(zoomLerpVal == zoom)
         {
             makeZoom = false;
