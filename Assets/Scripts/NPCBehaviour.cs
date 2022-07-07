@@ -21,8 +21,11 @@ public class NPCBehaviour : MonoBehaviour
     private Dialog currentDialog;
     private bool isSpeak = false;
     private Coroutine hideBubble = null;
+
+    private DialogueWindow _window;
     private void Start()
     {
+        _window = dManager.GetDialogController().GetDialogWindow();
         m_dialog = dManager.GetDialog(npcSettings.dialogName);
         if(!string.IsNullOrWhiteSpace(npcSettings.altDialogName))
             m_altdialog = dManager.GetDialog(npcSettings.altDialogName);
@@ -40,49 +43,9 @@ public class NPCBehaviour : MonoBehaviour
         player.SetCameraZoom(transform, 1f);
 
         if (!isSpeak)
-        {
-            currentDialog = m_dialog;
-            int num = currentDialog.GetAvailableRoutesCount(true);
-            Debug.Log("Available routes: " + num);
-            if (num <= npcSettings.limitToAlt)
-                currentDialog = m_altdialog;
-            if (npcBubble == null) npcBubble = dManager.CreateSpeechBubble(transform);
-            npcBubble.gameObject.SetActive(true);
-            if (currentDialog.IsAnswer) throw new Exception("Can't use an answer as a dialog");
-            if (currentDialog.IsDialog) dManager.SetRoutesInDialogWindow(this, currentDialog.Routes);
-            npcBubble.SetDialog(currentDialog);
-            isSpeak = true;
-            if (!npcBubble.GetTextFlag().FlagValue.HasNext() && currentDialog.IsDialog)
-            {
-                npcBubble.OnSpeechStop += (o, e) => dManager.GetDialogController().GetDialogWindow().TurnOn();
-            }
-            npcBubble.StartSpeech();
-        }
+            StartSpeak();
         else
-        {
-            UnitSpeech speech = npcBubble.GetTextFlag().FlagValue;
-            if (!speech.HasNext())
-            {
-                if (!dManager.GetDialogController().GetDialogWindow().IsOpened)
-                {
-                    DisableBubble();
-                    npcBubble.GetTextFlag().FlagValue.SetToStart();
-                    isSpeak = false;
-                    player.ResetZoom();
-                }
-                return;
-            }
-            speech.Next();
-            if (!speech.HasNext() && npcBubble.GetCurrentDialog().IsDialog)
-            {
-                npcBubble.OnSpeechStop += (o, e) => dManager.GetDialogController().GetDialogWindow().TurnOn();
-            }
-            if (!npcBubble.GetCurrentDialog().IsDialog)
-            {
-                dManager.GetDialogController().GetDialogWindow().TurnOff();
-            }
-            npcBubble.StartSpeech();
-        }
+            ContinueSpeaking();
     }
 
     private void Update()
@@ -95,22 +58,73 @@ public class NPCBehaviour : MonoBehaviour
         }
         if (isSpeak)
         {
+            if (Input.GetKeyDown(KeyCode.Return))
+                ContinueSpeaking();
             if (Vector2.Distance(player.transform.position, transform.position) > 2f)
             {
                 ResetSpeech();
+                _window.TurnOff();
             }
         }
     }
+
+    private void StartSpeak()
+    {
+        currentDialog = m_dialog;
+        int num = currentDialog.GetAvailableRoutesCount(true);
+        Debug.Log("Available routes: " + num);
+        if (num <= npcSettings.limitToAlt)
+            currentDialog = m_altdialog;
+        if (npcBubble == null) npcBubble = dManager.CreateSpeechBubble(transform);
+        npcBubble.gameObject.SetActive(true);
+        if (currentDialog.IsAnswer) throw new Exception("Can't use an answer as a dialog");
+        if (currentDialog.IsDialog) dManager.SetRoutesInDialogWindow(this, currentDialog.Routes);
+        npcBubble.SetDialog(currentDialog);
+        isSpeak = true;
+        if (!npcBubble.GetTextFlag().FlagValue.HasNext() && currentDialog.IsDialog)
+        {
+            npcBubble.OnSpeechStop += (o, e) => _window.TurnOn();
+        }
+        npcBubble.StartSpeech();
+    }
+
+    private void ContinueSpeaking()
+    {
+        UnitSpeech speech = npcBubble.GetTextFlag().FlagValue;
+        if (!speech.HasNext())
+        {
+            if (!_window.IsOpened)
+            {
+                DisableBubble();
+                npcBubble.GetTextFlag().FlagValue.SetToStart();
+                isSpeak = false;
+                player.ResetZoom();
+            }
+            return;
+        }
+        speech.Next();
+        Dialog currentDialog = npcBubble.GetCurrentDialog();
+        if (!speech.HasNext() && currentDialog.IsDialog)
+        {
+            npcBubble.OnSpeechStop += (o, e) => _window.TurnOn();
+        }
+        if (!currentDialog.IsDialog)
+        {
+            _window.TurnOff();
+        }
+        npcBubble.StartSpeech();
+    }
+
     public void ChangeDialog(Dialog newDialog)
     {
         currentDialog = newDialog;
-        dManager.GetDialogController().GetDialogWindow().TurnOff();
+        _window.TurnOff();
         if (newDialog.IsAnswer) throw new Exception("Can't use an answer as a dialog");
         npcBubble.SetDialog(newDialog);
         if (newDialog.IsDialog)
         {
             dManager.SetRoutesInDialogWindow(this, newDialog.Routes);
-            npcBubble.OnSpeechStop += (o, e) => dManager.GetDialogController().GetDialogWindow().TurnOff();
+            npcBubble.OnSpeechStop += (o, e) => _window.TurnOn();
         }
         isSpeak = true;
         npcBubble.StartSpeech();
