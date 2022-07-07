@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool useShaders;
     [SerializeField] private Inventory inventory;
     [SerializeField] private NetworkManager network;
+    [SerializeField] private FollowCamera playerCamera;
     public Guid playerGuid;
     private SpriteRenderer _renderer;
     private Rigidbody2D rb;
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 direction;
     private bool _isMoving;
     private Texture _defaultTexture;
+    private bool _freezeMove = false;
     public bool IsMoving { get => _isMoving; }
     public enum AnimationState
     {
@@ -50,20 +52,23 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         if (isOnline) return;
-        direction = ReadMovementKeys();
-        if (direction.magnitude > 0)
+        if (!_freezeMove)
         {
-            switch (network.Type)
+            direction = ReadMovementKeys();
+            if (direction.magnitude > 0)
             {
-                case NetworkType.Client:
-                    SendPositionToServer(direction);
-                    break;
-                case NetworkType.Server:
-                    network.SendHostPlayerMovement(direction);
-                    goto default;
-                default:
-                    MoveLocal(direction);
-                    break;
+                switch (network.Type)
+                {
+                    case NetworkType.Client:
+                        SendPositionToServer(direction);
+                        break;
+                    case NetworkType.Server:
+                        network.SendHostPlayerMovement(direction);
+                        goto default;
+                    default:
+                        MoveLocal(direction);
+                        break;
+                }
             }
         }
         
@@ -80,6 +85,18 @@ public class PlayerController : MonoBehaviour
     {
         if(useShaders)
             _renderer.material.SetTexture("_MainTex1", _defaultTexture);
+    }
+
+    public void SetCameraZoom(Transform target, float zoomValue)
+    {
+        playerCamera.SetTarget(target);
+        _freezeMove = true;
+    }
+
+    public void ResetZoom()
+    {
+        playerCamera.SetTarget(transform);
+        _freezeMove = false;
     }
 
     public void SetDefaultShaderTexture()

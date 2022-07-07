@@ -3001,7 +3001,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1799956602}
   followSpeed: 2
-  zoom: 0
+  zoom: 1
   minX: -13.3
   maxX: 13.3
   minY: 0.9
@@ -15505,6 +15505,11 @@ PrefabInstance:
       propertyPath: inventory
       value: 
       objectReference: {fileID: 1340369431}
+    - target: {fileID: 412621702446675538, guid: b5955948af4789c40bddbb229338adbd,
+        type: 3}
+      propertyPath: playerCamera
+      value: 
+      objectReference: {fileID: 417538258}
     - target: {fileID: 412621702446675539, guid: b5955948af4789c40bddbb229338adbd,
         type: 3}
       propertyPath: m_RootOrder

@@ -36,6 +36,9 @@ public class NPCBehaviour : MonoBehaviour
             return;
         }
         if (hideBubble != null) StopCoroutine(hideBubble);
+
+        player.SetCameraZoom(transform, 1f);
+
         if (!isSpeak)
         {
             currentDialog = m_dialog;
@@ -65,6 +68,7 @@ public class NPCBehaviour : MonoBehaviour
                     DisableBubble();
                     npcBubble.GetTextFlag().FlagValue.SetToStart();
                     isSpeak = false;
+                    player.ResetZoom();
                 }
                 return;
             }
