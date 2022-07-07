@@ -5,9 +5,17 @@ public class ItemMenuManager : MonoBehaviour
 {
     [SerializeField] private RectTransform menuObject;
     [SerializeField] private RectTransform content;
+    [SerializeField] private RectTransform menuConnector;
     [SerializeField] private Canvas canvas;
     [SerializeField] private bool _enabled;
     private ItemCell _currentCell = null;
+    private Vector2 menuScaledSize;
+
+    private void Start()
+    {
+        menuScaledSize = menuObject.sizeDelta * menuObject.localScale;
+    }
+
     public bool Enabled
     {
         get => _enabled;
@@ -15,6 +23,7 @@ public class ItemMenuManager : MonoBehaviour
         {
             _enabled = value;
             menuObject.gameObject.SetActive(value);
+            menuConnector.gameObject.SetActive(value);
         }
     }
     public void ExecuteInPosition(ItemCell cell, Vector2 pos, Vector2 objectSize)
@@ -28,13 +37,18 @@ public class ItemMenuManager : MonoBehaviour
                 return;
             }
         }
-                
         _currentCell = cell;
-        Vector2 menuScaledSize = menuObject.sizeDelta * menuObject.localScale;
-        Debug.Log("Start pos: " + pos);
-        pos.y += (((objectSize.y) * 0.5f) * canvas.scaleFactor);
+
+        menuConnector.position = new Vector2(pos.x, pos.y + (77.5f * canvas.scaleFactor));
+
+        //float gapX = canvas.pixelRect.width - (pos.x + (menuScaledSize.y * 0.5f) * canvas.scaleFactor);
+        //Debug.Log("Gap: " + gapX);
+        //if (gapX < 0f)
+        //{
+        //    pos.x += gapX * 0.5f;
+        //}
+        pos.y += ((objectSize.y * 0.5f + 11f) * canvas.scaleFactor);
         menuObject.transform.position = pos;
-        Debug.Log("Processed pos: " + pos);
         if (!Enabled) Enabled = true;
 
         AppearMenu();
@@ -43,8 +57,6 @@ public class ItemMenuManager : MonoBehaviour
     private void AppearMenu()
     {
         content.gameObject.SetActive(false);
-        //menuObject.localScale = Vector2.zero;
-        //menuObject.transform.DOScale(new Vector3(6, 6, 1), 0.5f);
         Vector2 size = menuObject.sizeDelta;
         menuObject.sizeDelta = new Vector2(size.x, 0);
         menuObject.DOSizeDelta(size, 0.15f).OnComplete(() =>
