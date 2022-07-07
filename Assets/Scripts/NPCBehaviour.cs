@@ -110,7 +110,7 @@ public class NPCBehaviour : MonoBehaviour
         if (newDialog.IsDialog)
         {
             dManager.SetRoutesInDialogWindow(this, newDialog.Routes);
-            npcBubble.OnSpeechStop += (o, e) => dManager.GetDialogController().GetDialogWindow().ToggleWindow();
+            npcBubble.OnSpeechStop += (o, e) => dManager.GetDialogController().GetDialogWindow().TurnOff();
         }
         isSpeak = true;
         npcBubble.StartSpeech();
