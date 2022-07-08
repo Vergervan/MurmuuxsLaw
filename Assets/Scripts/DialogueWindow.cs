@@ -43,6 +43,7 @@ public class DialogueWindow : MonoBehaviour
         {
             content.gameObject.SetActive(true);
             controller.SelectChoice(0);
+            controller.UpdatePrefferedHeight();
             _processing = false;
             _opened = true;
         });

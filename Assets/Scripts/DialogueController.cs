@@ -2,6 +2,7 @@ using DialogScriptCreator;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
 
 public class DialogueController : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private List<Route> choicesRoutes = new List<Route>();
     private List<ChoiceItem> choices = new List<ChoiceItem>();
     private int currentSelection = 0;
+    private float contentHeight = 0f;
     private NPCBehaviour currentNpc;
     public int ChoicesCount { get => choicesRoutes.Count; }
     public DialogueWindow GetDialogWindow() => window;
@@ -48,6 +50,11 @@ public class DialogueController : MonoBehaviour
             }
         }
     }
+    public void UpdatePrefferedHeight()
+    {
+        contentHeight = LayoutUtility.GetPreferredHeight(content);
+    }
+
     private void CheckParentRoutes(Route route)
     {
         if (Equals(route.Parent, null) || Equals(route.Parent.ParentRoute, null)) return;
@@ -114,6 +121,7 @@ public class DialogueController : MonoBehaviour
     private Vector2 ScrollToTop(ChoiceItem item)
     {
         float fullHeight = GetHeightFromBottom();
+        Debug.Log("BotooHeight: " + fullHeight);
         float diff = fullHeight - (content.sizeDelta.y - content.anchoredPosition.y);
         
         Vector2 newPos = content.anchoredPosition;
@@ -134,18 +142,20 @@ public class DialogueController : MonoBehaviour
     private Vector2 ScrollToBottom(ChoiceItem item)
     {
         float fullHeight = GetHeight();
+        Debug.Log("Height: " + fullHeight);
         float diff = contentMask.sizeDelta.y - fullHeight;
+        Debug.Log(diff);
         Vector2 newPos = content.anchoredPosition;
         Vector2 selectorPos = item.TextRect.anchoredPosition;
         if (diff < 0f)
         {
-            if (content.anchoredPosition.y == 0f)
+            if (content.anchoredPosition.y > 0f)
             {
-                newPos.y -= diff;
+                newPos.y += item.TextRect.sizeDelta.y;
             }
             else
             {
-                newPos.y += item.TextRect.sizeDelta.y;
+                newPos.y -= diff;
             }
             selectorPos.y -= diff;
             content.anchoredPosition = newPos;
@@ -167,7 +177,7 @@ public class DialogueController : MonoBehaviour
     private float GetHeightFromBottom()
     {
         float sum = 0f, counter = choices.Count;
-        for(int i = choices.Count-1; i != 0; --i)
+        for(int i = choices.Count-1; i > 0; --i)
         {
             sum += choices[i].TextRect.sizeDelta.y;
             --counter;
