@@ -40,13 +40,11 @@ public class DialogueController : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.UpArrow) && currentSelection > 0)
             {
-                --currentSelection;
-                SelectChoice(currentSelection, KeyCode.UpArrow);
+                SelectChoice(--currentSelection, KeyCode.UpArrow);
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow) && currentSelection != choices.Count - 1)
             {
-                ++currentSelection;
-                SelectChoice(currentSelection, KeyCode.DownArrow);
+                SelectChoice(++currentSelection, KeyCode.DownArrow);
             }
         }
     }
