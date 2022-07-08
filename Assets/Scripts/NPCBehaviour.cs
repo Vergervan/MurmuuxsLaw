@@ -23,7 +23,6 @@ public class NPCBehaviour : MonoBehaviour
     private Coroutine hideBubble = null;
 
     private DialogueWindow _window;
-    private Dialog _lastParentDialog;
     private void Start()
     {
         _window = dManager.GetDialogController().GetDialogWindow();
@@ -34,6 +33,7 @@ public class NPCBehaviour : MonoBehaviour
     }
     void OnMouseDown()
     {
+        if (!player.CheckNPC(this)) return;
         if (Vector2.Distance(player.transform.position, transform.position) > 2f)
         {
             if (npcBubble != null) npcBubble.gameObject.SetActive(false);
@@ -41,7 +41,7 @@ public class NPCBehaviour : MonoBehaviour
         }
         if (hideBubble != null) StopCoroutine(hideBubble);
 
-        player.SetCameraZoom(transform, 1f);
+        player.SetCameraZoom(transform);
 
         if (!_window.IsOpened && !_window.IsProcessing)
         {

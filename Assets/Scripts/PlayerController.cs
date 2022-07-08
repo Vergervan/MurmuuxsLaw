@@ -19,8 +19,10 @@ public class PlayerController : MonoBehaviour
     private Vector2 direction;
     private bool _isMoving;
     private Texture _defaultTexture;
-    private bool _freezeMove = false;
-    public bool IsMoving { get => _isMoving; }
+    private bool _freezeMove = false, _inDialog = false;
+    private NPCBehaviour _currentNpc;
+    public bool IsMoving => _isMoving;
+    public bool InDialog => _inDialog;
     public enum AnimationState
     {
         Idle = 0,
@@ -87,17 +89,21 @@ public class PlayerController : MonoBehaviour
             _renderer.material.SetTexture("_MainTex1", _defaultTexture);
     }
 
-    public void SetCameraZoom(Transform target, float zoomValue)
+    public void SetCameraZoom(Transform target)
     {
         playerCamera.SetTarget(target);
         _freezeMove = true;
+        _inDialog = true;
     }
 
     public void ResetZoom()
     {
         playerCamera.SetTarget(transform);
         _freezeMove = false;
+        _inDialog = false;
     }
+
+    public bool CheckNPC(NPCBehaviour npc) => npc == _currentNpc;
 
     public void SetDefaultShaderTexture()
     {
