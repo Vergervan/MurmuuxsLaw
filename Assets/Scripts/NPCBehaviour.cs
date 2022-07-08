@@ -34,7 +34,7 @@ public class NPCBehaviour : MonoBehaviour
     void OnMouseDown()
     {
         if (player.InDialog)
-            if(!player.CheckNPC(this)) 
+            if (!player.CheckTarget(transform))
                 return;
         if (Vector2.Distance(player.transform.position, transform.position) > 2f)
         {

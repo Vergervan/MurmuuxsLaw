@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     private bool _isMoving;
     private Texture _defaultTexture;
     private bool _freezeMove = false, _inDialog = false;
-    private NPCBehaviour _currentNpc;
     public bool IsMoving => _isMoving;
     public bool InDialog => _inDialog;
     public enum AnimationState
@@ -103,7 +102,7 @@ public class PlayerController : MonoBehaviour
         _inDialog = false;
     }
 
-    public bool CheckNPC(NPCBehaviour npc) => npc == _currentNpc;
+    public bool CheckTarget(Transform target) => playerCamera.Target == target;
 
     public void SetDefaultShaderTexture()
     {

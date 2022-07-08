@@ -11,6 +11,7 @@ public class FollowCamera : MonoBehaviour
 
     private bool makeZoom = false;
     private float zoomLerpVal;
+    public Transform Target => target;
 
     private void Awake()
     {
