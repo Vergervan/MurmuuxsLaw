@@ -125,11 +125,10 @@ public class DialogueController : MonoBehaviour
     private void ScrollToTop(ChoiceItem item)
     {
         currentHeight -= item.TextRect.sizeDelta.y;
-        float fullHeight = contentHeight - currentHeight + speechSelector.sizeDelta.y;
-        Debug.Log("Bottom Height: " + fullHeight);
-        float diff = fullHeight - (content.sizeDelta.y - content.anchoredPosition.y);
-        
         Vector2 newPos = content.anchoredPosition;
+        Vector2 selectorPos = item.TextRect.anchoredPosition;
+        float bottomHeight = contentHeight - currentHeight + item.TextRect.sizeDelta.y;
+        float diff = bottomHeight - (content.sizeDelta.y - content.anchoredPosition.y);
         if(currentSelection == 0)
         {
             newPos.y = 0;
@@ -139,7 +138,6 @@ public class DialogueController : MonoBehaviour
             newPos.y -= diff;
         }
         content.anchoredPosition = newPos;
-        Vector2 selectorPos = item.TextRect.anchoredPosition;
         selectorPos.y += newPos.y;
         speechSelector.anchoredPosition = selectorPos;
     }
@@ -149,21 +147,17 @@ public class DialogueController : MonoBehaviour
         currentHeight += item.TextRect.sizeDelta.y;
         Vector2 newPos = content.anchoredPosition;
         Vector2 selectorPos = item.TextRect.anchoredPosition;
-        float diff = currentHeight - contentMask.sizeDelta.y;
-        if(diff > 0f)
+        float diff = currentHeight - (contentMask.sizeDelta.y + content.anchoredPosition.y);
+        if (currentSelection == (choicesRoutes.Count - 1))
         {
-            if (content.anchoredPosition.y == 0f)
-            {
-                newPos.y += diff;
-                selectorPos.y += newPos.y;
-            }
-            else
-            {
-                newPos.y += item.TextRect.sizeDelta.y;
-                selectorPos.y += newPos.y;
-            }
+            newPos.y = endBorder;
+        }
+        else if(diff > 0f)
+        {
+            newPos.y += diff;
         }
         content.anchoredPosition = newPos;
+        selectorPos.y += newPos.y;
         speechSelector.anchoredPosition = selectorPos;
     }
 }
