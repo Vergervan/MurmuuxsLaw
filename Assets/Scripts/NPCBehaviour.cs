@@ -33,7 +33,9 @@ public class NPCBehaviour : MonoBehaviour
     }
     void OnMouseDown()
     {
-        if (!player.CheckNPC(this)) return;
+        if (player.InDialog)
+            if(!player.CheckNPC(this)) 
+                return;
         if (Vector2.Distance(player.transform.position, transform.position) > 2f)
         {
             if (npcBubble != null) npcBubble.gameObject.SetActive(false);

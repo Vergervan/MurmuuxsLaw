@@ -1,13 +1,25 @@
+[D]smokeCakeDialog=bringSmokerCake
+	giveCakeSmoker > thanks[removeCake,testOn]
+
 [D]defaultDialog=startDialogPhrase
+	defaultAnswer > defaultPhrase
+	defaultAnswer > defaultPhrase
+	defaultAnswer2 > defaultPhrase
+	defaultAnswer > defaultPhrase
+	defaultAnswer2 > defaultPhrase
+	defaultAnswer > defaultPhrase
+	defaultAnswer > defaultPhrase
+	defaultAnswer2 > defaultPhrase
+	defaultAnswer > defaultPhrase
+	defaultAnswer > defaultPhrase
+	defaultAnswer2 > defaultPhrase
 	defaultAnswer > defaultPhrase
 	giveSmokerInfo > smokeCakeDialog
 	testAnswer > testMonolog
 	endTalking > goodbye
 
-[D]smokeCakeDialog=bringSmokerCake
-	giveCakeSmoker > thanks[removeCake,testOn]
-
 [A!]defaultAnswer=hell
+[A]defaultAnswer2=noTalks
 [A]endTalking=end
 
 [A!(Cake)]giveCakeSmoker=cakeSmoker
