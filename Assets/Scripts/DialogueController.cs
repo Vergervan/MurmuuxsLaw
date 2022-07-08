@@ -16,6 +16,8 @@ public class DialogueController : MonoBehaviour
     private List<ChoiceItem> choices = new List<ChoiceItem>();
     private int currentSelection = 0;
     private float contentHeight = 0f;
+    private float currentHeight = 0f;
+    private float endBorder = 0f;
     private NPCBehaviour currentNpc;
     public int ChoicesCount { get => choicesRoutes.Count; }
     public DialogueWindow GetDialogWindow() => window;
@@ -53,6 +55,8 @@ public class DialogueController : MonoBehaviour
     public void UpdatePrefferedHeight()
     {
         contentHeight = LayoutUtility.GetPreferredHeight(content);
+        endBorder = -contentMask.sizeDelta.y + contentHeight;
+        Debug.Log(endBorder);
     }
 
     private void CheckParentRoutes(Route route)
@@ -96,32 +100,33 @@ public class DialogueController : MonoBehaviour
             choice.Text = speech.CurrentText();
             choices.Add(choice);
         }
+        content.anchoredPosition = new Vector2(content.anchoredPosition.x, 0);
     }
 
     public void SelectChoice(int index, KeyCode arrow = KeyCode.None)
     {
         ChoiceItem item = choices[index];
         Canvas.ForceUpdateCanvases();
-        Vector2 selectorPos = Vector2.zero;
         switch (arrow)
         {
             case KeyCode.UpArrow:
-                selectorPos = ScrollToTop(item);
+                ScrollToTop(item);
                 break;
             case KeyCode.DownArrow:
-                selectorPos = ScrollToBottom(item);
+                ScrollToBottom(item);
                 break;
             default:
-                selectorPos = item.TextRect.anchoredPosition;
+                speechSelector.anchoredPosition = item.TextRect.anchoredPosition;
+                currentHeight = item.TextRect.sizeDelta.y;
                 break;
         }
-        speechSelector.anchoredPosition = selectorPos;
         speechSelector.sizeDelta = item.TextRect.sizeDelta;
     }
-    private Vector2 ScrollToTop(ChoiceItem item)
+    private void ScrollToTop(ChoiceItem item)
     {
-        float fullHeight = GetHeightFromBottom();
-        Debug.Log("BotooHeight: " + fullHeight);
+        currentHeight -= item.TextRect.sizeDelta.y;
+        float fullHeight = contentHeight - currentHeight + speechSelector.sizeDelta.y;
+        Debug.Log("Bottom Height: " + fullHeight);
         float diff = fullHeight - (content.sizeDelta.y - content.anchoredPosition.y);
         
         Vector2 newPos = content.anchoredPosition;
@@ -136,53 +141,29 @@ public class DialogueController : MonoBehaviour
         content.anchoredPosition = newPos;
         Vector2 selectorPos = item.TextRect.anchoredPosition;
         selectorPos.y += newPos.y;
-        return selectorPos;
+        speechSelector.anchoredPosition = selectorPos;
     }
 
-    private Vector2 ScrollToBottom(ChoiceItem item)
+    private void ScrollToBottom(ChoiceItem item)
     {
-        float fullHeight = GetHeight();
-        Debug.Log("Height: " + fullHeight);
-        float diff = contentMask.sizeDelta.y - fullHeight;
-        Debug.Log(diff);
+        currentHeight += item.TextRect.sizeDelta.y;
         Vector2 newPos = content.anchoredPosition;
         Vector2 selectorPos = item.TextRect.anchoredPosition;
-        if (diff < 0f)
+        float diff = currentHeight - contentMask.sizeDelta.y;
+        if(diff > 0f)
         {
-            if (content.anchoredPosition.y > 0f)
+            if (content.anchoredPosition.y == 0f)
             {
-                newPos.y += item.TextRect.sizeDelta.y;
+                newPos.y += diff;
+                selectorPos.y += newPos.y;
             }
             else
             {
-                newPos.y -= diff;
+                newPos.y += item.TextRect.sizeDelta.y;
+                selectorPos.y += newPos.y;
             }
-            selectorPos.y -= diff;
-            content.anchoredPosition = newPos;
         }
-        return selectorPos;
-    }
-    private float GetHeight()
-    {
-        float sum = 0f, counter = -1;
-        foreach(var item in choices)
-        {
-            sum += item.TextRect.sizeDelta.y;
-            ++counter;
-            if (counter == currentSelection) break;
-        }
-        return sum;
-    }
-    //Returns a height from the bottom to the selected item
-    private float GetHeightFromBottom()
-    {
-        float sum = 0f, counter = choices.Count;
-        for(int i = choices.Count-1; i > 0; --i)
-        {
-            sum += choices[i].TextRect.sizeDelta.y;
-            --counter;
-            if (counter == currentSelection) break;
-        }
-        return sum;
+        content.anchoredPosition = newPos;
+        speechSelector.anchoredPosition = selectorPos;
     }
 }
