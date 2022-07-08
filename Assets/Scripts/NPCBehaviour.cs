@@ -43,7 +43,7 @@ public class NPCBehaviour : MonoBehaviour
 
         player.SetCameraZoom(transform, 1f);
 
-        if (!_window.IsOpened)
+        if (!_window.IsOpened && !_window.IsProcessing)
         {
             if (!isSpeak)
                 StartSpeak();
@@ -62,7 +62,8 @@ public class NPCBehaviour : MonoBehaviour
         }
         if (isSpeak)
         {
-            if (Input.GetKeyDown(KeyCode.Return) && !_window.IsOpened && !npcBubble.IsTyping)
+            bool inputAccess = !_window.IsOpened && !_window.IsProcessing && !npcBubble.IsTyping;
+            if (Input.GetKeyDown(KeyCode.Return) && inputAccess)
                 ContinueSpeaking();
             if (Vector2.Distance(player.transform.position, transform.position) > 2f)
             {
@@ -100,11 +101,11 @@ public class NPCBehaviour : MonoBehaviour
             npcBubble.GetTextFlag().FlagValue.SetToStart();
             DisableBubble();
             isSpeak = false;
+            _window.TurnOff();
             if (dialog.ParentRoute.From.Name == "endTalking")
             {
                 currentDialog = m_dialog;
                 player.ResetZoom();
-                _window.TurnOff();
                 return;
             }
             //if (!_window.IsOpened)

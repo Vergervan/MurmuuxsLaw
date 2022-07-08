@@ -70,9 +70,9 @@ public class SpeechBubble : MonoBehaviour
 
             yield return null;
         }
-        m_typing = false;
         OnSpeechStop?.Invoke(this, new EventArgs());
         ClearEvents();
+        m_typing = false;
     }
     public void ClearEvents()
     {

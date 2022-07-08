@@ -10,6 +10,8 @@ public class ItemMenuManager : MonoBehaviour
     [SerializeField] private bool _enabled;
     private ItemCell _currentCell = null;
     private Vector2 menuScaledSize;
+    private bool _processing = false;
+    public bool IsProcessing => _processing;
 
     private void Start()
     {
@@ -28,6 +30,7 @@ public class ItemMenuManager : MonoBehaviour
     }
     public void ExecuteInPosition(ItemCell cell, Vector2 pos, Vector2 objectSize)
     {
+        if (IsProcessing) return;
         if (cell != null)
         {
             if (_currentCell == cell && Enabled)
@@ -56,22 +59,26 @@ public class ItemMenuManager : MonoBehaviour
 
     private void AppearMenu()
     {
+        _processing = true;
         content.gameObject.SetActive(false);
         Vector2 size = menuObject.sizeDelta;
         menuObject.sizeDelta = new Vector2(size.x, 0);
         menuObject.DOSizeDelta(size, 0.15f).OnComplete(() =>
         {
             content.gameObject.SetActive(true);
+            _processing = false;
         });
     }
     private void DisappearMenu()
     {
+        _processing = true;
         content.gameObject.SetActive(false);
         Vector2 size = menuObject.sizeDelta;
         menuObject.DOSizeDelta(new Vector2(size.x, 0), 0.15f).OnComplete(() =>
         {
-            Enabled = false;
             menuObject.sizeDelta = size;
+            Enabled = false;
+            _processing = false;
         });
     }
 }

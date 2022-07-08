@@ -19,7 +19,7 @@ public class DialogueController : MonoBehaviour
     public DialogueWindow GetDialogWindow() => window;
     private void Update()
     {
-        if (window.IsOpened)
+        if (window.IsOpened && !window.IsProcessing)
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
