@@ -23,6 +23,7 @@ public class NPCBehaviour : MonoBehaviour
     private Coroutine hideBubble = null;
 
     private DialogueWindow _window;
+    private Dialog _lastParentDialog;
     private void Start()
     {
         _window = dManager.GetDialogController().GetDialogWindow();
@@ -58,7 +59,7 @@ public class NPCBehaviour : MonoBehaviour
         }
         if (isSpeak)
         {
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (Input.GetKeyDown(KeyCode.Return) && !_window.IsOpened)
                 ContinueSpeaking();
             if (Vector2.Distance(player.transform.position, transform.position) > 2f)
             {
@@ -70,7 +71,6 @@ public class NPCBehaviour : MonoBehaviour
 
     private void StartSpeak()
     {
-        currentDialog = m_dialog;
         int num = currentDialog.GetAvailableRoutesCount(true);
         Debug.Log("Available routes: " + num);
         if (num <= npcSettings.limitToAlt)
@@ -91,28 +91,48 @@ public class NPCBehaviour : MonoBehaviour
     private void ContinueSpeaking()
     {
         UnitSpeech speech = npcBubble.GetTextFlag().FlagValue;
+        Dialog dialog = npcBubble.GetCurrentDialog();
         if (!speech.HasNext())
         {
-            if (!_window.IsOpened)
+            isSpeak = false;
+            npcBubble.GetTextFlag().FlagValue.SetToStart();
+            DisableBubble();
+            if (dialog.ParentRoute.From.Name == "endTalking")
             {
-                DisableBubble();
-                npcBubble.GetTextFlag().FlagValue.SetToStart();
-                isSpeak = false;
+                currentDialog = m_dialog;
                 player.ResetZoom();
+                _window.TurnOff();
+                return;
             }
+            //if (!_window.IsOpened)
+            //{
+            //    DisableBubble();
+            //    npcBubble.GetTextFlag().FlagValue.SetToStart();
+            //    isSpeak = false;
+            //    player.ResetZoom();
+            //}
+
+            currentDialog = FindAvailableRelativeDialog(dialog);
+            StartSpeak();
             return;
         }
         speech.Next();
-        Dialog currentDialog = npcBubble.GetCurrentDialog();
-        if (!speech.HasNext() && currentDialog.IsDialog)
+        if (!speech.HasNext() && dialog.IsDialog)
         {
             npcBubble.OnSpeechStop += (o, e) => _window.TurnOn();
         }
-        if (!currentDialog.IsDialog)
+        if (!dialog.IsDialog)
         {
             _window.TurnOff();
         }
         npcBubble.StartSpeech();
+    }
+
+    private Dialog FindAvailableRelativeDialog(Dialog dialog)
+    {
+        if (dialog == null) return null;
+        if (dialog.ParentRoute.Parent.HasAvailableRoutes) return dialog.ParentRoute.Parent;
+        return FindAvailableRelativeDialog(dialog.ParentRoute.Parent);
     }
 
     public void ChangeDialog(Dialog newDialog)
