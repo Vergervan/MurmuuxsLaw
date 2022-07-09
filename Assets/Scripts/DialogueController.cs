@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class DialogueController : MonoBehaviour
 {
@@ -42,21 +43,58 @@ public class DialogueController : MonoBehaviour
                     }
                 }
             }
-            if (Input.GetKeyDown(KeyCode.UpArrow) && currentSelection > 0)
-            {
-                SelectChoice(--currentSelection, KeyCode.UpArrow);
-            }
-            else if (Input.GetKeyDown(KeyCode.DownArrow) && currentSelection != choices.Count - 1)
-            {
-                SelectChoice(++currentSelection, KeyCode.DownArrow);
-            }
+            UpdateSelector();
         }
     }
     public void UpdatePrefferedHeight()
     {
         contentHeight = LayoutUtility.GetPreferredHeight(content);
         endBorder = -contentMask.sizeDelta.y + contentHeight;
-        Debug.Log(endBorder);
+    }
+
+    private void UpdateSelector()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            MoveSelector(KeyCode.UpArrow);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            MoveSelector(KeyCode.DownArrow);
+        }
+    }
+
+    private async void MoveSelector(KeyCode key)
+    {
+        if (!TryUpdateSelection(key)) return;
+        SelectChoice(currentSelection, key);
+        await Task.Delay(300);
+        while (Input.GetKey(key) && !Input.GetKeyDown(key))
+        {
+            if (!TryUpdateSelection(key)) return;
+            SelectChoice(currentSelection, key);
+            await Task.Delay(80);
+            await Task.Yield();
+        }
+        Debug.Log("Key up " + key.ToString());
+    }
+
+    private bool TryUpdateSelection(KeyCode key)
+    {
+        switch (key)
+        {
+            case KeyCode.UpArrow:
+                if (currentSelection == 0)
+                    return false;
+                --currentSelection;
+                return true;
+            case KeyCode.DownArrow:
+                if (currentSelection == choicesRoutes.Count - 1)
+                    return false;
+                ++currentSelection;
+                return true;
+        }
+        return true;
     }
 
     private void CheckParentRoutes(Route route)
