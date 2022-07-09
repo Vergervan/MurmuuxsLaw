@@ -22,6 +22,7 @@ public class SceneManager : MonoBehaviour
     }
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Confined; //TODO Грамотную работу с курсором
         SetScene(startSceneName);
     }
     public Scene GetCurrentScene() => currentScene;
