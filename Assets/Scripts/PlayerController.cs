@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 
 using NetworkType = NetworkManager.NetworkType;
 using static PlayerInfo.Types;
+using System.Threading.Tasks;
 
 public class PlayerController : MonoBehaviour
 {
@@ -71,9 +72,8 @@ public class PlayerController : MonoBehaviour
                         break;
                 }
             }
+            RefreshAnimation(direction);
         }
-        
-        RefreshAnimation(direction);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -93,6 +93,8 @@ public class PlayerController : MonoBehaviour
         playerCamera.SetTarget(target);
         _freezeMove = true;
         _inDialog = true;
+        direction = Vector2.zero;
+        RefreshAnimation(direction);
     }
 
     public void ResetZoom()
@@ -187,6 +189,14 @@ public class PlayerController : MonoBehaviour
             else if (state == AnimationState.Walk) state = AnimationState.Idle;
         }
         animator.SetInteger("CurrentAnim", (int)state);
+    }
+    public async void StopPlayer()
+    {
+        while (!_freezeMove) await Task.Yield(); 
+        if (state == AnimationState.WalkBack) state = AnimationState.IdleBack;
+        else if (state == AnimationState.Walk) state = AnimationState.Idle;
+        animator.SetInteger("CurrentAnim", (int)state);
+        await Task.Yield();
     }
     private void SendPositionToServer(Vector2 direction)
     {
