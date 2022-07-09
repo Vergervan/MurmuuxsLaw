@@ -8,22 +8,19 @@ public class StretchWindow : MonoBehaviour, IDragHandler
     private readonly Vector2 minSize = new Vector2(200, 200);
     public void OnDrag(PointerEventData eventData)
     {
-        Vector2 mousePos = Input.mousePosition;
-        if (mousePos.y <= 5f) return; 
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            windowRect.sizeDelta += new Vector2(eventData.delta.x, -eventData.delta.y) / canvas.scaleFactor;
-            Vector2 newSize = windowRect.sizeDelta;
-            if(windowRect.sizeDelta.x < minSize.x)
+            if (eventData.position.y < 1f) return;
+            Vector2 newSize = windowRect.sizeDelta + (new Vector2(eventData.delta.x, -eventData.delta.y) / canvas.scaleFactor);
+            if(newSize.x < minSize.x)
             {
                 newSize.x = minSize.x;
             }
-            if(windowRect.sizeDelta.y < minSize.y)
+            if(newSize.y < minSize.y)
             {
                 newSize.y = minSize.y;
             }
             windowRect.sizeDelta = newSize;
         }
-        Debug.Log($"{eventData.position}");
     }
 }
