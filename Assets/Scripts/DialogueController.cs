@@ -42,6 +42,7 @@ public class DialogueController : MonoBehaviour
                         actionTrigger.TryToInvokeEvent(trigger);
                     }
                 }
+                UpdatePrefferedHeight();
             }
             UpdateSelector();
         }
@@ -186,13 +187,16 @@ public class DialogueController : MonoBehaviour
         Vector2 newPos = content.anchoredPosition;
         Vector2 selectorPos = item.TextRect.anchoredPosition;
         float diff = currentHeight - (contentMask.sizeDelta.y + content.anchoredPosition.y);
-        if (currentSelection == (choicesRoutes.Count - 1))
+        if(diff > 0f)
         {
-            newPos.y = endBorder;
-        }
-        else if(diff > 0f)
-        {
-            newPos.y += diff;
+            if (currentSelection == (choicesRoutes.Count - 1))
+            {
+                newPos.y = endBorder;
+            }
+            else
+            {
+                newPos.y += diff;
+            }
         }
         content.anchoredPosition = newPos;
         selectorPos.y += newPos.y;
