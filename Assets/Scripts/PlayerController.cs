@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 using NetworkType = NetworkManager.NetworkType;
 using static PlayerInfo.Types;
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Inventory inventory;
     [SerializeField] private NetworkManager network;
     [SerializeField] private FollowCamera playerCamera;
+    [SerializeField] private InputAction playerMovement;
     public Guid playerGuid;
     private SpriteRenderer _renderer;
     private Rigidbody2D rb;
@@ -32,6 +34,17 @@ public class PlayerController : MonoBehaviour
     }
     public float speed = 2.7f;
     private AnimationState state = AnimationState.Idle;
+
+    private void OnEnable()
+    {
+        playerMovement.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerMovement.Disable();
+    }
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -114,33 +127,25 @@ public class PlayerController : MonoBehaviour
     private Vector2 ReadMovementKeys()
     {
         //return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        Vector2 direction = Vector2.zero;
-        if (Input.GetKey(KeyCode.A))
-            direction -= Vector2.right;
-        if (Input.GetKey(KeyCode.D))
-            direction += Vector2.right;
-        if (Input.GetKey(KeyCode.W))
-            direction += Vector2.up;
-        if (Input.GetKey(KeyCode.S))
-            direction -= Vector2.up;
+        Vector2 direction = playerMovement.ReadValue<Vector2>();
         return direction;
     }
 
-    private bool[] ReadKeysInBools()
-    {
-        //ADWS
-        bool[] keys = new bool[4];
+    //private bool[] ReadKeysInBools()
+    //{
+    //    //ADWS
+    //    bool[] keys = new bool[4];
 
-        if (Input.GetKey(KeyCode.A))
-            keys[0] = true;
-        if (Input.GetKey(KeyCode.D))
-            keys[1] = true;
-        if (Input.GetKey(KeyCode.W))
-            keys[2] = true;
-        if (Input.GetKey(KeyCode.S))
-            keys[3] = true;
-        return keys;
-    }
+    //    if (Input.GetKey(KeyCode.A))
+    //        keys[0] = true;
+    //    if (Input.GetKey(KeyCode.D))
+    //        keys[1] = true;
+    //    if (Input.GetKey(KeyCode.W))
+    //        keys[2] = true;
+    //    if (Input.GetKey(KeyCode.S))
+    //        keys[3] = true;
+    //    return keys;
+    //}
 
     public void SetDirection(Vector2 direction)
     {

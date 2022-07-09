@@ -4,9 +4,11 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using UnityEngine.InputSystem;
 
 public class DialogueController : MonoBehaviour
 {
+    [SerializeField] private InputAction dialogInput;
     [SerializeField] private ActionTrigger actionTrigger;
     [SerializeField] private DialogueWindow window;
     [SerializeField] private RectTransform speechSelector;
@@ -20,6 +22,7 @@ public class DialogueController : MonoBehaviour
     private float currentHeight = 0f;
     private float endBorder = 0f;
     private NPCBehaviour currentNpc;
+    private bool selectorMoves = false;
     public int ChoicesCount { get => choicesRoutes.Count; }
     public DialogueWindow GetDialogWindow() => window;
     private void Update()
@@ -67,17 +70,20 @@ public class DialogueController : MonoBehaviour
 
     private async void MoveSelector(KeyCode key)
     {
-        if (!TryUpdateSelection(key)) return;
+        if (selectorMoves) return;
+        selectorMoves = TryUpdateSelection(key);
+        if (!selectorMoves) return;
         SelectChoice(currentSelection, key);
         await Task.Delay(300);
-        while (Input.GetKey(key) && !Input.GetKeyDown(key))
+        while (Input.GetKey(key))
         {
-            if (!TryUpdateSelection(key)) return;
+            selectorMoves = TryUpdateSelection(key);
+            if (!selectorMoves) return;
             SelectChoice(currentSelection, key);
             await Task.Delay(80);
             await Task.Yield();
         }
-        Debug.Log("Key up " + key.ToString());
+        selectorMoves = false;
     }
 
     private bool TryUpdateSelection(KeyCode key)

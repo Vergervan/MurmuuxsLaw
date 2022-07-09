@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using DialogScriptCreator;
+using UnityEngine.InputSystem;
 
 public class NPCBehaviour : MonoBehaviour
 {
