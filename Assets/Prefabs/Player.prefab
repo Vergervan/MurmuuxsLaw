@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -118,8 +118,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b940e90c949e79242ae63f7d01d62146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useShaders: 0
   inventory: {fileID: 0}
   network: {fileID: 0}
+  playerCamera: {fileID: 0}
+  playerMovement:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
   speed: 2.7
 --- !u!61 &412621702446675541
 BoxCollider2D:

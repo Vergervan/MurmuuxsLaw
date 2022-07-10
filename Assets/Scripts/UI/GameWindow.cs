@@ -10,11 +10,6 @@ public class GameWindow : MonoBehaviour
     public WindowBar Bar => _bar;
     public RectTransform Rect => _rect;
 
-    private void OnEnable()
-    {
-        Bar.UpdateBorders();
-    }
-
     private void Awake()
     {
         _rect = GetComponent<RectTransform>();

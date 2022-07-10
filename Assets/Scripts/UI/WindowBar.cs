@@ -11,6 +11,10 @@ public class WindowBar : MonoBehaviour, IDragHandler
     {
         barRect = GetComponent<RectTransform>();
     }
+    private void OnEnable()
+    {
+        UpdateBorders();
+    }
     public void OnDrag(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
