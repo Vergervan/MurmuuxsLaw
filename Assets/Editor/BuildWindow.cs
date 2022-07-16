@@ -4,12 +4,14 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
+using Debug = UnityEngine.Debug;
+
 public class BuildWindow : EditorWindow
 {
     [SerializeField] private string buildPath;
     [SerializeField] private List<Object> scenesToBuild;
-    [SerializeField] private List<Object> dialogScripts;
-    [SerializeField] private List<Object> localeFiles;
+    [SerializeField] private List<string> dialogScripts;
+    [SerializeField] private List<string> localeFiles;
     [SerializeField] private bool dialogScriptsFoldout, localeFilesFoldout;
 
     [MenuItem("Window/Custom Build Window")]
@@ -24,7 +26,12 @@ public class BuildWindow : EditorWindow
         {
             var json = File.ReadAllText("custombuildsettings.json");
             JsonUtility.FromJsonOverwrite(json, this);
+            Debug.Log("File exists: " + json);
+            Debug.Log($"{dialogScripts.Count} {localeFiles.Count}");
+            Repaint();
         }
+        dialogScripts ??= new List<string>();
+        localeFiles ??= new List<string>();
     }
     private void SaveSettings()
     {
@@ -95,8 +102,7 @@ public class BuildWindow : EditorWindow
         foreach (var dialog in dialogScripts)
         {
             if (dialog == null) continue;
-            string assetPath = AssetDatabase.GetAssetPath(dialog);
-            FileUtil.CopyFileOrDirectory(assetPath, scriptsPath + Path.GetFileName(assetPath));
+            FileUtil.CopyFileOrDirectory(dialog, scriptsPath + Path.GetFileName(dialog));
         }
     }
     private void CopyLocaleFiles()
@@ -109,8 +115,7 @@ public class BuildWindow : EditorWindow
         foreach (var file in localeFiles)
         {
             if (file == null) continue;
-            string assetPath = AssetDatabase.GetAssetPath(file);
-            FileUtil.CopyFileOrDirectory(assetPath, localePath + Path.GetFileName(assetPath));
+            FileUtil.CopyFileOrDirectory(file, localePath + Path.GetFileName(file));
         }
     }
     private void ShowDialogScriptsGUI()
@@ -120,20 +125,17 @@ public class BuildWindow : EditorWindow
         {
             if (GUILayout.Button("Add Dialog Script", GUILayout.Width(150)))
             {
-                dialogScripts.Add(new Object());
+                dialogScripts.Add(null);
             }
             for (int i = 0; i < dialogScripts.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                Object file = EditorGUILayout.ObjectField(dialogScripts[i], typeof(Object), false);
-                string path = AssetDatabase.GetAssetPath(file);
-                if (Path.GetExtension(path) == ".ds")
+                Object file = EditorGUILayout.ObjectField(dialogScripts[i] == null ? null : AssetDatabase.LoadMainAssetAtPath(dialogScripts[i]), typeof(Object), false);
+
+                if (file != null)
                 {
-                    dialogScripts[i] = file;
-                }
-                else
-                {
-                    dialogScripts[i] = null;
+                    string path = AssetDatabase.GetAssetPath(file);
+                    dialogScripts[i] = (Path.GetExtension(path) == ".ds") ? path : null;
                 }
 
                 if (GUILayout.Button("✖", GUILayout.Width(40)))
@@ -152,21 +154,19 @@ public class BuildWindow : EditorWindow
         {
             if (GUILayout.Button("Add Locale File", GUILayout.Width(150)))
             {
-                localeFiles.Add(new Object());
+                localeFiles.Add(null);
             }
             for (int i = 0; i < localeFiles.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                Object file = EditorGUILayout.ObjectField(localeFiles[i], typeof(Object), false);
-                string path = AssetDatabase.GetAssetPath(file);
-                if (Path.GetExtension(path) == ".lc")
+                Object file = EditorGUILayout.ObjectField(localeFiles[i] == null ? null : AssetDatabase.LoadMainAssetAtPath(localeFiles[i]), typeof(Object), false);
+
+                if (file != null)
                 {
-                    localeFiles[i] = file;
+                    string path = AssetDatabase.GetAssetPath(file);
+                    localeFiles[i] = (Path.GetExtension(path) == ".lc") ? path : null;
                 }
-                else
-                {
-                    localeFiles[i] = null;
-                }
+
                 if (GUILayout.Button("✖", GUILayout.Width(40)))
                 {
                     localeFiles.RemoveAt(i);
