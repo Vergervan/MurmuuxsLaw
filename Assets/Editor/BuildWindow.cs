@@ -26,8 +26,6 @@ public class BuildWindow : EditorWindow
         {
             var json = File.ReadAllText("custombuildsettings.json");
             JsonUtility.FromJsonOverwrite(json, this);
-            Debug.Log("File exists: " + json);
-            Debug.Log($"{dialogScripts.Count} {localeFiles.Count}");
             Repaint();
         }
         dialogScripts ??= new List<string>();
