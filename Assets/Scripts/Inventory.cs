@@ -2,7 +2,7 @@
 using UnityEngine;
 using System;
 
-public class Inventory : MonoBehaviour
+public class Inventory : MonoBehaviour, ILoadSavedData
 {
     [SerializeField] private DialogueManager dialogueManager;
 
@@ -21,10 +21,12 @@ public class Inventory : MonoBehaviour
         {ItemType.Tape, "item_tape"}
     };
     public static Dictionary<ItemType, Sprite> ItemSprites = new Dictionary<ItemType, Sprite>();
-    public List<ItemCell> items = new List<ItemCell>();
+    [SaveField] private List<ItemCell> items = new List<ItemCell>();
     void Awake()
     {
         LoadSprites();
+        SavedDataHandler dataHandler = SavedDataHandler.GetInstance();
+        dataHandler.Subscribe(this);
     }
     void Start()
     {
@@ -33,6 +35,11 @@ public class Inventory : MonoBehaviour
             items.Add(GameObject.Find("ItemCell" + i).GetComponent<ItemCell>());
         }
     }
+    void ILoadSavedData.OnLoad()
+    {
+
+    }
+
     private void LoadSprites()
     {
         var sprites = Resources.LoadAll<Sprite>("Items");
