@@ -21,16 +21,17 @@ public class Inventory : MonoBehaviour, ILoadSavedData
         {ItemType.Tape, "item_tape"}
     };
     public static Dictionary<ItemType, Sprite> ItemSprites = new Dictionary<ItemType, Sprite>();
+    private const int inventoryCells = 6;
     [SaveField] private List<ItemCell> items = new List<ItemCell>();
     void Awake()
     {
-        LoadSprites();
         SavedDataHandler dataHandler = SavedDataHandler.GetInstance();
         dataHandler.Subscribe(this);
+        LoadSprites();
     }
     void Start()
     {
-        for(int i = 0; i < 6; i++)
+        for(int i = 0; i < inventoryCells; i++)
         {
             items.Add(GameObject.Find("ItemCell" + i).GetComponent<ItemCell>());
         }

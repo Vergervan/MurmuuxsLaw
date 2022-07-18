@@ -25,6 +25,11 @@ public class ItemCell : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     private RectTransform rectTransform, imageTransform;
     private Vector2 posBeforeDrag;
 
+
+    public override string ToString()
+    {
+        return _type.ToString();
+    }
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
         imageTransform = itemImage.gameObject.GetComponent<RectTransform>();
