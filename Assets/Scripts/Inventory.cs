@@ -5,6 +5,7 @@ using System;
 public class Inventory : MonoBehaviour, ILoadSavedData
 {
     [SerializeField] private DialogueManager dialogueManager;
+    private SavedDataHandler dataHandler;
 
     [Serializable]
     public enum ItemType
@@ -25,9 +26,13 @@ public class Inventory : MonoBehaviour, ILoadSavedData
     [SaveField] private List<ItemCell> items = new List<ItemCell>();
     void Awake()
     {
-        SavedDataHandler dataHandler = SavedDataHandler.GetInstance();
+        dataHandler = SavedDataHandler.GetInstance();
         dataHandler.Subscribe(this);
         LoadSprites();
+    }
+    private void OnDestroy()
+    {
+        dataHandler.Unsubscribe(this);
     }
     void Start()
     {
