@@ -14,4 +14,9 @@ public class SaveManager : MonoBehaviour
     {
         dataHandler.SaveData("test_save");
     }
+
+    public void LoadSave()
+    {
+        dataHandler.LoadData("test_save");
+    }
 }

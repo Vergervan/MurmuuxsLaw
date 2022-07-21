@@ -21,6 +21,7 @@ public class SavedDataHandler
     private static SavedDataHandler _instance = null;
     private List<ILoadSavedData> _data;
     private StringBuilder _newFile;
+    private Dictionary<string, string> values = new Dictionary<string, string>();
 
     private SavedDataHandler()
     {
@@ -44,7 +45,16 @@ public class SavedDataHandler
 
     public void LoadData(string path)
     {
-
+        path += ".gsv";
+        using(FileStream fs = new FileStream(path, FileMode.Open))
+        {
+            using(StreamReader sr = new StreamReader(fs))
+            {
+                string data = sr.ReadToEnd();
+            }
+        }
+        values.Clear();
+        Debug.Log("Save loaded");
     }
     public void SaveData(string saveName)
     {
@@ -71,6 +81,7 @@ public class SavedDataHandler
             }
         }
         CreateFile(saveName);
+        Debug.Log("Game saved");
     }
     private void CreateFile(string saveName)
     {
