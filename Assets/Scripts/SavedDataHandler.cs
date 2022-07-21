@@ -28,6 +28,12 @@ public class SavedDataHandler
         _data = new List<ILoadSavedData>();
     }
 
+    public string GetValue(string name)
+    {
+        string str;
+        return values.TryGetValue(name, out str) ? str : null;
+    }
+
     public void Subscribe(ILoadSavedData data)
     {
         _data.Add(data);
