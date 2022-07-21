@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Text;
 
 public class Inventory : MonoBehaviour, ILoadSavedData
 {
@@ -44,6 +45,21 @@ public class Inventory : MonoBehaviour, ILoadSavedData
     void ILoadSavedData.OnLoad()
     {
 
+    }
+
+    string ILoadSavedData.GetStringData(ref bool isArray)
+    {
+        if (items.Count == 0) return null;
+        isArray = true;
+        StringBuilder str = new StringBuilder();
+        bool first = true;
+        foreach(var item in items)
+        {
+            if (!first) str.Append(',');
+            str.Append(item.ToString());
+            if (first) first = false;
+        }
+        return str.ToString();
     }
 
     private void LoadSprites()

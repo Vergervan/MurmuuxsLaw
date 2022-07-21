@@ -11,6 +11,7 @@ using System.IO;
 public interface ILoadSavedData
 {
     void OnLoad();
+    string GetStringData(ref bool isArray);
 }
 
 public class SaveFieldAttribute : Attribute { }
@@ -48,7 +49,6 @@ public class SavedDataHandler
     public void SaveData(string saveName)
     {
         _newFile = new StringBuilder();
-        StringBuilder iterBuilder = new StringBuilder();
         lock (_data)
         {
             foreach (var item in _data)
@@ -56,34 +56,16 @@ public class SavedDataHandler
                 Type type = item.GetType();
                 foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
                 {
-                    iterBuilder.Clear();
                     SaveFieldAttribute fieldAttribute = (SaveFieldAttribute)Attribute.GetCustomAttribute(field, typeof(SaveFieldAttribute));
                     if (fieldAttribute != null)
                     {
                         var fieldValue = field.GetValue(item);
-                        iterBuilder.Append($"{field.Name}=");
-                        if (fieldValue is IEnumerable)
-                        {
-                            IEnumerable arr = fieldValue as IEnumerable;
-                            iterBuilder.Append('[');
-                            int counter = 0;
-                            foreach (var it in arr)
-                            {
-                                if(counter != 0)
-                                {
-                                    iterBuilder.Append(',');
-                                }
-                                iterBuilder.Append(it);
-                                counter++;
-                            }
-                            if (counter == 0) continue;
-                            iterBuilder.Append("]\n");
-                        }
-                        else
-                        {
-                            iterBuilder.Append($"{field.Name}={fieldValue}\n");
-                        }
-                        _newFile.Append(iterBuilder.ToString());
+                        if (!(fieldValue is ILoadSavedData)) continue;
+                        ILoadSavedData dataToSave = fieldValue as ILoadSavedData;
+                        bool arr = false;
+                        string strData = dataToSave.GetStringData(ref arr);
+                        if (string.IsNullOrEmpty(strData)) continue;
+                        _newFile.Append(arr ? $"{field.Name}=[{strData}]\n" : $"{field.Name}={strData}\n");
                     }
                 }
             }
