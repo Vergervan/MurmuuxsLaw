@@ -46,14 +46,21 @@ public class SavedDataHandler
     public void LoadData(string path)
     {
         path += ".gsv";
+        string data = string.Empty;
         using(FileStream fs = new FileStream(path, FileMode.Open))
         {
             using(StreamReader sr = new StreamReader(fs))
             {
-                string data = sr.ReadToEnd();
+                data = sr.ReadToEnd();
             }
         }
         values.Clear();
+        foreach(var str in data.Split('\n'))
+        {
+            if (string.IsNullOrWhiteSpace(str)) continue;
+            var arr = str.Trim().Split('=');
+            values.Add(arr[0], arr[1]);
+        }
         Debug.Log("Save loaded");
     }
     public void SaveData(string saveName)
