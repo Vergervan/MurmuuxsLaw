@@ -9,6 +9,9 @@ public class DialogScriptWindow : EditorWindow
     private string scriptPath;
     private FileStream ifs;
 
+    private Vector2 scrollPos = Vector2.zero;
+    private Vector2 scrollPos2 = Vector2.zero;
+
     [MenuItem("Window/Dialog Script Editor")]
     public static void ShowWindow()
     {
@@ -27,20 +30,23 @@ public class DialogScriptWindow : EditorWindow
         {
             scriptPath = EditorUtility.OpenFilePanel("Choose script file", Application.dataPath, "ds");
             byte[] buffer = { };
-            using (ifs = new FileStream(scriptPath, FileMode.Open, FileAccess.Read))
+            if(!string.IsNullOrEmpty(scriptPath))
             {
-                int numBytesToRead = (int)(ifs.Length), numBytesRead = 0;
-                buffer = new byte[numBytesToRead];
-                while (numBytesToRead > 0)
+                using (ifs = new FileStream(scriptPath, FileMode.Open, FileAccess.Read))
                 {
-                    int n = ifs.Read(buffer, numBytesRead, numBytesToRead);
-                    numBytesRead += n;
-                    numBytesToRead -= n;
+                    int numBytesToRead = (int)(ifs.Length), numBytesRead = 0;
+                    buffer = new byte[numBytesToRead];
+                    while (numBytesToRead > 0)
+                    {
+                        int n = ifs.Read(buffer, numBytesRead, numBytesToRead);
+                        numBytesRead += n;
+                        numBytesToRead -= n;
+                    }
                 }
+                scriptText = Encoding.UTF8.GetString(buffer);
             }
-            scriptText = Encoding.UTF8.GetString(buffer);
         }
-        if (!string.IsNullOrWhiteSpace(scriptPath))
+        if (!string.IsNullOrEmpty(scriptPath))
         {
             GUILayout.Label(scriptPath);
             EditorGUILayout.BeginHorizontal();
@@ -64,6 +70,10 @@ public class DialogScriptWindow : EditorWindow
         }
         EditorGUILayout.Space();
         EditorStyles.textField.wordWrap = true;
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
         EditorGUILayout.TextArea(scriptText);
+        EditorGUILayout.EndScrollView();
+
+        GUILayout.FlexibleSpace();
     }
 }
